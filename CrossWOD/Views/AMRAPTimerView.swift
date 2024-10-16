@@ -6,28 +6,17 @@
 //
 
 import SwiftUI
-import RiveRuntime
+
 
 struct ARMAPTimerView: View {
+
     
-    let phrases = [
-        "Congrats, you survived! Now, breathe... if you can!",
-        "Time’s up! Who needs legs tomorrow, right?",
-        "Well done! Your muscles will thank you... later, much later.",
-        "That’s it! You just won the ‘Out of Breath’ championship!",
-        "Great job! Now go hydrate, you earned it... and maybe a nap.",
-        "Boom! Time’s up. Now, crawling counts as cardio!",
-        "Workout complete! You’ve officially earned your sweat badge.",
-        "You did it! If you’re not wobbling, did you even AMRAP?",
-        "Finished! And now for the recovery... a week-long Netflix marathon?",
-        "Done! Feel that? That’s your body filing a formal complaint."
-    ]
-    
+    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     
     @State private var randomPhrase: String = ""
     @Binding var showModal: Bool
     @State private var isPaused: Bool = true
-    @StateObject private var riveViewModel = RiveViewModel(fileName: "AMRAP_animation", stateMachineName: "AMRAP_machine")
+    var riveAnimation = RiveAnimationManager(fileName: "AMRAP_animation", stateMachineName: "AMRAP_machine")
     
     @State var countdown: Int
     @State private var timer: Timer? = nil
@@ -36,7 +25,7 @@ struct ARMAPTimerView: View {
     @State private var startingTime : Int = 0
     @State private var delayCountdown : Int = 3
     @State private var initialCountdown : Int = 0
-    @State private var seriesTime : Int = 0
+    @State private var seriesTimes: [Int] = []
     
     
     
@@ -46,8 +35,7 @@ struct ARMAPTimerView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             
             VStack {
-                
-               
+            
                 
                 Text("AMRAP")
                     .font(.largeTitle)
@@ -56,12 +44,12 @@ struct ARMAPTimerView: View {
                 
                 Spacer()
                 
-                riveViewModel.view()
+                riveAnimation.riveViewModel.view()
                     .frame(width: 370, height: 370)
                     .opacity(delay ? 0.6 : 1)
                     .clipShape(Circle())
                     .padding()
-                
+                    
                 
                 
                 VStack {
@@ -82,7 +70,7 @@ struct ARMAPTimerView: View {
                                 .padding(.all, 8)
                                 .padding(.leading, 12)
                             
-                            Text(formatTime(seconds: startingTime))
+                            Text(formatTimeWithDecimals(seconds: startingTime))
                                 .font(.body)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -94,24 +82,23 @@ struct ARMAPTimerView: View {
                         .padding()
                         
                     } else {
-                        Text(delay ? "Starts in:" : "Last series in: \(formatTime(seconds: seriesTime))")
+                        Text(delay ? "Starts in:" : "Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
                             .fontWeight(.bold)
                             .padding()
-                            .opacity(seriesTime != 0 || delay ? 1 : 0)
+                            .opacity(!seriesTimes.isEmpty || delay ? 1 : 0)
                     }
                     
                     
                     
                     
                     // Show the remaining time section
-                    
                     if delay {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
                             .fontWeight(.bold)
                             .foregroundColor(Color(red: 247/255, green: 79/255, blue: 51/255))
                     } else {
-                        Text(formatTime(seconds: countdown))
+                        Text(formatTimeWithDecimals(seconds: countdown))
                             .font(.system(size: 60))
                             .fontWeight(.bold)
                             .opacity(countdown == 0 ? 0 : 1)
@@ -179,12 +166,19 @@ struct ARMAPTimerView: View {
                 
                 
                 
+                
             }
             .onAppear {
-                randomPhrase = phrases.randomElement() ?? "Great job!"
+                randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
                 startingTime = countdown
                 initialCountdown = countdown
                 startDelay()
+            }
+            .onDisappear {
+                if(countdown == 0) {
+                    saveWorkoutHistory()
+                }
+                
             }
         }
         
@@ -206,7 +200,7 @@ struct ARMAPTimerView: View {
     }
     
     private func startTimer() {
-        startRiveAnimation()
+        riveAnimation.startRiveAnimation()
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             if isPaused && countdown > 0 {
@@ -214,45 +208,37 @@ struct ARMAPTimerView: View {
             }
             
             if countdown == 0 {
-                stopRiveAnimation()
+                riveAnimation.stopRiveAnimation()
             }
         }
     }
     
-    private func lastSeriesTime() {
-        seriesTime = initialCountdown - countdown
-        initialCountdown -= seriesTime
-    }
-    
-    
     private func stopTimer() {
-        pauseRiveAnimation()
+        riveAnimation.pauseRiveAnimation()
         timer?.invalidate()
         timer = nil
     }
     
+    private func lastSeriesTime() {
+        let seriesTime = initialCountdown - countdown
+        seriesTimes.append(seriesTime)
+        initialCountdown -= seriesTime
+    }
     
-    private func startRiveAnimation() {
-        riveViewModel.setInput("isStarted", value: true)
-        riveViewModel.setInput("endAnimation", value: false)
+    private func saveWorkoutHistory() {
+        let workout = Workout(
+            type: "ARMAP",
+            date: Date(),
+            initialCountdown: startingTime,
+            seriesPerformed: seriesTimes.count,
+            seriesTimes: seriesTimes
+        )
         
+        workoutHistoryManager.addWorkout(workout)
     }
+        
     
-    private func pauseRiveAnimation() {
-        riveViewModel.setInput("isStarted", value: false)
-        riveViewModel.setInput("endAnimation", value: false)
-    }
     
-    private func stopRiveAnimation() {
-        riveViewModel.setInput("isStarted", value: false)
-        riveViewModel.setInput("endAnimation", value: true)
-    }
-    
-    private func formatTime(seconds: Int) -> String {
-        let minutes = seconds / 60
-        let  remainingSeconds = seconds % 60
-        return String(format: "%02d:%02d", minutes, remainingSeconds)
-    }
 }
 
 struct ARMAPTimerView_Previews: PreviewProvider {

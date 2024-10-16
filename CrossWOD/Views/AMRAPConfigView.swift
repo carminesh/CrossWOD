@@ -16,11 +16,11 @@ struct AMRAPConfigView: View {
     
     var body: some View {
         NavigationView {
-                
+            
             ZStack {
                 
                 Color.black.edgesIgnoringSafeArea(.all)
-               
+                
                 VStack {
                     HStack {
                         Spacer()
@@ -55,18 +55,18 @@ struct AMRAPConfigView: View {
                         Button(action: {
                             showTimePicker = true // Show time picker
                         }) {
-                            Text(formatTime(seconds: selectedTime))
+                            Text(formatTimeToNumberOnly(seconds: selectedTime))
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .frame(width: 74, height: 74)
+                                .padding()
                                 .overlay( // Create the outline
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(Color(red: 247/255, green: 79/255, blue: 51/255), lineWidth: 3)
                                 )
                         }
                         
-                        Text(formatTimeText(seconds: selectedTime))
+                        Text(formatTimeToOnlyText(seconds: selectedTime))
                             .font(.title)
                             .fontWeight(.medium)
                             .foregroundColor(.white)
@@ -77,15 +77,15 @@ struct AMRAPConfigView: View {
                     
                     // NavigationLink for starting the timer
                     NavigationLink(destination: ARMAPTimerView(showModal: $showModal, countdown: selectedTime)){
-                            Text("START TIMER")
-                                .font(.body)
-                                .fontWeight(.bold)
-                                .padding()
-                                .background(Color(red: 247/255, green: 79/255, blue: 51/255))
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        .padding()
+                        Text("START TIMER")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .padding()
+                            .background(Color(red: 247/255, green: 79/255, blue: 51/255))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding()
                 }
                 
                 // Custom time picker overlay
@@ -109,7 +109,7 @@ struct AMRAPConfigView: View {
                     }
                     .edgesIgnoringSafeArea(.all) // Cover the entire screen
                 }
-               
+                
             }
             .animation(.easeInOut, value: showTimePicker)
             
@@ -117,28 +117,7 @@ struct AMRAPConfigView: View {
         .accentColor(.white)
     }
     
-    func formatTime(seconds: Int) -> String {
-        if seconds < 60 {
-            return String(seconds)
-        } else if seconds == 60 {
-            return String(1)
-        } else if seconds % 60 == 0 {
-            return String(seconds / 60)
-        } else {
-            return "\(String(seconds / 60)):\(String(seconds % 60))"
-        }
-    }
     
-    // Format the time as before
-    func formatTimeText(seconds: Int) -> String {
-        if seconds < 60 {
-            return "Seconds"
-        } else if seconds == 60 {
-            return "Minute"
-        } else {
-            return "Minutes"
-        }
-    }
 }
 
 struct AMRAPConfigView_Previews: PreviewProvider {

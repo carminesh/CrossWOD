@@ -25,14 +25,14 @@ struct ContentView: View {
                             .padding()
                         Spacer()
                         
-                        Button(action: {
-                            
-                        }) {
+                        NavigationLink(destination: SettingsView()) {
                             Image("setting_icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30)
                         }
+                        
+                        
                         
                         
                     }
