@@ -115,7 +115,9 @@ struct ContentView: View {
                 }
             }
         }
+        .accentColor(.white)
     }
+    
 }
 
 #Preview {

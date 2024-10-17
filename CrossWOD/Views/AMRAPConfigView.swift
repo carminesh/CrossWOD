@@ -76,7 +76,7 @@ struct AMRAPConfigView: View {
                     Spacer()
                     
                     // NavigationLink for starting the timer
-                    NavigationLink(destination: ARMAPTimerView(showModal: $showModal, countdown: selectedTime)){
+                    NavigationLink(destination: AMRAPTimerView(showModal: $showModal, countdown: selectedTime)){
                         Text("START TIMER")
                             .font(.body)
                             .fontWeight(.bold)

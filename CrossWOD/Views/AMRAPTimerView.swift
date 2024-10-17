@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct ARMAPTimerView: View {
+struct AMRAPTimerView: View {
 
     
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
@@ -45,12 +45,11 @@ struct ARMAPTimerView: View {
                 Spacer()
                 
                 riveAnimation.riveViewModel.view()
-                    .frame(width: 370, height: 370)
                     .opacity(delay ? 0.6 : 1)
                     .clipShape(Circle())
                     .padding()
+                    .padding(.bottom, 6)
                     
-                
                 
                 VStack {
                     
@@ -227,7 +226,7 @@ struct ARMAPTimerView: View {
     
     private func saveWorkoutHistory() {
         let workout = Workout(
-            type: "ARMAP",
+            type: "AMRAP",
             date: Date(),
             initialCountdown: startingTime,
             seriesPerformed: seriesTimes.count,
@@ -241,9 +240,9 @@ struct ARMAPTimerView: View {
     
 }
 
-struct ARMAPTimerView_Previews: PreviewProvider {
+struct AMRAPTimerView_Previews: PreviewProvider {
     static var previews: some View {
-        ARMAPTimerView(showModal: .constant(true), countdown: 5)
+        AMRAPTimerView(showModal: .constant(true), countdown: 5)
     }
 }
 

@@ -16,3 +16,9 @@ struct Workout: Identifiable, Codable {
     let seriesTimes: [Int] // Track each last series time in seconds
 }
     
+
+struct WorkoutGroup: Identifiable {
+    let id = UUID()
+    let date: Date
+    let workouts: [Workout]
+}

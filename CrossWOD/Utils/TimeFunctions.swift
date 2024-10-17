@@ -7,6 +7,14 @@
 
 import Foundation
 
+// Date formatter for displaying the date in the correct way
+var dateFormatter: DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .medium
+    return formatter
+}
+
+
 
 // -> 00:10, 1:30
 func formatTimeWithDecimals(seconds: Int) -> String {
@@ -14,6 +22,7 @@ func formatTimeWithDecimals(seconds: Int) -> String {
     let  remainingSeconds = seconds % 60
     return String(format: "%02d:%02d", minutes, remainingSeconds)
 }
+
 
 
 // -> 10 (SECONDS), 20 (SECONDS) and so on
@@ -55,6 +64,7 @@ func formatTimeToOnlyText(seconds: Int) -> String {
     }
 }
 
+
 // Function used in the CustomTimePicker in order to create the different time intervals
 func generateTimeIntervals() -> [Int] {
     var intervals: [Int] = []
@@ -73,3 +83,6 @@ func generateTimeIntervals() -> [Int] {
 
     return intervals
 }
+
+
+
