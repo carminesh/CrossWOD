@@ -9,14 +9,12 @@ import SwiftUI
 
 
 struct AMRAPTimerView: View {
-
     
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     
     @State private var randomPhrase: String = ""
-    @Binding var showModal: Bool
     @State private var isPaused: Bool = true
-    var riveAnimation = RiveAnimationManager(fileName: "AMRAP_animation", stateMachineName: "AMRAP_machine")
+    var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
     
     @State var countdown: Int
     @State private var timer: Timer? = nil
@@ -26,16 +24,17 @@ struct AMRAPTimerView: View {
     @State private var delayCountdown : Int = 3
     @State private var initialCountdown : Int = 0
     @State private var seriesTimes: [Int] = []
-    
-    
-    
+    @State private var showAfterDelay: Bool = false // Added state variable
     
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
+            
+            riveAnimation.riveViewModel.view()
+                .opacity(delayCountdown == 0 ? 1 : 0)
+                .ignoresSafeArea()
+                .aspectRatio(contentMode: .fill)
             
             VStack {
-            
                 
                 Text("AMRAP")
                     .font(.largeTitle)
@@ -44,53 +43,14 @@ struct AMRAPTimerView: View {
                 
                 Spacer()
                 
-                riveAnimation.riveViewModel.view()
-                    .opacity(delay ? 0.6 : 1)
-                    .clipShape(Circle())
-                    .padding()
-                    .padding(.bottom, 6)
-                    
-                
                 VStack {
+                    Spacer()
                     
-                    if countdown == 0 {
-                        Text(randomPhrase)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding()
-                        
-                        HStack {
-                            Image("clock_icon")
-                                .scaledToFit()
-                                .frame(width: 16, height: 16)
-                                .padding(.all, 8)
-                                .padding(.leading, 12)
-                            
-                            Text(formatTimeWithDecimals(seconds: startingTime))
-                                .font(.body)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.all, 8)
-                                .padding(.trailing, 12)
-                        }
-                        .background(Color(red: 60/255, green: 60/255, blue: 60/255))
-                        .cornerRadius(6)
+                    Text(delay ? "Starts in:" : "Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
+                        .fontWeight(.bold)
                         .padding()
-                        
-                    } else {
-                        Text(delay ? "Starts in:" : "Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
-                            .fontWeight(.bold)
-                            .padding()
-                            .opacity(!seriesTimes.isEmpty || delay ? 1 : 0)
-                    }
+                        .opacity(!seriesTimes.isEmpty || delay ? 1 : 0)
                     
-                    
-                    
-                    
-                    // Show the remaining time section
                     if delay {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
@@ -105,13 +65,42 @@ struct AMRAPTimerView: View {
                             .padding()
                     }
                     
+                    Spacer()
+                    Spacer()
                     
-                }
-                .frame(height: 130)
+                }.padding()
                 
+                // Delay showing this part after countdown == 0
+                if countdown == 0 && showAfterDelay {
+                    Text(randomPhrase)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                    
+                    HStack {
+                        Image("clock_icon")
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+                            .padding(.all, 8)
+                            .padding(.leading, 12)
+                        
+                        Text(formatTimeWithDecimals(seconds: startingTime))
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.all, 8)
+                            .padding(.trailing, 12)
+                    }
+                    .background(Color(red: 60/255, green: 60/255, blue: 60/255))
+                    .cornerRadius(6)
+                    .padding()
+                    .transition(.opacity)
+                }
                 
                 Spacer()
-                
                 
                 HStack {
                     Button(action: {
@@ -123,7 +112,7 @@ struct AMRAPTimerView: View {
                         }
                     }) {
                         HStack(spacing: 10) {
-                            Image(isPaused ? "pause_icon" : "start_icon" )
+                            Image(isPaused ? "pause_icon" : "start_icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 14, height: 14)
@@ -150,7 +139,6 @@ struct AMRAPTimerView: View {
                                 .scaledToFit()
                                 .frame(width: 20, height: 20)
                                 .padding(.horizontal, 20)
-                            
                         }
                         .padding(.vertical, 20)
                         .background(Color(red: 247/255, green: 79/255, blue: 51/255))
@@ -161,11 +149,6 @@ struct AMRAPTimerView: View {
                 .disabled(countdown == 0 || delay)
                 .opacity(countdown == 0 || delay ? 0 : 1)
                 .padding(.bottom, 40)
-                
-                
-                
-                
-                
             }
             .onAppear {
                 randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
@@ -173,13 +156,25 @@ struct AMRAPTimerView: View {
                 initialCountdown = countdown
                 startDelay()
             }
+            .onChange(of: countdown) {
+                if countdown == 0 {
+                    // Add a delay before showing the text
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation {
+                            showAfterDelay = true
+                        }
+                    }
+                }
+            }
             .onDisappear {
+                riveAnimation.riveViewModel.reset()
+                stopTimer()
                 if(countdown == 0) {
                     saveWorkoutHistory()
                 }
-                
             }
         }
+        
         
     }
     
@@ -207,6 +202,8 @@ struct AMRAPTimerView: View {
             }
             
             if countdown == 0 {
+                timer?.invalidate()
+                timer = nil
                 riveAnimation.stopRiveAnimation()
             }
         }
@@ -235,14 +232,14 @@ struct AMRAPTimerView: View {
         
         workoutHistoryManager.addWorkout(workout)
     }
-        
+    
     
     
 }
 
 struct AMRAPTimerView_Previews: PreviewProvider {
     static var previews: some View {
-        AMRAPTimerView(showModal: .constant(true), countdown: 5)
+        AMRAPTimerView(countdown: 5)
     }
 }
 

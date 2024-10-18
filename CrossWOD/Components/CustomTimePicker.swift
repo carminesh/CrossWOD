@@ -8,38 +8,50 @@
 import SwiftUI
 
 struct CustomTimePicker: View {
-    // Intervalli di tempo personalizzati
-    let timeIntervals: [Int] = generateTimeIntervals()
-
+    
+    let intervalType: String
+    
     @Binding var selectedTime: Int
+    
+
+    // Computed property for time intervals based on intervalType
+    var timeIntervals: [Int] {
+        switch intervalType {
+        case "AMRAP":
+            return generateTimeIntervalsAMRAP()
+        case "EMOM":
+            return generateTimeIntervalsEMOM()
+        case "SIMPLE EMOM":
+            return generateTimeIntervalsSimpleEMOM(multiple: selectedTime)
+        default:
+            return generateTimeIntervalsAMRAP()
+        }
+    }
 
     var body: some View {
         VStack {
-            // Visualizza il tempo attualmente selezionato
+            // Display the currently selected time
             Text("Selected Time: \(formatTime(seconds: selectedTime))")
                 .font(.headline)
                 .padding()
 
-            // Picker per selezionare il tempo
+            // Picker to select the time
             Picker("Select Time", selection: $selectedTime) {
                 ForEach(timeIntervals, id: \.self) { time in
                     Text(formatTime(seconds: time)).tag(time)
                 }
             }
-            .labelsHidden() // Nascondi l'etichetta del picker
-            .pickerStyle(WheelPickerStyle()) // Stile a ruota
+            .labelsHidden() // Hide picker label
+            .pickerStyle(WheelPickerStyle()) // Wheel style picker
             .frame(height: 150)
         }
         .padding()
     }
-
-    
-    
 }
 
 
 struct CustomTimePicker_Previews: PreviewProvider {
     static var previews: some View {
-        CustomTimePicker(selectedTime: .constant(20)) // Use .constant to simulate a binding in the preview
+        CustomTimePicker(intervalType: "AMRAP", selectedTime: .constant(20))
     }
 }

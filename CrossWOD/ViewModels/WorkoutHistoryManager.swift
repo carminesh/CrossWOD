@@ -21,7 +21,7 @@ class WorkoutHistoryManager: ObservableObject {
         
         
         return grouped.map { WorkoutGroup(date: $0.key, workouts: $0.value) }
-            .sorted(by: { $0.date < $1.date })
+            .sorted(by: { $0.date > $1.date })
     }
     
     init() {

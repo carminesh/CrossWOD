@@ -43,48 +43,45 @@ struct ContentView: View {
                             Spacer()
                             // Glass cards for different modalities
                             GlassCardView(
-                                selectedMode: $selectedMode,
-                                showTimer: $showTimer,
                                 mode: "AMRAP",
                                 backgroundColor: Color.white,
                                 circleColor: Color(red: 247/255, green: 79/255, blue: 51/255),
                                 circleSize: 160,
-                                circleOffset: CGSize(width: -100, height: -160)
+                                circleOffset: CGSize(width: -100, height: -160),
+                                destination: AMRAPConfigView()
                             )
                             Spacer()
                             GlassCardView(
-                                selectedMode: $selectedMode,
-                                showTimer: $showTimer,
                                 mode: "EMOM",
                                 backgroundColor: Color.white,
                                 circleColor: Color.green,
                                 circleSize: 120,
-                                circleOffset: CGSize(width: -120, height: -100)
+                                circleOffset: CGSize(width: -120, height: -100),
+                                destination: EMOMConfigView()
                             )
+                            
                             Spacer()
                         }
                         .padding(.bottom, 6)
                         HStack {
                             Spacer()
                             GlassCardView(
-                                selectedMode: $selectedMode,
-                                showTimer: $showTimer,
                                 mode: "FOR TIME",
                                 backgroundColor: Color.white,
                                 circleColor: Color.yellow,
                                 circleSize: 120,
-                                circleOffset: CGSize(width: -100, height: -100)
+                                circleOffset: CGSize(width: -100, height: -100),
+                                destination: EMOMConfigView()
                             )
                             
                             Spacer()
                             GlassCardView(
-                                selectedMode: $selectedMode,
-                                showTimer: $showTimer,
                                 mode: "TABATA",
                                 backgroundColor: Color.white,
                                 circleColor: Color.blue,
                                 circleSize: 120,
-                                circleOffset: CGSize(width: -100, height: -160)
+                                circleOffset: CGSize(width: -100, height: -160),
+                                destination: EMOMConfigView()
                             )
                             
                             Spacer()
@@ -94,25 +91,7 @@ struct ContentView: View {
                     
                     Spacer()
                 }
-                .sheet(isPresented: $showTimer) { [selectedMode] in
-                    
-                    
-                    // Present appropriate view based on selected mode
-                    if selectedMode == "AMRAP" {
-                        AMRAPConfigView(showModal: $showTimer, selectedMode: $selectedMode)
-                    } else if selectedMode == "EMOM" {
-                        AMRAPConfigView(showModal: $showTimer, selectedMode: $selectedMode)
-                    } else if selectedMode == "FOR TIME" {
-                        // Replace with the correct view for "FOR TIME"
-                        Text("For Time view")
-                    } else if selectedMode == "TABATA" {
-                        // Replace with the correct view for "TABATA"
-                        Text("Tabata view")
-                    } else {
-                        // Default view when selectedMode is empty or unexpected
-                        Text("Selected Mode: \(selectedMode)")
-                    }
-                }
+                
             }
         }
         .accentColor(.white)

@@ -37,7 +37,7 @@ struct WorkoutHistoryView: View {
         .listStyle(.insetGrouped)
     }
     
-    }
+}
 
 #Preview {
     WorkoutHistoryView()

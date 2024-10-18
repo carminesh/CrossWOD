@@ -8,23 +8,18 @@
 import SwiftUI
 
 
-struct GlassCardView: View {
+struct GlassCardView<Destination: View>: View {
     
-    @Binding var selectedMode: String
-    @Binding var showTimer: Bool
     var mode: String
     var backgroundColor: Color
     var circleColor: Color
     var circleSize: CGFloat // max size 160
     var circleOffset: CGSize
+    let destination: Destination
     
     var body: some View {
-        Button(action: {
-            DispatchQueue.main.async {
-                selectedMode = mode
-                showTimer = true
-            }
-        }) {
+        
+        NavigationLink(destination: destination) {
             ZStack {
                 Circle()
                     .fill(circleColor.opacity(0.6)) // Semi-transparent color
@@ -55,13 +50,15 @@ struct GlassCardView: View {
                             .frame(width: circleSize * 1.875, height: circleSize * 1.875) // Larger than the main circle
                             .offset(circleOffset) // Reapply dynamic offset
                     }
-                    .blur(radius: 90) // Apply blur for the frosted glass effect
+                        .blur(radius: 90) // Apply blur for the frosted glass effect
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 .shadow(radius: 50) // Optional: adds shadow for depth
             }
         }
     }
+    
+    
 }
 
 
@@ -74,19 +71,3 @@ extension View {
     }
 }
 
-#Preview {
-    // Create dummy states for the preview
-    @Previewable @State  var selectedMode: String = "AMRAP"
-    @Previewable @State  var showTimer: Bool = false
-    
-    // Embed the view in a parent view to use State properties
-    GlassCardView(
-                selectedMode: $selectedMode,
-                showTimer: $showTimer,
-                mode: "AMRAP",
-                backgroundColor: Color.white,
-                circleColor: Color.red,
-                circleSize: 160,
-                circleOffset: CGSize(width: -100, height: -160)
-            )
-}
