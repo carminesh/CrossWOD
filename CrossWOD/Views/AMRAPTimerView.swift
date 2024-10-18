@@ -28,6 +28,7 @@ struct AMRAPTimerView: View {
     
     
     var body: some View {
+        
         ZStack {
             
             riveAnimation.riveViewModel.view()
@@ -51,6 +52,8 @@ struct AMRAPTimerView: View {
                         .fontWeight(.bold)
                         .padding()
                         .opacity(!seriesTimes.isEmpty || delay ? 1 : 0)
+                    
+            
                     
                     if delay {
                         Text("\(delayCountdown)")
@@ -98,10 +101,13 @@ struct AMRAPTimerView: View {
                     }
                     .background(Color(red: 60/255, green: 60/255, blue: 60/255))
                     .cornerRadius(6)
-                    .padding(.bottom, 100)
+                    .padding(.bottom, UIScreen.main.bounds.height * 0.1)
                     .transition(.opacity)
+                    
+                
                 }
                 
+               
                 Spacer()
                 
                 HStack {
