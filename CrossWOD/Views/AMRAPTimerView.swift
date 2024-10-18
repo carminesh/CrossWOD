@@ -24,7 +24,8 @@ struct AMRAPTimerView: View {
     @State private var delayCountdown : Int = 3
     @State private var initialCountdown : Int = 0
     @State private var seriesTimes: [Int] = []
-    @State private var showAfterDelay: Bool = false // Added state variable
+    @State private var showAfterDelay: Bool = false
+    
     
     var body: some View {
         ZStack {
@@ -78,6 +79,7 @@ struct AMRAPTimerView: View {
                         .multilineTextAlignment(.center)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
                         .padding()
                     
                     HStack {
@@ -96,7 +98,7 @@ struct AMRAPTimerView: View {
                     }
                     .background(Color(red: 60/255, green: 60/255, blue: 60/255))
                     .cornerRadius(6)
-                    .padding()
+                    .padding(.bottom, 100)
                     .transition(.opacity)
                 }
                 
@@ -195,8 +197,13 @@ struct AMRAPTimerView: View {
     
     private func startTimer() {
         riveAnimation.startRiveAnimation()
+
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.prepare() // Prepare the generator
+            generator.impactOccurred() // Trigger the feedback
+            
             if isPaused && countdown > 0 {
                 countdown -= 1
             }
@@ -220,6 +227,8 @@ struct AMRAPTimerView: View {
         seriesTimes.append(seriesTime)
         initialCountdown -= seriesTime
     }
+    
+
     
     private func saveWorkoutHistory() {
         let workout = Workout(
