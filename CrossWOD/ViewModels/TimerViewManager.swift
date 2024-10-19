@@ -84,8 +84,19 @@ class TimerViewManager: ObservableObject {
     }
     
     func saveWorkoutHistory() {
+        let workoutEnumType: WorkoutType
+        
+        switch workoutType.lowercased() {
+        case "amrap":
+            workoutEnumType = .amrap
+        case "emom":
+            workoutEnumType = .emom
+        default:
+            workoutEnumType = .amrap  
+        }
+        
         let workout = Workout(
-            type: workoutType,  // Use the generalized workout type
+            type: workoutEnumType,
             date: Date(),
             initialCountdown: startingTime,
             seriesPerformed: seriesTimes.count,

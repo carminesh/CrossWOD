@@ -24,7 +24,7 @@ struct HistoryRow: View {
                     .clipShape(Circle())
                 
                 
-                Text(workout.type)
+                Text(workout.type.rawValue.capitalized)
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -32,28 +32,74 @@ struct HistoryRow: View {
             
             Spacer()
             
-            VStack {
-                Image("clock_icon")
-                    .scaledToFit()
-                    .frame(width: 16, height: 16)
+            if workout.type == .amrap {
                 
-                Text(formatTimeWithDecimals(seconds: workout.initialCountdown))
-                    .font(.body)
-                    .foregroundColor(.white)
-            }.padding()
-            
-            Spacer()
-            
-            VStack {
-                Text(String(workout.seriesPerformed))
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
+                VStack {
+                    Image("clock_icon")
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                    
+                    Text(formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0))
+                        .font(.body)
+                        .foregroundColor(.white)
+                }.padding()
                 
-                Text("Series")
-                    .font(.body)
-                    .foregroundColor(.white)
-            }.padding()
+                Spacer()
+                
+                VStack {
+                    Text(String(workout.seriesPerformed ?? 0))
+                        .font(.body)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Text("Series")
+                        .font(.body)
+                        .foregroundColor(.white)
+                }.padding()
+                
+            } else if workout.type == .emom {
+                
+                VStack {
+                    
+                    
+                    if let numberOfRounds = workout.numberOfRounds {
+                        let roundsText = numberOfRounds == 1 ? "Round" : "Rounds"
+                        let formattedTime = formatTimeToNumberOnly(seconds: numberOfRounds)
+                        
+                        Text("\(formattedTime)")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("\(roundsText)")
+                            .font(.body)
+                            .foregroundColor(.white)
+                    }
+                }.padding()
+                
+                Spacer()
+                
+                VStack {
+                    
+                    if let seriesPerformed = workout.performedSets {
+                        let setText = seriesPerformed == 1 ? "Set" : "Sets"
+                        let numberOfPerformedSeries = formatTimeToNumberOnly(seconds:  workout.performedSets ?? 0)
+                        
+                        Text("\(numberOfPerformedSeries)")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("\(setText)")
+                            .font(.body)
+                            .foregroundColor(.white)
+                        
+                    }
+                    
+                }.padding()
+                
+                
+            }
             
             Spacer()
             Spacer()
@@ -67,13 +113,13 @@ struct HistoryRow: View {
 
 #Preview {
     let dummyWorkout = Workout(
-        type: "AMRAP",
+        type: .amrap,
         date: Date(), // Use the current date for the dummy workout
         initialCountdown: 300, // 5 minutes countdown
         seriesPerformed: 5,
         seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
     )
-    let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type)
+    let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
     
     HistoryRow(viewModel: viewModel, workout: dummyWorkout)
 }

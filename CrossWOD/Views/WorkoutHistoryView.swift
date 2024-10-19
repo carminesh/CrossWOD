@@ -16,7 +16,7 @@ struct WorkoutHistoryView: View {
                 Section(header: Text(dateFormatter.string(from: group.date))) {
                     ForEach(group.workouts) { workout in
                         HistoryRow(
-                            viewModel: HistoryRowViewModel(workoutType: workout.type),
+                            viewModel: HistoryRowViewModel(workoutType: workout.type.rawValue),
                             workout: workout
                         )
                         .listRowInsets(EdgeInsets())

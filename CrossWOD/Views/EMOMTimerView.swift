@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct EMOMTimerView: View {
+    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
+    
+    
     let everyTime: Int // Time interval (e.g. every minute)
     let forTime: Int // Number of rounds before rest
     let numberOfSeries: Int // Total series to be performed
@@ -36,6 +39,7 @@ struct EMOMTimerView: View {
         ZStack {
             riveAnimation.riveViewModel.view()
                 .opacity(delayCountdown == 0 ? 1 : 0)
+                .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
                 .aspectRatio(contentMode: .fill)
             
@@ -50,7 +54,7 @@ struct EMOMTimerView: View {
                 
                 Text("Set: \(currentSeries)/\(numberOfSeries)")
                     .font(.title3)
-                    .opacity(numberOfSeries  > 1 || timerHasFinished ? 0: 1)
+                    .opacity(timerHasFinished ? 0 : 1)
                     .padding(.top, 4)
                 
                 Text(isResting ? "Rest Time" : "Round: \(currentRound)/\(formatTimeToNumberOnly(seconds: forTime))")
@@ -179,6 +183,9 @@ struct EMOMTimerView: View {
             }
             .onDisappear {
                 stopTimer()
+                if timeRemaining == 0 {
+                    saveWorkoutHistory()
+                }
             }
         }
     }
@@ -271,6 +278,18 @@ struct EMOMTimerView: View {
                 startTimer() // Start the next round
             }
         }
+    }
+    
+    private func saveWorkoutHistory() {
+        let workout = Workout(
+            type: .emom,
+            date: Date(),
+            performedSets: numberOfSeries,
+            numberOfRounds: forTime,
+            roundTimes: everyTime
+        )
+        
+        workoutHistoryManager.addWorkout(workout)
     }
     
     

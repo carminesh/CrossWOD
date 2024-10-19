@@ -70,7 +70,7 @@ struct WorkoutHistoryDetailView: View {
                     
                     Text(
                         formatTimeWithDecimals(
-                            seconds: workout.initialCountdown
+                            seconds: workout.initialCountdown ?? 0
                         )
                     )
                     .font(.headline)
@@ -90,7 +90,7 @@ struct WorkoutHistoryDetailView: View {
                 
         
         
-        if !workout.seriesTimes.isEmpty {
+        if let seriesTimes = workout.seriesTimes, !seriesTimes.isEmpty {
             
             VStack(spacing: 0) {
                 
@@ -104,12 +104,7 @@ struct WorkoutHistoryDetailView: View {
                     .padding(.bottom, 0)
                 
                 List {
-                    ForEach(
-                        Array(workout.seriesTimes.enumerated()),
-                        id: \.offset
-                    ) {
-                        index,
-                        time in
+                    ForEach(Array(seriesTimes.enumerated()), id: \.offset) { index, time in
                         HStack {
                             Text("Series \(index + 1)")
                                 .font(.body)
@@ -124,39 +119,21 @@ struct WorkoutHistoryDetailView: View {
                                 .padding()
                             
                             Spacer()
-                         
                             
-                            Text(
-                                workoutHistoryManager
-                                    .timeDifferenceText(
-                                        workout: workout,
-                                        for: index
-                                    )
-                            )
-                            .font(.body)
-                            .foregroundColor(
-                                workoutHistoryManager
-                                    .timeDifferenceColor(
-                                        workout: workout,
-                                        for: index
-                                    )
-                            )
-                            .frame(width: 70)
-                            .padding()
+                            Text(workoutHistoryManager.timeDifferenceText(workout: workout, for: index))
+                                .font(.body)
+                                .foregroundColor(workoutHistoryManager.timeDifferenceColor(workout: workout, for: index))
+                                .frame(width: 70)
+                                .padding()
                         }
-                        .background(
-                            Color(red: 28/255, green: 28/255, blue: 30/255)
-                        )
+                        .background(Color(red: 28/255, green: 28/255, blue: 30/255))
                         .cornerRadius(10)
                         .listRowInsets(EdgeInsets())
                     }
                 }
             }
             .listStyle(.insetGrouped)
-            
-            
-            
-            
+
         } else {
             VStack(spacing: 0) {
                 
@@ -188,7 +165,7 @@ struct WorkoutHistoryDetailView: View {
 
 #Preview {
     let dummyWorkout = Workout(
-        type: "AMRAP",
+        type: .amrap,
         date: Date(), // Use the current date for the dummy workout
         initialCountdown: 300, // 5 minutes countdown
         seriesPerformed: 5,

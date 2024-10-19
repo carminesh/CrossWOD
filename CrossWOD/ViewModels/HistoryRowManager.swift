@@ -21,7 +21,7 @@ class HistoryRowViewModel: ObservableObject {
         case "amrap":
             return Color(red: 247/255, green: 79/255, blue: 51/255)
         case "emom":
-            return Color.blue
+            return Color.green
         case "for time":
             return Color.red
         case "tabata":

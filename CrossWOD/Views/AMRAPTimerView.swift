@@ -33,6 +33,7 @@ struct AMRAPTimerView: View {
             
             riveAnimation.riveViewModel.view()
                 .opacity(delayCountdown == 0 ? 1 : 0)
+                .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
                 .aspectRatio(contentMode: .fill)
             
@@ -238,7 +239,7 @@ struct AMRAPTimerView: View {
     
     private func saveWorkoutHistory() {
         let workout = Workout(
-            type: "AMRAP",
+            type: .amrap,
             date: Date(),
             initialCountdown: startingTime,
             seriesPerformed: seriesTimes.count,
