@@ -10,10 +10,44 @@ import SwiftUI
 struct WorkoutHistoryDetailView: View {
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     var workout: Workout
-        
+    
     var body: some View {
         
-       
+        VStack {
+            Text("Workout type: ")
+                .font(.body)
+                .multilineTextAlignment(.leading)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical)
+                .padding(.leading, 26)
+            
+            
+            HStack {
+                HStack {
+                    
+                    
+                    Text(workout.type.rawValue)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(width: 150)
+                        .background(Color(red: 28/255, green: 28/255, blue: 30/255))
+                        .cornerRadius(10)
+                        .padding()
+                    
+                    
+                    
+                }
+                .frame(width: 150)
+                .background(Color(red: 28/255, green: 28/255, blue: 30/255))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+            }.padding(.horizontal)
+
+            
+        }
         
         HStack {
             
@@ -87,80 +121,146 @@ struct WorkoutHistoryDetailView: View {
             
             
         }.padding(.bottom, 30)
-                
         
-        
-        if let seriesTimes = workout.seriesTimes, !seriesTimes.isEmpty {
-            
-            VStack(spacing: 0) {
+        if workout.type == .amrap {
+            if let seriesTimes = workout.seriesTimes, !seriesTimes.isEmpty {
                 
-                Text("Round timing:")
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.black)
-                    .padding(.leading, 22)
-                    .padding(.bottom, 0)
-                
-                List {
-                    ForEach(Array(seriesTimes.enumerated()), id: \.offset) { index, time in
-                        HStack {
-                            Text("Series \(index + 1)")
-                                .font(.body)
-                                .foregroundColor(.white)
-                                .padding()
-                            
-                            Spacer()
-                            
-                            Text(formatTimeWithDecimals(seconds: time))
-                                .font(.body)
-                                .foregroundColor(.white)
-                                .padding()
-                            
-                            Spacer()
-                            
-                            Text(workoutHistoryManager.timeDifferenceText(workout: workout, for: index))
-                                .font(.body)
-                                .foregroundColor(workoutHistoryManager.timeDifferenceColor(workout: workout, for: index))
-                                .frame(width: 70)
-                                .padding()
+                VStack(spacing: 0) {
+                    
+                    Text("Round timing:")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.black)
+                        .padding(.leading, 22)
+                        .padding(.bottom, 0)
+                    
+                    List {
+                        ForEach(Array(seriesTimes.enumerated()), id: \.offset) { index, time in
+                            HStack {
+                                Text("Series \(index + 1)")
+                                    .font(.body)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                
+                                Spacer()
+                                
+                                Text(formatTimeWithDecimals(seconds: time))
+                                    .font(.body)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                
+                                Spacer()
+                                
+                                Text(workoutHistoryManager.timeDifferenceText(workout: workout, for: index))
+                                    .font(.body)
+                                    .foregroundColor(workoutHistoryManager.timeDifferenceColor(workout: workout, for: index))
+                                    .frame(width: 70)
+                                    .padding()
+                            }
+                            .background(Color(red: 28/255, green: 28/255, blue: 30/255))
+                            .cornerRadius(10)
+                            .listRowInsets(EdgeInsets())
                         }
-                        .background(Color(red: 28/255, green: 28/255, blue: 30/255))
-                        .cornerRadius(10)
-                        .listRowInsets(EdgeInsets())
                     }
                 }
-            }
-            .listStyle(.insetGrouped)
-
-        } else {
-            VStack(spacing: 0) {
+                .listStyle(.insetGrouped)
                 
-                Text("Round timing:")
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.black)
-                    .padding(.leading, 22)
-                    .padding(.bottom, 0)
-                
-                Text("For this workout, series were not performed.")
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.black)
-                    .padding(.leading, 22)
-                    .padding(.top, 18)
+            } else {
+                VStack(spacing: 0) {
+                    
+                    Text("Round timing:")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.black)
+                        .padding(.leading, 22)
+                        .padding(.bottom, 0)
+                    
+                    Text("For this workout, series were not performed.")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.black)
+                        .padding(.leading, 22)
+                        .padding(.top, 18)
+                }
             }
+        } else if workout.type == .emom {
+            
+            HStack {
+                
+                Spacer()
+                
+                VStack {
+                    Text("Every: ")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical)
+                        .padding(.leading, 22)
+                    
+                    
+                    VStack {
+                        
+                        
+                        Text("\(formatTimeWithDecimals(seconds: workout.roundTimes ?? 0)) \(formatTimeToOnlyText(seconds: workout.roundTimes ?? 0))")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                        
+                    }
+                    .frame(width: 150)
+                    .background(Color(red: 28/255, green: 28/255, blue: 30/255))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                }
+                
+                Spacer()
+                
+                
+                VStack {
+                    
+                    Text("For duration of: ")
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical)
+                        .padding(.leading, 22)
+                    
+                    VStack {
+                        
+                        
+                        Text("\(formatTimeWithDecimals(seconds: workout.numberOfRounds ?? 0)) \(formatTimeToOnlyText(seconds: workout.numberOfRounds ?? 0))")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                        
+                    }
+                    .frame(width: 150)
+                    .background(Color(red: 28/255, green: 28/255, blue: 30/255))
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                    
+                }
+                
+                
+            }
+            .padding(.bottom, 40)
+                        
+            
         }
+        
         
         Spacer()
         
-        
     }
+    
 }
 
 #Preview {
