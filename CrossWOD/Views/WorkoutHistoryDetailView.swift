@@ -104,7 +104,7 @@ struct WorkoutHistoryDetailView: View {
                         }.padding(.leading, 16)
                         
                         // Conditional views for AMRAP or EMOM workout types
-                        if workout.type == .Amrap {
+                        if workout.type == .Amrap || workout.type == .ForTime {
                             if let seriesTimes = workout.seriesTimes, !seriesTimes.isEmpty {
                                 VStack(alignment: .leading) {
                                     Text("Round timing:")

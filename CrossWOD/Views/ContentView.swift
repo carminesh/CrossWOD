@@ -16,7 +16,7 @@ struct ContentView: View {
     let workouts = [
         (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPConfigView())),
         (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
-        (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible",  destination: AnyView(AMRAPConfigView())),
+        (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible",  destination: AnyView(ForTimeConfigView())),
         (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(AMRAPConfigView()))
     ]
     

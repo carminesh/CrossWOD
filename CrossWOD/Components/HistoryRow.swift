@@ -22,15 +22,18 @@ struct HistoryRow: View {
                 viewModel.shape()
                 
                 
-                Text(workout.type.rawValue.capitalized)
+                Text(workout.type.rawValue)
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-            }.padding()
+                
+            }
+            .frame(width: 70)
+            .padding()
             
             Spacer()
             
-            if workout.type == .Amrap {
+            if workout.type == .Amrap || workout.type == .ForTime {
                 
                 VStack {
                     Image("clock_icon")
@@ -40,7 +43,9 @@ struct HistoryRow: View {
                     Text(formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0))
                         .font(.body)
                         .foregroundColor(.white)
-                }.padding()
+                }
+                .frame(width: 50)
+                .padding()
                 
                 Spacer()
                 
@@ -53,7 +58,9 @@ struct HistoryRow: View {
                     Text("Series")
                         .font(.body)
                         .foregroundColor(.white)
-                }.padding()
+                }
+                .frame(width: 50)
+                .padding()
                 
             } else if workout.type == .Emom {
                 
@@ -73,7 +80,9 @@ struct HistoryRow: View {
                             .font(.body)
                             .foregroundColor(.white)
                     }
-                }.padding()
+                }
+                .padding()
+
                 
                 Spacer()
                 
@@ -114,7 +123,7 @@ struct HistoryRow: View {
 
 #Preview {
     let dummyWorkout = Workout(
-        type: .Amrap,
+        type: .Emom,
         date: Date(), // Use the current date for the dummy workout
         initialCountdown: 300, // 5 minutes countdown
         seriesPerformed: 5,

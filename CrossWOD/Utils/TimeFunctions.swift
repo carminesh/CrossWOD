@@ -116,3 +116,13 @@ func generateTimeIntervalsSimpleEMOM(multiple: Int) -> [Int] {
 
     return intervals
 }
+
+func generateTimeIntervalsForTime() -> [Int] {
+    var intervals: [Int] = []
+
+    // from  1:00 to 90:00 minutes (increments by 60 seconds)
+    intervals.append(contentsOf: stride(from: 60, through: 5400, by: 60))
+
+
+    return intervals
+}

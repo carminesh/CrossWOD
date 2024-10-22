@@ -23,6 +23,8 @@ struct CustomTimePicker: View {
             return generateTimeIntervalsEMOM()
         case "SIMPLE EMOM":
             return generateTimeIntervalsSimpleEMOM(multiple: selectedTime)
+        case "FOR TIME":
+            return generateTimeIntervalsForTime()
         default:
             return generateTimeIntervalsAMRAP()
         }
