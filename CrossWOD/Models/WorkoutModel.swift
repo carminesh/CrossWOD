@@ -9,8 +9,8 @@
 import Foundation
 
 enum WorkoutType: String, Codable {
-    case amrap  // As Many Rounds As Possible
-    case emom   // Every Minute On the Minute
+    case Amrap  // As Many Rounds As Possible
+    case Emom   // Every Minute On the Minute
     // Add more workout types as needed
 }
 

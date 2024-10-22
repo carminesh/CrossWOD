@@ -5,99 +5,66 @@
 //  Created by Carmine Fabbri on 12/10/24.
 //
 
-import SwiftUI
 
+import SwiftUI
 
 struct ContentView: View {
     @State private var selectedMode: String = ""
     @State private var showTimer = false
     
+
+    let workouts = [
+        (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPConfigView())),
+        (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
+        (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible",  destination: AnyView(AMRAPConfigView())),
+        (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(AMRAPConfigView()))
+    ]
+    
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black.edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    HStack {
-                        Text("welcome.")
-                            .foregroundColor(.white)
-                            .font(.largeTitle)
-                            .padding()
-                        Spacer()
-                        
-                        NavigationLink(destination: SettingsView()) {
-                            Image("setting_icon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 30)
-                        }
-                        
-                        
-                        
-                        
-                    }
-                    .padding()
+        GeometryReader { geometry in
+            NavigationView {
+                ZStack {
+                    Color("backgroundColor").edgesIgnoringSafeArea(.all)
                     
                     VStack {
                         HStack {
+                            Text("welcome.")
+                                .foregroundColor(.white)
+                                .font(.largeTitle)
+                                .padding()
                             Spacer()
-                            // Glass cards for different modalities
-                            GlassCardView(
-                                mode: "AMRAP",
-                                backgroundColor: Color.white,
-                                circleColor: Color(red: 247/255, green: 79/255, blue: 51/255),
-                                circleSize: 160,
-                                circleOffset: CGSize(width: -100, height: -160),
-                                destination: AMRAPConfigView()
-                            )
-                            Spacer()
-                            GlassCardView(
-                                mode: "EMOM",
-                                backgroundColor: Color.white,
-                                circleColor: Color.green,
-                                circleSize: 120,
-                                circleOffset: CGSize(width: -120, height: -100),
-                                destination: EMOMConfigView()
-                            )
                             
-                            Spacer()
+                            NavigationLink(destination: SettingsView()) {
+                                Image("setting_icon")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                            }
                         }
-                        .padding(.bottom, 6)
-                        HStack {
-                            Spacer()
-                            GlassCardView(
-                                mode: "FOR TIME",
-                                backgroundColor: Color.white,
-                                circleColor: Color.yellow,
-                                circleSize: 120,
-                                circleOffset: CGSize(width: -100, height: -100),
-                                destination: EMOMConfigView()
-                            )
-                            
-                            Spacer()
-                            GlassCardView(
-                                mode: "TABATA",
-                                backgroundColor: Color.white,
-                                circleColor: Color.blue,
-                                circleSize: 120,
-                                circleOffset: CGSize(width: -100, height: -160),
-                                destination: EMOMConfigView()
-                            )
-                            
-                            Spacer()
+                        .padding()
+                        
+                      
+                        LazyVStack(spacing: 0) {
+                            ForEach(workouts, id: \.title) { workout in
+                                NavigationLink(destination: workout.destination) {
+                                    CardView(
+                                        imageName: workout.icon, title: workout.title, modeDescription: workout.modeDescription
+                                    )
+                                    .frame(height: geometry.size.width / 3.45)
+                  
+                                }
+                            }
                         }
+                        
+                        Spacer()
                     }
-                    .padding()
-                    
-                    Spacer()
                 }
-                
             }
+            .accentColor(.white)
         }
-        .accentColor(.white)
     }
-    
 }
+
 
 #Preview {
     ContentView()

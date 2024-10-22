@@ -19,15 +19,51 @@ class HistoryRowViewModel: ObservableObject {
     var color: Color {
         switch workoutType.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
         case "amrap":
-            return Color(red: 247/255, green: 79/255, blue: 51/255)
+            return Color("amrapAccentColor")
         case "emom":
-            return Color.green
+            return Color("emomAccentColor")
         case "for time":
-            return Color.red
+            return Color("fortimeAccentColor")
         case "tabata":
-            return Color.purple
+            return Color("tabataAccentColor")
         default:
             return Color.gray
+        }
+    }
+    
+    // Method to return different shapes based on workout type
+    func shape() -> AnyView {
+        switch workoutType.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "amrap":
+            return AnyView(
+                Circle()
+                    .fill(color)
+                    .frame(width: 18, height: 18)
+            )
+        case "emom":
+            return AnyView(
+                Hexagon()
+                    .fill(color)
+                    .frame(width: 18, height: 18)
+            )
+        case "for time":
+            return AnyView(
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(color)
+                    .frame(width: 18, height: 18)
+            )
+        case "tabata":
+            return AnyView(
+                Triangle()
+                    .fill(color)
+                    .frame(width: 18, height: 18)
+            )
+        default:
+            return AnyView(
+                Circle()
+                    .fill(Color.gray)
+                    .frame(width: 18, height: 18)
+            )
         }
     }
 }

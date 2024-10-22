@@ -65,6 +65,10 @@ struct EMOMAdditionalConfigView: View {
                     )
                     .padding(.leading, geometry.size.width * 0.02)
                 }
+                .padding()
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(20)
+                
                 
                 // Rest Time Section
                 Text("Rest time")
@@ -131,6 +135,9 @@ struct EMOMAdditionalConfigView: View {
                     )
                     .padding(.leading, geometry.size.width * 0.02)
                 }
+                .padding()
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(20)
                 
                 Spacer()
                 
@@ -142,7 +149,7 @@ struct EMOMAdditionalConfigView: View {
                             .font(.body)
                             .fontWeight(.bold)
                             .padding()
-                            .background(.green)
+                            .background(Color("emomAccentColor"))
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
@@ -152,15 +159,16 @@ struct EMOMAdditionalConfigView: View {
                         Button(action: {
                             selectedRestTime = 10
                             numberOfSeries = 1
+
                         }) {
                             Image(systemName: "arrow.uturn.backward")
                                 .font(.title2) // Dynamic size
                                 .foregroundColor(.white)
                                 .padding()
                         }
-                        .frame(width: geometry.size.width * 0.125, height: geometry.size.width * 0.125)
-                        .background(.gray)
-                        .cornerRadius(10)
+                        .frame(width: geometry.size.width * 0.135, height: geometry.size.width * 0.135)
+                        .background(Color("cardBackgroundColor"))
+                        .cornerRadius(15)
                     }
                 }
                

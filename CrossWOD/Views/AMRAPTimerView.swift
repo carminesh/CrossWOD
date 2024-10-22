@@ -31,6 +31,10 @@ struct AMRAPTimerView: View {
         
         ZStack {
             
+            
+            Color("backgroundColor")
+                  .ignoresSafeArea()
+            
             riveAnimation.riveViewModel.view()
                 .opacity(delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: delayCountdown)
@@ -60,7 +64,7 @@ struct AMRAPTimerView: View {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
                             .fontWeight(.bold)
-                            .foregroundColor(Color(red: 247/255, green: 79/255, blue: 51/255))
+                            .foregroundColor(Color("amrapAccentColor"))
                     } else {
                         Text(formatTimeWithDecimals(seconds: countdown))
                             .font(.system(size: 60))
@@ -134,8 +138,8 @@ struct AMRAPTimerView: View {
                                 .padding(.trailing, 50)
                         }
                         .padding(.vertical, 20)
-                        .background(Color(red: 60/255, green: 60/255, blue: 60/255))
-                        .cornerRadius(10)
+                        .background(Color("cardBackgroundColor"))
+                        .cornerRadius(15)
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
                     
@@ -150,8 +154,8 @@ struct AMRAPTimerView: View {
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)
-                        .background(Color(red: 247/255, green: 79/255, blue: 51/255))
-                        .cornerRadius(10)
+                        .background(Color("amrapAccentColor"))
+                        .cornerRadius(15)
                     }
                     
                 }
@@ -239,7 +243,7 @@ struct AMRAPTimerView: View {
     
     private func saveWorkoutHistory() {
         let workout = Workout(
-            type: .amrap,
+            type: .Amrap,
             date: Date(),
             initialCountdown: startingTime,
             seriesPerformed: seriesTimes.count,

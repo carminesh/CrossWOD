@@ -11,7 +11,7 @@ struct EMOMConfigView: View {
     
     @State private var everyTime: Int = 60 {
         didSet {
-            // Update forTime to be the next multiple of everyTime if needed
+          
             updateForTime()
         }
     }
@@ -32,73 +32,73 @@ struct EMOMConfigView: View {
     
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
+            Color("backgroundColor")
+                .edgesIgnoringSafeArea(.all)
             
             VStack {
                 Text("EMOM")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .padding()
+                    .padding(.top, 20)
+                
+                Text("Every minute on the minute")
+                    .font(.subheadline)
                 
                 Spacer()
                 
-                Text("Every x minute(s) for y repetition(s)")
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding()
+                // Time Configuration Box
+                VStack {
+                    Text("Workout every:")
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                    
+                    Button(action: {
+                        showTimePicker = true
+                        everyTimeBool = true // Show time picker
+                    }) {
+                        Text(formatTimeWithDecimals(seconds: everyTime))
+                            .font(.system(size: 46))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                    }
+                }
+                .frame(minWidth: UIScreen.main.bounds.width * 0.8)
+                .padding()
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(25)
+                .padding(.top, 30)
+                
                 
                 VStack {
-                    HStack {
-                        VStack {
-                            Text("Every:")
-                                .font(.title)
-                                .fontWeight(.medium)
-                                .foregroundColor(.white)
-                                .padding(6)
-                            
-                            Text("for:")
-                                .font(.title)
-                                .fontWeight(.medium)
-                                .foregroundColor(.white)
-                                .padding()
-                        }
+                    Text("for:")
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
                         .padding()
-                        
-                        VStack {
-                            Button(action: {
-                                showTimePicker = true
-                                everyTimeBool = true
-                            }) {
-                                Text(formatTimeToNumberOnly(seconds: everyTime))
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.green, lineWidth: 3)
-                                    )
-                            }
-                            .padding(.bottom, 4)
-                            
-                            Button(action: {
-                                showTimePicker = true
-                                forTimeBool = true
-                            }) {
-                                Text(formatTimeToNumberOnly(seconds: forTime))
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.green, lineWidth: 3)
-                                    )
-                            }
-                        }
+                    
+                    Button(action: {
+                        showTimePicker = true
+                        forTimeBool = true
+                    }) {
+                        Text(formatTimeWithDecimals(seconds: forTime))
+                            .font(.system(size: 46))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                     }
+                }
+                .frame(minWidth: UIScreen.main.bounds.width * 0.8)
+                .padding()
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(25)
+                .padding(.top, 30)
+                
+                
+               
+                
+                VStack {
+                    
                     
                     Button(action: {
                         withAnimation {
@@ -108,7 +108,7 @@ struct EMOMConfigView: View {
                         Text(additionalSettingsAreApplied ? "Custom configuration added" : "+ Add configuration (optional)")
                             .font(.body)
                             .fontWeight(.medium)
-                            .foregroundColor(additionalSettingsAreApplied ? .green : .white)
+                            .foregroundColor(additionalSettingsAreApplied ? Color("emomAccentColor") : .white)
                             .padding()
                     }
                     .padding()
@@ -125,9 +125,9 @@ struct EMOMConfigView: View {
                             .font(.body)
                             .fontWeight(.bold)
                             .padding()
-                            .background(.green)
+                            .background(Color("emomAccentColor"))
                             .foregroundColor(.white)
-                            .cornerRadius(10)
+                            .cornerRadius(15)
                     }
                     .padding()
                 }
@@ -148,7 +148,7 @@ struct EMOMConfigView: View {
             // Custom time picker overlay
             if showTimePicker {
                 ZStack {
-                    Color.black.opacity(1) // Dimmed background
+                    Color.black.opacity(0.9) 
                     
                     VStack {
                         if everyTimeBool {
@@ -169,12 +169,14 @@ struct EMOMConfigView: View {
                         .padding()
                         .buttonStyle(.bordered)
                     }
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(25)
                     .frame(width: 300, height: 400)
                     .cornerRadius(20)
                     .shadow(radius: 10)
-                    .transition(.scale) // Animation for showing the picker
+                    .transition(.scale)
                 }
-                .edgesIgnoringSafeArea(.all) // Cover the entire screen
+                .edgesIgnoringSafeArea(.all)
             }
         }
         .animation(.easeInOut, value: showTimePicker)

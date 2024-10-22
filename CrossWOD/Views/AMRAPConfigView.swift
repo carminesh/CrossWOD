@@ -13,49 +13,46 @@ struct AMRAPConfigView: View {
     
     var body: some View {
         ZStack {
-            
-            Color.black.edgesIgnoringSafeArea(.all)
+            Color("backgroundColor")
+                .edgesIgnoringSafeArea(.all)
             
             VStack {
-                
-                
+                // Title
                 Text("AMRAP")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .padding()
+                    .padding(.top, 50)
                 
-                Spacer()
+                Text("As many rounds as possible")
+                    .font(.subheadline)
+                    
+                    
                 
-                Text("Maximum number of possible series in:")
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding()
                 
-                HStack {
+                // Time Configuration Box
+                VStack {
+                    Text("Maximum number of possible series in:")
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                    
                     Button(action: {
                         showTimePicker = true // Show time picker
                     }) {
-                        Text(formatTimeToNumberOnly(seconds: selectedTime))
-                            .font(.title)
+                        Text(formatTimeWithDecimals(seconds: selectedTime))
+                            .font(.system(size: 46))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding()
-                            .overlay( // Create the outline
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color(red: 247/255, green: 79/255, blue: 51/255), lineWidth: 3)
-                            )
                     }
-                    
-                    Text(formatTimeToOnlyText(seconds: selectedTime))
-                        .font(.title)
-                        .fontWeight(.medium)
-                        .foregroundColor(.white)
-                        .padding(6)
                 }
+                .padding()
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(25)
+                .padding(.top, 30)
+                .frame(maxWidth: UIScreen.main.bounds.width * 0.9)
                 
-                Spacer()
+                Spacer() 
                 
                 // NavigationLink for starting the timer
                 NavigationLink(destination: AMRAPTimerView(countdown: selectedTime)){
@@ -63,17 +60,17 @@ struct AMRAPConfigView: View {
                         .font(.body)
                         .fontWeight(.bold)
                         .padding()
-                        .background(Color(red: 247/255, green: 79/255, blue: 51/255))
+                        .background(Color("amrapAccentColor"))
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                 }
-                .padding()
+                .padding(.bottom, 40) // Add padding at the bottom for spacing
             }
             
             // Custom time picker overlay
             if showTimePicker {
                 ZStack {
-                    Color.black.opacity(1) // Dimmed background
+                    Color.black.opacity(0.9) // Dimmed background
                     
                     VStack {
                         CustomTimePicker(intervalType: "AMRAP", selectedTime: $selectedTime)
@@ -84,23 +81,20 @@ struct AMRAPConfigView: View {
                         .padding()
                         .buttonStyle(.bordered)
                     }
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(25)
                     .frame(width: 300, height: 400)
                     .cornerRadius(20)
                     .shadow(radius: 10)
-                    .transition(.scale) // Animation for showing the picker
+                    .transition(.scale)
+
                 }
                 .edgesIgnoringSafeArea(.all) // Cover the entire screen
             }
-            
         }
         .animation(.easeInOut, value: showTimePicker)
-        
     }
-    
-    
 }
-
-
 
 
 struct AMRAPConfigView_Previews: PreviewProvider {

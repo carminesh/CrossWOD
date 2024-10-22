@@ -13,18 +13,29 @@ struct SettingsRow<Destination: View>: View {
     let destination: Destination
 
     var body: some View {
-        NavigationLink(destination: destination) {
-            HStack {
-                Image(systemName: icon)
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(.white)
-                Text(title)
-                    .font(.body)
-                    .foregroundColor(.white)
-                Spacer()
+        ZStack {
+            
+            Color("cardBackgroundColor")
+                .edgesIgnoringSafeArea(.all)
+                
+            
+            NavigationLink(destination: destination) {
+                HStack {
+                    Image(systemName: icon)
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(.white)
+                    Text(title)
+                        .font(.body)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                
             }
-            .padding(.vertical, 6)
+            .padding(.horizontal)
+           
+            
         }
+        .listRowInsets(EdgeInsets())
+
     }
 }
-

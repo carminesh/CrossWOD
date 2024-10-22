@@ -51,7 +51,7 @@ class WorkoutHistoryManager: ObservableObject {
 
     // Function to calculate time differences for AMRAP workouts
     func timeDifferenceText(workout: Workout, for index: Int) -> String {
-        guard workout.type == .amrap, let seriesTimes = workout.seriesTimes, index > 0 else {
+        guard workout.type == .Amrap, let seriesTimes = workout.seriesTimes, index > 0 else {
             return ""
         }
         let currentTime = seriesTimes[index]
@@ -69,7 +69,7 @@ class WorkoutHistoryManager: ObservableObject {
     
     // Function to change color based on time difference for AMRAP workouts
     func timeDifferenceColor(workout: Workout, for index: Int) -> Color {
-        guard workout.type == .amrap, let seriesTimes = workout.seriesTimes, index > 0 else {
+        guard workout.type == .Amrap, let seriesTimes = workout.seriesTimes, index > 0 else {
             return .white // No difference for the first element
         }
         let currentTime = seriesTimes[index]

@@ -16,12 +16,10 @@ struct HistoryRow: View {
     
     var body: some View {
         
-        NavigationLink(destination: WorkoutHistoryDetailView(workout: workout)) {
+        NavigationLink(destination: WorkoutHistoryDetailView(viewModel: viewModel, workout: workout)) {
             VStack {
-                Circle()
-                    .fill(viewModel.color)
-                    .frame(width: 18, height: 18)
-                    .clipShape(Circle())
+                
+                viewModel.shape()
                 
                 
                 Text(workout.type.rawValue.capitalized)
@@ -32,7 +30,7 @@ struct HistoryRow: View {
             
             Spacer()
             
-            if workout.type == .amrap {
+            if workout.type == .Amrap {
                 
                 VStack {
                     Image("clock_icon")
@@ -57,7 +55,7 @@ struct HistoryRow: View {
                         .foregroundColor(.white)
                 }.padding()
                 
-            } else if workout.type == .emom {
+            } else if workout.type == .Emom {
                 
                 VStack {
                     
@@ -106,14 +104,17 @@ struct HistoryRow: View {
             Spacer()
             
         }
+        .background(Color("cardBackgroundColor"))
+        .cornerRadius(15)
         .padding(.horizontal)
     }
+    
     
 }
 
 #Preview {
     let dummyWorkout = Workout(
-        type: .amrap,
+        type: .Amrap,
         date: Date(), // Use the current date for the dummy workout
         initialCountdown: 300, // 5 minutes countdown
         seriesPerformed: 5,

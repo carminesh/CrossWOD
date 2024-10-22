@@ -87,12 +87,12 @@ class TimerViewManager: ObservableObject {
         let workoutEnumType: WorkoutType
         
         switch workoutType.lowercased() {
-        case "amrap":
-            workoutEnumType = .amrap
-        case "emom":
-            workoutEnumType = .emom
+        case "Amrap":
+            workoutEnumType = .Amrap
+        case "Emom":
+            workoutEnumType = .Emom
         default:
-            workoutEnumType = .amrap  
+            workoutEnumType = .Amrap
         }
         
         let workout = Workout(

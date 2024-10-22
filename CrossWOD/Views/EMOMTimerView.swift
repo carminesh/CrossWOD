@@ -37,6 +37,11 @@ struct EMOMTimerView: View {
         
         
         ZStack {
+            
+            Color("backgroundColor")
+                .edgesIgnoringSafeArea(.all)
+
+            
             riveAnimation.riveViewModel.view()
                 .opacity(delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: delayCountdown)
@@ -81,7 +86,7 @@ struct EMOMTimerView: View {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
                             .fontWeight(.bold)
-                            .foregroundColor(.green)
+                            .foregroundColor(Color("emomAccentColor"))
                     } else {
                         Text(formatTimeWithDecimals(seconds: timeRemaining))
                             .font(.system(size: 60))
@@ -124,8 +129,8 @@ struct EMOMTimerView: View {
                             .padding(.all, 8)
                             .padding(.trailing, 12)
                     }
-                    .background(Color(red: 60/255, green: 60/255, blue: 60/255))
-                    .cornerRadius(6)
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(15)
                     
                 }
                 
@@ -155,7 +160,7 @@ struct EMOMTimerView: View {
                                 .padding(.trailing, 50)
                         }
                         .padding(.vertical, 20)
-                        .background(Color(red: 60/255, green: 60/255, blue: 60/255))
+                        .background(Color("cardBackgroundColor"))
                         .cornerRadius(10)
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
@@ -282,7 +287,7 @@ struct EMOMTimerView: View {
     
     private func saveWorkoutHistory() {
         let workout = Workout(
-            type: .emom,
+            type: .Emom,
             date: Date(),
             performedSets: numberOfSeries,
             numberOfRounds: forTime,
