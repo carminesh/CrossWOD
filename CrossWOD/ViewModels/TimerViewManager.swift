@@ -93,6 +93,8 @@ class TimerViewManager: ObservableObject {
             workoutEnumType = .Emom
         case "ForTime":
             workoutEnumType = .ForTime
+        case "Tabata":
+            workoutEnumType = .Tabata
         default:
             workoutEnumType = .Amrap
         }

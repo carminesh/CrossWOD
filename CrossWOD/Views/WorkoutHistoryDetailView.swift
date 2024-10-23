@@ -92,12 +92,22 @@ struct WorkoutHistoryDetailView: View {
                                         .font(.system(size: 57))
                                         .foregroundColor(.white)
                                     
-                                    Text(
-                                        formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0)
-                                    )
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding(4)
+                                    if workout.type == .Amrap || workout.type == .ForTime {
+                                        Text(
+                                            formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0)
+                                        )
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .padding(4)
+                                    } else {
+                                        Text(
+                                            formatTimeWithDecimals(seconds: workout.totalWorkoutTime ?? 0)
+                                        )
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .padding(4)
+                                    }
+                                   
                                     
                                 }
                                 .frame(width: geometry.size.width / 2.35, height: geometry.size.width / 2.5)

@@ -13,7 +13,7 @@ struct EMOMTimerView: View {
     
     let everyTime: Int // Time interval (e.g. every minute)
     let forTime: Int // Number of rounds before rest
-    let numberOfSeries: Int // Total series to be performed
+    let numberOfSeries: Int // Total sets to be performed
     let restTime: Int // Rest time between series
     
     @State private var isPaused: Bool = true
@@ -30,6 +30,16 @@ struct EMOMTimerView: View {
     @State private var timerHasFinished = false
     
     @State private var showAfterDelay: Bool = false
+    
+    var totalTime: Int {
+        let totalTimePerRound = forTime
+        
+        if numberOfSeries > 1 {
+            return (totalTimePerRound * numberOfSeries) + (restTime * (numberOfSeries > 1 ? numberOfSeries - 1 : numberOfSeries ))
+        }
+        
+        return totalTimePerRound
+    }
     
     var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
     
@@ -123,7 +133,7 @@ struct EMOMTimerView: View {
                             .padding(.all, 8)
                             .padding(.leading, 12)
                         
-                        Text(formatTimeWithDecimals(seconds: forTime))
+                        Text(formatTimeWithDecimals(seconds: totalTime))
                             .font(.body)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -293,7 +303,8 @@ struct EMOMTimerView: View {
             date: Date(),
             performedSets: numberOfSeries,
             numberOfRounds: forTime,
-            roundTimes: everyTime
+            roundTimes: everyTime,
+            totalWorkoutTime: totalTime
         )
         
         workoutHistoryManager.addWorkout(workout)

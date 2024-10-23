@@ -62,7 +62,7 @@ struct HistoryRow: View {
                 .frame(width: 50)
                 .padding()
                 
-            } else if workout.type == .Emom {
+            } else if workout.type == .Emom || workout.type == .Tabata {
                 
                 VStack {
                     
@@ -123,7 +123,7 @@ struct HistoryRow: View {
 
 #Preview {
     let dummyWorkout = Workout(
-        type: .Emom,
+        type: .Tabata,
         date: Date(), // Use the current date for the dummy workout
         initialCountdown: 300, // 5 minutes countdown
         seriesPerformed: 5,

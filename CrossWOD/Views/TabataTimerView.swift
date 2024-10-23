@@ -38,7 +38,7 @@ struct TabataTimerView: View {
         let totalTimePerRound = (workTime + restTime) * numberOfSeries
         
         if setSeries > 1 {
-            return (totalTimePerRound + setRestTime * (setSeries - 1))
+            return (totalTimePerRound * setSeries) + (setRestTime * (setRestTime > 1 ? setSeries - 1 : setSeries ))
         }
         
         return totalTimePerRound
@@ -302,7 +302,8 @@ struct TabataTimerView: View {
             date: Date(),
             performedSets: setSeries,
             numberOfRounds: numberOfSeries,
-            roundTimes: workTime
+            roundTimes: workTime,
+            totalWorkoutTime: totalTime
         )
         workoutHistoryManager.addWorkout(workout)
     }

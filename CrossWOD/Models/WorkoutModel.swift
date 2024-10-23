@@ -30,7 +30,7 @@ struct Workout: Identifiable, Codable {
     var performedSets: Int?     
     var numberOfRounds: Int?
     var roundTimes: Int?
-    
+    var totalWorkoutTime: Int?
     
 }
 
