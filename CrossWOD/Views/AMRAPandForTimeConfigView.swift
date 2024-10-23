@@ -14,6 +14,7 @@ struct AMRAPandForTimeConfigView: View {
     
     var modeTitle: String
     var modeDescription: String
+    var timePickerDescription: String
     
     
     private var accentColor: Color {
@@ -38,17 +39,19 @@ struct AMRAPandForTimeConfigView: View {
                     .foregroundColor(.white)
                 
     
-                    
+                Text(modeDescription)
+                    .font(.subheadline)
+                    .foregroundColor(.white)
 
                 
                 // Time Configuration Box
                 VStack {
-                    Text(modeDescription)
+                    Text(timePickerDescription)
                         .font(.callout)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
-                        .padding()
-                    
+                        .padding(6)
+                        
                     Button(action: {
                         showTimePicker = true // Show time picker
                     }) {
@@ -56,6 +59,8 @@ struct AMRAPandForTimeConfigView: View {
                             .font(.system(size: 46))
                             .fontWeight(.bold)
                             .foregroundColor(.white)
+                            .padding()
+                        
                     }
                 }
                 .frame(minWidth: UIScreen.main.bounds.width * 0.8)
@@ -68,7 +73,7 @@ struct AMRAPandForTimeConfigView: View {
                 Spacer()
                 
                 // NavigationLink for starting the timer
-                NavigationLink(destination: AMRAPandForTimeTimerView(countdown: selectedTime, modeTitle: modeTitle, accentColor: accentColor)){
+                NavigationLink(destination: AMRAPandForTimeTimerView(countdown: selectedTime, modeTitle: modeTitle,  accentColor: accentColor)){
                     Text("START TIMER")
                         .font(.body)
                         .fontWeight(.bold)
@@ -112,6 +117,7 @@ struct AMRAPandForTimeConfigView: View {
 #Preview {
     AMRAPandForTimeConfigView(
         modeTitle: "AMRAP",
-        modeDescription: "Maximum number of possible series in:"
+        modeDescription: "Maximum number of possible series in:",
+        timePickerDescription: "Complete as many rounds as possible in:"
     )
 }

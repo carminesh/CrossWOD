@@ -39,65 +39,71 @@ struct EMOMConfigView: View {
                 Text("EMOM")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(.white)
                     .padding(.top, 20)
                 
                 Text("Every minute on the minute")
                     .font(.subheadline)
-                
-                Spacer()
-                
-                // Time Configuration Box
-                VStack {
-                    Text("Workout every:")
-                        .font(.callout)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    
-                    Button(action: {
-                        showTimePicker = true
-                        everyTimeBool = true // Show time picker
-                    }) {
-                        Text(formatTimeWithDecimals(seconds: everyTime))
-                            .font(.system(size: 46))
-                            .fontWeight(.bold)
+                    .foregroundColor(.white)
+                                
+                VStack(spacing: 16) {
+                    // Time Configuration Box
+                    VStack {
+                        Text("Workout every:")
+                            .font(.callout)
                             .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                        Button(action: {
+                            showTimePicker = true
+                            everyTimeBool = true // Show time picker
+                        }) {
+                            Text(formatTimeWithDecimals(seconds: everyTime))
+                                .font(.system(size: 46))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
                     }
-                }
-                .frame(minWidth: UIScreen.main.bounds.width * 0.8)
-                .padding()
-                .background(Color("cardBackgroundColor"))
-                .cornerRadius(25)
-                .padding(.top, 30)
-                
-                
-                VStack {
-                    Text("for:")
-                        .font(.callout)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                    .frame(minWidth: UIScreen.main.bounds.width * 0.8)
+                    .padding()
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(25)
+            
                     
-                    Button(action: {
-                        showTimePicker = true
-                        forTimeBool = true
-                    }) {
-                        Text(formatTimeWithDecimals(seconds: forTime))
-                            .font(.system(size: 46))
-                            .fontWeight(.bold)
+                    VStack {
+                        Text("for:")
+                            .font(.callout)
                             .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                        Button(action: {
+                            showTimePicker = true
+                            forTimeBool = true
+                        }) {
+                            Text(formatTimeWithDecimals(seconds: forTime))
+                                .font(.system(size: 46))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
                     }
-                }
-                .frame(minWidth: UIScreen.main.bounds.width * 0.8)
-                .padding()
-                .background(Color("cardBackgroundColor"))
-                .cornerRadius(25)
-                .padding(.top, 30)
+                    .frame(minWidth: UIScreen.main.bounds.width * 0.8)
+                    .padding()
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(25)
+                    
+                    
+                }.padding()
+                
                 
                 
                
                 
-                VStack {
+                
+               
+                
+                VStack(spacing: 16) {
                     
                     
                     Button(action: {
@@ -111,7 +117,7 @@ struct EMOMConfigView: View {
                             .foregroundColor(additionalSettingsAreApplied ? Color("emomAccentColor") : .white)
                             .padding()
                     }
-                    .padding()
+                  
                     
                     Spacer()
                     
@@ -129,7 +135,10 @@ struct EMOMConfigView: View {
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }
-                    .padding()
+                    .padding(.bottom, 40)
+                    
+                    
+                    
                 }
             }
             .accentColor(.white)
