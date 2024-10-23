@@ -126,3 +126,25 @@ func generateTimeIntervalsForTime() -> [Int] {
 
     return intervals
 }
+
+func generateTimeIntervalsForTabata() -> [Int] {
+    var intervals: [Int] = []
+
+    // from  00:05 to 1:00 minutes (increments by 5 seconds)
+    intervals.append(contentsOf: stride(from: 5, through: 60, by: 5))
+
+    // from 1:00 to 3:00 minutes (increments by 10 seconds)
+    intervals.append(contentsOf: stride(from: 60, through: 180, by: 10))
+
+    // from 3:00 to 7:00 minutes (increment of 15 seconds)
+    intervals.append(contentsOf: stride(from: 180, through: 420, by: 15))
+    
+    // from 7:00 to 10:00 minutes (increment of 30 seconds)
+    intervals.append(contentsOf: stride(from: 420, through: 600, by: 30))
+    
+    // from 10:00 to 15:00 minutes (increment of 1 minute)
+    intervals.append(contentsOf: stride(from: 600, through: 900, by: 90))
+
+
+    return intervals
+}

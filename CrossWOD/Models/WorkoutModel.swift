@@ -9,10 +9,10 @@
 import Foundation
 
 enum WorkoutType: String, Codable {
-    case Amrap  // As Many Rounds As Possible
-    case Emom   // Every Minute On the Minute
+    case Amrap
+    case Emom
     case ForTime
-    // Add more workout types as needed
+    case Tabata
 }
 
 struct Workout: Identifiable, Codable {

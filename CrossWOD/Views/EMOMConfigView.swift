@@ -143,10 +143,11 @@ struct EMOMConfigView: View {
             }
             .accentColor(.white)
             .sheet(isPresented: $showAdditionalSettings) {
-                EMOMAdditionalConfigView(
+                AdditionalTimerConfigView(
                     showAdditionalSettings: $showAdditionalSettings,
                     numberOfSeries: $numberOfSeries,
-                    selectedRestTime: $selectedRestTime
+                    selectedRestTime: $selectedRestTime,
+                    accentColor: Color("emomAccentColor")
                 )
                 .presentationDetents(
                     [.medium],

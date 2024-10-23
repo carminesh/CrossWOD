@@ -6,9 +6,17 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 struct Constants {
+    
+    static let workouts = [
+            (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "AMRAP", modeDescription: "As many rounds as possible", timePickerDescription: "Complete as many rounds as possible in:"))),
+            (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
+            (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "FOR TIME", modeDescription: "Workout as fast as possible:", timePickerDescription: "Finish the workout as fast as possible in:"))),
+            (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(TabataConfigView()))
+        ]
     
     static let motivationalPhrases = [
         "Congrats, you survived! Now, breathe... if you can!",

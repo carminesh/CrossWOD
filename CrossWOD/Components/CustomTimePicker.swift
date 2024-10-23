@@ -25,6 +25,8 @@ struct CustomTimePicker: View {
             return generateTimeIntervalsSimpleEMOM(multiple: selectedTime)
         case "FOR TIME":
             return generateTimeIntervalsForTime()
+        case "TABATA":
+            return generateTimeIntervalsForTabata()
         default:
             return generateTimeIntervalsAMRAP()
         }
