@@ -11,16 +11,19 @@ import SwiftUI
 class WorkoutHistoryManager: ObservableObject {
     @Published var workouts: [Workout] = []
     
-    // Computed property to group workouts by date
     var groupedWorkouts: [WorkoutGroup] {
         let calendar = Calendar.current
         let grouped = Dictionary(grouping: workouts) { workout in
             calendar.startOfDay(for: workout.date)
         }
-        
-        return grouped.map { WorkoutGroup(date: $0.key, workouts: $0.value) }
-            .sorted(by: { $0.date > $1.date })
+
+        return grouped.map { group in
+            // Reverse the workouts for each group (for the same day)
+            WorkoutGroup(date: group.key, workouts: group.value.reversed())
+        }
+        .sorted(by: { $0.date > $1.date }) // Sort groups by date (most recent first)
     }
+    
     
     init() {
         loadWorkouts()

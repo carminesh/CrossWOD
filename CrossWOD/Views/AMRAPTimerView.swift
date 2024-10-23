@@ -36,10 +36,10 @@ struct AMRAPTimerView: View {
                   .ignoresSafeArea()
             
             riveAnimation.riveViewModel.view()
+                .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
-                .aspectRatio(contentMode: .fill)
             
             VStack {
                 
