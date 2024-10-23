@@ -1,15 +1,28 @@
 //
-//  AMRAPConfigView.swift
+//  AMRAPandForTimeConfigView.swift
 //  CrossWOD
 //
-//  Created by Carmine Fabbri on 14/10/24.
+//  Created by Carmine Fabbri on 23/10/24.
 //
 
 import SwiftUI
 
-struct AMRAPConfigView: View {
+struct AMRAPandForTimeConfigView: View {
     @State private var selectedTime: Int = 10
     @State private var showTimePicker = false
+    
+    
+    var modeTitle: String
+    var modeDescription: String
+    
+    
+    private var accentColor: Color {
+        modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor")
+    }
+    
+    
+    
+   
     
     var body: some View {
         ZStack {
@@ -18,20 +31,19 @@ struct AMRAPConfigView: View {
             
             VStack {
                 // Title
-                Text("AMRAP")
+                Text(modeTitle)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding(.top, 50)
+                    .foregroundColor(.white)
                 
-                Text("As many rounds as possible")
-                    .font(.subheadline)
+    
                     
-                    
-                
+
                 
                 // Time Configuration Box
                 VStack {
-                    Text("Maximum number of possible series in:")
+                    Text(modeDescription)
                         .font(.callout)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
@@ -53,19 +65,19 @@ struct AMRAPConfigView: View {
                 .padding(.top, 30)
                 
                 
-                Spacer() 
+                Spacer()
                 
                 // NavigationLink for starting the timer
-                NavigationLink(destination: AMRAPTimerView(countdown: selectedTime)){
+                NavigationLink(destination: AMRAPandForTimeTimerView(countdown: selectedTime, modeTitle: modeTitle, accentColor: accentColor)){
                     Text("START TIMER")
                         .font(.body)
                         .fontWeight(.bold)
                         .padding()
-                        .background(Color("amrapAccentColor"))
+                        .background(accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(15)
                 }
-                .padding(.bottom, 40) // Add padding at the bottom for spacing
+                .padding(.bottom, 40)
             }
             
             // Custom time picker overlay
@@ -74,7 +86,7 @@ struct AMRAPConfigView: View {
                     Color.black.opacity(0.9) // Dimmed background
                     
                     VStack {
-                        CustomTimePicker(intervalType: "AMRAP", selectedTime: $selectedTime)
+                        CustomTimePicker(intervalType: modeTitle, selectedTime: $selectedTime)
                         
                         Button("Done") {
                             showTimePicker = false // Hide the picker
@@ -97,9 +109,9 @@ struct AMRAPConfigView: View {
     }
 }
 
-
-struct AMRAPConfigView_Previews: PreviewProvider {
-    static var previews: some View {
-        AMRAPConfigView()
-    }
+#Preview {
+    AMRAPandForTimeConfigView(
+        modeTitle: "AMRAP",
+        modeDescription: "Maximum number of possible series in:"
+    )
 }

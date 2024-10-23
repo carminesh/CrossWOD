@@ -14,11 +14,14 @@ struct HomeView: View {
     
     
     let workouts = [
-        (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPConfigView())),
+        (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "AMRAP", modeDescription: "As many rounds as possible in:"))),
         (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
-        (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible",  destination: AnyView(ForTimeConfigView())),
+        (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible",  destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "FOR TIME", modeDescription: "Workout as fast as possible in:"))),
         (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(AMRAPConfigView()))
     ]
+    
+    
+    
     
     var body: some View {
         GeometryReader { geometry in

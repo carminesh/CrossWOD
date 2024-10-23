@@ -1,15 +1,14 @@
 //
-//  AMRAPTimerView.swift
+//  AMRAPandForTimeTimerView.swift
 //  CrossWOD
 //
-//  Created by Carmine Fabbri on 14/10/24.
+//  Created by Carmine Fabbri on 23/10/24.
 //
 
 import SwiftUI
 
-
-struct AMRAPTimerView: View {
-    
+struct AMRAPandForTimeTimerView: View {
+   
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     
     @State private var randomPhrase: String = ""
@@ -26,6 +25,10 @@ struct AMRAPTimerView: View {
     @State private var seriesTimes: [Int] = []
     @State private var showAfterDelay: Bool = false
     
+    var modeTitle: String
+    var accentColor: Color
+    
+  
     
     var body: some View {
         
@@ -33,7 +36,7 @@ struct AMRAPTimerView: View {
             
             
             Color("backgroundColor")
-                  .ignoresSafeArea()
+                .ignoresSafeArea()
             
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
@@ -43,78 +46,104 @@ struct AMRAPTimerView: View {
             
             VStack {
                 
-                Text("AMRAP")
+                Text(modeTitle)
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(.white)
                     .padding()
-                
-                Spacer()
-                
-                VStack {
-                    Spacer()
-                    
-                    Text(delay ? "Starts in:" : "Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
-                        .fontWeight(.bold)
-                        .padding()
-                        .opacity(!seriesTimes.isEmpty || delay ? 1 : 0)
-                    
             
+                
+                
+                // MARK: COUNTDOWN section
+                VStack(alignment: .center) {
                     
-                    if delay {
-                        Text("\(delayCountdown)")
-                            .font(.system(size: 60))
-                            .fontWeight(.bold)
-                            .foregroundColor(Color("amrapAccentColor"))
-                    } else {
-                        Text(formatTimeWithDecimals(seconds: countdown))
-                            .font(.system(size: 60))
-                            .fontWeight(.bold)
-                            .opacity(countdown == 0 ? 0 : 1)
-                            .foregroundColor(.white)
-                            .padding()
+                    
+                    Text("Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .opacity(!seriesTimes.isEmpty ? 1 : 0)
+                    
+                    
+                    
+                    GeometryReader { geometry in
+                        if delay {
+                            
+                            VStack() {
+                                
+                                Text("Starts in:")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .opacity(delay ? 1 : 0)
+                                    .padding(.bottom, 20)
+                                
+                                Text("\(delayCountdown)")
+                                    .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.2))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(accentColor)
+                                
+                            }
+                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                            
+                        
+                            
+                        } else {
+                            
+                            Text(formatTimeWithDecimals(seconds: countdown))
+                                .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.18))
+                                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                                .fontWeight(.bold)
+                                .opacity(countdown == 0 ? 0 : 1)
+                                .foregroundColor(.white)
+                              
+            
+                        }
+                        
                     }
                     
-                    Spacer()
-                    Spacer()
-                    
-                }.padding()
+                }
+                .padding()
+                .padding(.bottom, 80)
+                
                 
                 // Delay showing this part after countdown == 0
                 if countdown == 0 && showAfterDelay {
-                    Text(randomPhrase)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
-                        .padding()
-                    
-                    HStack {
-                        Image("clock_icon")
-                            .scaledToFit()
-                            .frame(width: 16, height: 16)
-                            .padding(.all, 8)
-                            .padding(.leading, 12)
-                        
-                        Text(formatTimeWithDecimals(seconds: startingTime))
-                            .font(.body)
+                    VStack {
+                        Text(randomPhrase)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .padding(.all, 8)
-                            .padding(.trailing, 12)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding()
+                        
+                        HStack {
+                            Image("clock_icon")
+                                .scaledToFit()
+                                .frame(width: 16, height: 16)
+                                .padding(10)
+
+                            
+                            Text(formatTimeWithDecimals(seconds: startingTime))
+                                .font(.body)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(10)
+                                
+                        }
+                        .background(Color("cardBackgroundColor"))
+                        .cornerRadius(10)
+                        .transition(.opacity)
+                        
                     }
-                    .background(Color(red: 60/255, green: 60/255, blue: 60/255))
-                    .cornerRadius(6)
-                    .padding(.bottom, UIScreen.main.bounds.height * 0.1)
-                    .transition(.opacity)
+                    .padding()
                     
-                
                 }
-                
-               
+            
                 Spacer()
+            
                 
+            
+                // MARK: BUTTON section
                 HStack {
                     Button(action: {
                         isPaused.toggle()
@@ -154,14 +183,15 @@ struct AMRAPTimerView: View {
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)
-                        .background(Color("amrapAccentColor"))
+                        .background(Color(accentColor))
                         .cornerRadius(15)
                     }
                     
                 }
+                .padding()
                 .disabled(countdown == 0 || delay)
                 .opacity(countdown == 0 || delay ? 0 : 1)
-                .padding(.bottom, 40)
+                
             }
             .onAppear {
                 randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
@@ -208,7 +238,7 @@ struct AMRAPTimerView: View {
     
     private func startTimer() {
         riveAnimation.startRiveAnimation()
-
+        
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -239,11 +269,13 @@ struct AMRAPTimerView: View {
         initialCountdown -= seriesTime
     }
     
-
+    
     
     private func saveWorkoutHistory() {
+
+        
         let workout = Workout(
-            type: .Amrap,
+            type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
             date: Date(),
             initialCountdown: startingTime,
             seriesPerformed: seriesTimes.count,
@@ -254,13 +286,25 @@ struct AMRAPTimerView: View {
     }
     
     
-    
 }
 
-struct AMRAPTimerView_Previews: PreviewProvider {
+    
+
+struct AMRAPandForTimeTimerView_Previews: PreviewProvider {
     static var previews: some View {
-        AMRAPTimerView(countdown: 5)
+        Group {
+            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+                .previewDevice("iPhone 16 Pro")
+                .previewDisplayName("iPhone 16 Pro")
+            
+            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+                .previewDevice("iPhone SE (3rd generation)")
+                .previewDisplayName("iPhone SE 3rd Gen")
+            
+            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+                .previewDevice("iPad (11-inch)")
+                .previewDisplayName("iPad 11-inch")
+        }
+        .previewLayout(.device)
     }
 }
-
-
