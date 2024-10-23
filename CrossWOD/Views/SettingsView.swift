@@ -37,8 +37,23 @@ struct SettingsView: View {
     }
 }
 
-#Preview {
-    SettingsView()
+struct SettingsView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            SettingsView()
+                .previewDevice("iPhone 16 Pro")
+                .previewDisplayName("iPhone 16 Pro")
+            
+            SettingsView()
+                .previewDevice("iPhone SE (3rd generation)")
+                .previewDisplayName("iPhone SE 3rd Gen")
+            
+            SettingsView()
+                .previewDevice("iPad (11-inch)")
+                .previewDisplayName("iPad 11-inch")
+        }
+        .previewLayout(.device)
+    }
 }
 
 

@@ -17,19 +17,20 @@ struct WorkoutHistoryDetailView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Set background color for the entire view
+              
                 Color("backgroundColor")
                     .edgesIgnoringSafeArea(.all)
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 16) {
                         
-                        // Workout type section
+                        // MARK: Workout type section
                         VStack(alignment: .leading) {
+                            
                             Text("Workout type:")
                                 .font(.body)
                                 .foregroundColor(.white)
-                                .padding(.leading, 28)
+                                
                             
                             HStack {
                                 viewModel.shape()
@@ -39,22 +40,23 @@ struct WorkoutHistoryDetailView: View {
                                     .foregroundColor(.white)
                                 
                                 
-                            }.frame(width: geometry.size.width / 3)
-                                .padding()
-                                .background(Color("cardBackgroundColor"))
-                                .cornerRadius(15)
-                                .padding(.leading, 26)
-                        }.padding(.top, 30)
-                        
-                        // Workout date and duration
-                        HStack {
-                            Spacer()
+                            }
+                            .frame(width: geometry.size.width / 3)
+                            .padding()
+                            .background(Color("cardBackgroundColor"))
+                            .cornerRadius(15)
                             
-                            VStack {
+                        }.padding(.horizontal)
+                        
+                        // MARK: Workout date and duration
+                        HStack() {
+                           
+                            
+                            VStack(alignment: .leading) {
                                 Text("Workout date:")
                                     .font(.body)
                                     .foregroundColor(.white)
-                                    .padding(.trailing, 50)
+                                    
                                 
                                 
                                 VStack {
@@ -65,21 +67,24 @@ struct WorkoutHistoryDetailView: View {
                                     Text(dateFormatter.string(from: workout.date))
                                         .font(.headline)
                                         .foregroundColor(.white)
-                                        .padding()
+                                        .padding(4)
                                 }
-                                .frame(width: geometry.size.width / 2.5, height: geometry.size.width / 2.5)
+                                .frame(width: geometry.size.width / 2.35, height: geometry.size.width / 2.5)
                                 .background(Color("cardBackgroundColor"))
                                 .cornerRadius(15)
                                 
                             }
                             
                             Spacer()
-                            
-                            VStack {
+                        
+                            VStack(alignment: .leading) {
+                                
+                                
                                 Text("Workout duration:")
                                     .font(.body)
                                     .foregroundColor(.white)
-                                    .padding(.trailing, 24)
+                                   
+                                
                                 
                                 
                                 VStack {
@@ -92,25 +97,27 @@ struct WorkoutHistoryDetailView: View {
                                     )
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                    .padding()
+                                    .padding(4)
+                                    
                                 }
-                                .frame(width: geometry.size.width / 2.5, height: geometry.size.width / 2.5)
+                                .frame(width: geometry.size.width / 2.35, height: geometry.size.width / 2.5)
                                 .background(Color("cardBackgroundColor"))
                                 .cornerRadius(15)
-                                .padding(.horizontal)
+                              
                             }
-                            
-                            Spacer()
-                        }.padding(.leading, 16)
+                           
+                        }.padding()
                         
-                        // Conditional views for AMRAP or EMOM workout types
+                        // MARK: AMRAP and FORTIME list section
                         if workout.type == .Amrap || workout.type == .ForTime {
                             if let seriesTimes = workout.seriesTimes, !seriesTimes.isEmpty {
+                                
+                                
                                 VStack(alignment: .leading) {
                                     Text("Round timing:")
                                         .font(.body)
                                         .foregroundColor(.white)
-                                        .padding(.leading, 22)
+                                     
                                     
                                     ForEach(Array(seriesTimes.enumerated()), id: \.offset) { index, time in
                                         HStack {
@@ -135,74 +142,100 @@ struct WorkoutHistoryDetailView: View {
                                         .padding()
                                         .background(Color("cardBackgroundColor"))
                                         .cornerRadius(15)
-                                        .padding(.horizontal, 22)
+                                        
                                     }
-                                }
+                                }.padding()
                             } else {
-                                Text("For this workout, series were not performed.")
-                                    .font(.body)
-                                    .foregroundColor(.gray)
-                                    .padding(.leading, 22)
-                            }
-                        } else if workout.type == .Emom {
-                            HStack {
-                                Spacer()
                                 
-                                VStack {
+                                
+                                VStack(alignment: .leading) {
+                                    Text("For this workout, series were not performed.")
+                                        .font(.body)
+                                        .foregroundColor(.gray)
+                                        
+                                }.padding()
+                            }
+                            // MARK: EMOM section
+                        } else if workout.type == .Emom {
+                            
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    
                                     Text("Every:")
                                         .font(.body)
                                         .foregroundColor(.white)
-                                        .padding(.trailing, 100)
+
+                                       
                                     
                                     Text("\(formatTimeWithDecimals(seconds: workout.roundTimes ?? 0)) \(formatTimeToOnlyText(seconds: workout.roundTimes ?? 0))")
+                                        .frame(width: geometry.size.width / 3)
+                                        .padding()
                                         .font(.headline)
                                         .foregroundColor(.white)
-                                        .padding()
                                         .background(Color("cardBackgroundColor"))
-                                        .cornerRadius(10)
-                                        .padding(.horizontal)
+                                        .cornerRadius(15)
+                                     
                                 }
                                 
                                 Spacer()
                                 
-                                VStack {
+                                VStack(alignment: .leading) {
+                                    
                                     Text("For duration of:")
                                         .font(.body)
                                         .foregroundColor(.white)
-                                        .padding(.trailing, 30)
+                                    
                                     
                                     Text("\(formatTimeWithDecimals(seconds: workout.numberOfRounds ?? 0)) \(formatTimeToOnlyText(seconds: workout.numberOfRounds ?? 0))")
+                                        .frame(width: geometry.size.width / 3)
+                                        .padding()
                                         .font(.headline)
                                         .foregroundColor(.white)
-                                        .padding()
                                         .background(Color("cardBackgroundColor"))
-                                        .cornerRadius(10)
-                                        .padding(.horizontal)
+                                        .cornerRadius(15)
+
                                 }
                                 
-                                Spacer()
+                               
                             }
+                            .padding()
                         }
-                        
-                        Spacer()
                     }
-                    .padding(.bottom, 30)
-                }
+                }.padding(.top, 30)
             }
         }
         
     }
 }
-#Preview {
-    let dummyWorkout = Workout(
-        type: .Emom,
-        date: Date(), // Use the current date for the dummy workout
-        initialCountdown: 300, // 5 minutes countdown
-        seriesPerformed: 5,
-        seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
-    )
+
+struct WorkoutHistoryDetail_Previews: PreviewProvider {
+
     
-    let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
-    
-    WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+    static var previews: some View {
+        
+        let dummyWorkout = Workout(
+            type: .Amrap,
+            date: Date(), // Use the current date for the dummy workout
+            initialCountdown: 300, // 5 minutes countdown
+            seriesPerformed: 5,
+            seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
+        )
+        
+        let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
+        
+        Group {
+            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+                .previewDevice("iPhone 16 Pro")
+                .previewDisplayName("iPhone 16 Pro")
+            
+            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+                .previewDevice("iPhone SE (3rd generation)")
+                .previewDisplayName("iPhone SE 3rd Gen")
+            
+            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+                .previewDevice("iPad (11-inch)")
+                .previewDisplayName("iPad 11-inch")
+        }
+        .previewLayout(.device)
+    }
 }
