@@ -188,6 +188,7 @@ struct EMOMTimerView: View {
                 }
             }
             .onDisappear {
+                riveAnimation.riveViewModel.reset()
                 stopTimer()
                 if timeRemaining == 0 {
                     saveWorkoutHistory()

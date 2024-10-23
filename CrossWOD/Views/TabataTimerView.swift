@@ -32,6 +32,17 @@ struct TabataTimerView: View {
     @State private var showAfterDelay: Bool = false
 
     var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
+    
+    
+    var totalTime: Int {
+        let totalTimePerRound = (workTime + restTime) * numberOfSeries
+        
+        if setSeries > 1 {
+            return (totalTimePerRound + setRestTime * (setSeries - 1))
+        }
+        
+        return totalTimePerRound
+    }
 
     var body: some View {
         ZStack {
@@ -101,14 +112,33 @@ struct TabataTimerView: View {
                     }
                 }.padding()
 
-                if currentSeries == 0 && currentRound == 0 && !isResting && showAfterDelay {
+                if timerHasFinished && showAfterDelay {
                     Spacer()
                     Text(randomPhrase)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
                         .padding()
+                    
+                    HStack {
+                        Image("clock_icon")
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+                            .padding(.all, 8)
+                            .padding(.leading, 12)
+                        
+                        Text(formatTimeWithDecimals(seconds: totalTime))
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.all, 8)
+                            .padding(.trailing, 12)
+                    }
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(15)
                 }
 
                 Spacer()
@@ -150,7 +180,18 @@ struct TabataTimerView: View {
                 startDelay()
                 randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
             }
+            .onChange(of: timerHasFinished) {
+                if timerHasFinished {
+                    // Add a delay before showing the text
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation {
+                            showAfterDelay = true
+                        }
+                    }
+                }
+            }
             .onDisappear {
+                riveAnimation.riveViewModel.reset()
                 stopTimer()
                 if timeRemaining == 0 {
                     saveWorkoutHistory()
