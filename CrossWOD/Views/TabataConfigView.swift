@@ -64,15 +64,20 @@ struct TabataConfigView: View {
                                     numberOfSeries -= 1
                                 }
                             }) {
-                                Image(systemName: "minus")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 50, height: 50)
+
+                                    Image(systemName: "minus")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                }
+                                .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
                             }
                             .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2)
-                            )
                             
                             
                             // Display Number of Series
@@ -89,15 +94,20 @@ struct TabataConfigView: View {
                                     numberOfSeries += 1
                                 }
                             }) {
-                                Image(systemName: "plus")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 50, height: 50)
+
+                                    Image(systemName: "plus")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                }
+                                .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
                             }
                             .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle().stroke(Color.white, lineWidth: 2)
-                            )
                             
                             
                             

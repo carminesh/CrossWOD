@@ -11,7 +11,6 @@ struct EMOMConfigView: View {
     
     @State private var everyTime: Int = 60 {
         didSet {
-          
             updateForTime()
         }
     }
@@ -45,7 +44,7 @@ struct EMOMConfigView: View {
                 Text("Every minute on the minute")
                     .font(.subheadline)
                     .foregroundColor(.white)
-                                
+                
                 VStack(spacing: 16) {
                     // Time Configuration Box
                     VStack {
@@ -69,43 +68,75 @@ struct EMOMConfigView: View {
                     .padding()
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(25)
-            
                     
                     VStack {
-                        Text("for:")
+                        Text("For:")
                             .font(.callout)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
-                            .padding()
                         
-                        Button(action: {
-                            showTimePicker = true
-                            forTimeBool = true
-                        }) {
+                        HStack(spacing: 20) {
+                            
+                            // Decrease Series
+                            Button(action: {
+                                forTime = max(forTime - everyTime, everyTime)
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 50, height: 50)
+                                    Image(systemName: "minus")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                }
+                                .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
+                            }
+                            .frame(width: 50, height: 50)
+                            
+            
+                                
+                            
+                            // Display Number of Series
                             Text(formatTimeWithDecimals(seconds: forTime))
+                                .frame(width: 150, height: 62)
+                                .foregroundColor(.white)
                                 .font(.system(size: 46))
                                 .fontWeight(.bold)
-                                .foregroundColor(.white)
+                               
+                            
+                            Button(action: {
+                                forTime = min(forTime + everyTime, 10 * everyTime)
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.clear)
+                                        .frame(width: 50, height: 50)
+                                    Image(systemName: "plus")
+                                        .font(.title2)
+                                        .foregroundColor(.white)
+                                }
+                                .overlay(
+                                    Circle().stroke(Color.white, lineWidth: 2)
+                                )
+                            }
+                            .frame(width: 50, height: 50)
+                            
+                            
                         }
+                        .padding(.horizontal)
+                        .cornerRadius(20)
+
                     }
                     .frame(minWidth: UIScreen.main.bounds.width * 0.8)
                     .padding()
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(25)
-                    
-                    
-                }.padding()
-                
-                
-                
-               
-                
-                
-               
+                }
+                .padding()
                 
                 VStack(spacing: 16) {
-                    
-                    
                     Button(action: {
                         withAnimation {
                             showAdditionalSettings = true
@@ -117,7 +148,6 @@ struct EMOMConfigView: View {
                             .foregroundColor(additionalSettingsAreApplied ? Color("emomAccentColor") : .white)
                             .padding()
                     }
-                  
                     
                     Spacer()
                     
@@ -136,9 +166,6 @@ struct EMOMConfigView: View {
                             .cornerRadius(15)
                     }
                     .padding(.bottom, 40)
-                    
-                    
-                    
                 }
             }
             .accentColor(.white)
@@ -158,17 +185,14 @@ struct EMOMConfigView: View {
             // Custom time picker overlay
             if showTimePicker {
                 ZStack {
-                    Color.black.opacity(0.9) 
+                    Color.black.opacity(0.9)
                     
                     VStack {
                         if everyTimeBool {
                             CustomTimePicker(intervalType: "EMOM", selectedTime: $everyTime)
-                                .onChange(of: everyTime) {                         updateForTime() 
+                                .onChange(of: everyTime) {
+                                    updateForTime()
                                 }
-                        } else if forTimeBool {
-                            CustomTimePicker(intervalType: "SIMPLE EMOM", selectedTime: $forTime)
-                                
-                            
                         }
                         
                         Button("Done") {
@@ -182,7 +206,6 @@ struct EMOMConfigView: View {
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(25)
                     .frame(width: 300, height: 400)
-                    .cornerRadius(20)
                     .shadow(radius: 10)
                     .transition(.scale)
                 }
@@ -193,16 +216,14 @@ struct EMOMConfigView: View {
     }
     
     private func updateForTime() {
-        
-        if forTime < 2 * everyTime {
-            forTime = 2 * everyTime
+        // Ensure forTime is always a multiple of everyTime
+        if forTime < everyTime {
+            forTime = everyTime
         } else {
-            forTime = ((forTime + everyTime - 1) / everyTime) * everyTime;
+            forTime = ((forTime + everyTime - 1) / everyTime) * everyTime
         }
-        
     }
 }
-
 struct EMOMConfigView_Previews: PreviewProvider {
     static var previews: some View {
         EMOMConfigView()

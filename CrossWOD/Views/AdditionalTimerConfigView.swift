@@ -44,16 +44,21 @@ struct AdditionalTimerConfigView: View {
                                 numberOfSeries -= 1
                             }
                         }) {
-                            Image(systemName: "minus")
-                                .font(.title2) // Dynamic size
-                                .foregroundColor(.white)
-                                .padding()
+                            ZStack {
+                                Circle()
+                                    .fill(Color.clear)
+                                    .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
+
+                                Image(systemName: "minus")
+                                    .font(.title2) // Dynamic size
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                         }
                         .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12) // Adjust for screen size
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle().stroke(Color.white, lineWidth: 2)
-                        )
                         .padding(.trailing, geometry.size.width * 0.02)
                         
                         // Display Number of Series
@@ -67,16 +72,22 @@ struct AdditionalTimerConfigView: View {
                         Button(action: {
                             numberOfSeries += 1
                         }) {
-                            Image(systemName: "plus")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding()
+                            ZStack {
+                                Circle()
+                                    .fill(Color.clear)
+                                    .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
+
+                                Image(systemName: "plus")
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                         }
                         .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle().stroke(Color.white, lineWidth: 2)
-                        )
                         .padding(.leading, geometry.size.width * 0.02)
                     }
                     .padding()
@@ -106,17 +117,21 @@ struct AdditionalTimerConfigView: View {
                                 }
                             }
                         }) {
-                            Image(systemName: "minus")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
+                            ZStack {
+                                Circle()
+                                    .fill(Color.clear)
+                                    .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
+
+                                Image(systemName: "minus")
+                                    .foregroundColor(.white)
+                                    .font(.headline)
+                                    .padding()
+                            }
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                         }
                         .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle().stroke(Color.white, lineWidth: 2)
-                        )
                         .padding(.trailing, geometry.size.width * 0.02)
                         
                         // Display Rest Time
@@ -140,17 +155,26 @@ struct AdditionalTimerConfigView: View {
                                 }
                             }
                         }) {
-                            Image(systemName: "plus")
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .padding()
+                            ZStack {
+                                Circle()
+                                    .fill(Color.clear)
+                                    .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
+
+                                Image(systemName: "plus")
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 2)
+                            )
                         }
                         .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle().stroke(Color.white, lineWidth: 2)
-                        )
                         .padding(.leading, geometry.size.width * 0.02)
+                        
+                        
+                        
                     }
                     .padding()
                     .background(Color("backgroundColor"))
