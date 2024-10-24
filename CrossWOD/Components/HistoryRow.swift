@@ -16,120 +16,143 @@ struct HistoryRow: View {
     
     var body: some View {
         
-        NavigationLink(destination: WorkoutHistoryDetailView(viewModel: viewModel, workout: workout)) {
-            VStack {
-                
-                viewModel.shape()
-                
-                
-                Text(workout.type.rawValue)
-                    .font(.body)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-            }
-            .frame(width: 70)
-            .padding()
+        
+        HStack(spacing: 12) {
             
-            Spacer()
-            
-            if workout.type == .Amrap || workout.type == .ForTime {
+            NavigationLink(destination: WorkoutHistoryDetailView(viewModel: viewModel, workout: workout)) {
                 
                 VStack {
-                    Image("clock_icon")
-                        .scaledToFit()
-                        .frame(width: 16, height: 16)
                     
-                    Text(formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0))
-                        .font(.body)
-                        .foregroundColor(.white)
-                }
-                .frame(width: 50)
-                .padding()
-                
-                Spacer()
-                
-                VStack {
-                    Text(String(workout.seriesPerformed ?? 0))
+                    viewModel.shape()
+                    
+                    
+                    Text(workout.type.rawValue)
                         .font(.body)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                     
-                    Text("Series")
-                        .font(.body)
-                        .foregroundColor(.white)
                 }
-                .frame(width: 50)
-                .padding()
+                .frame(width: 90)
                 
-            } else if workout.type == .Emom || workout.type == .Tabata {
                 
-                VStack {
+                
+                
+                if workout.type == .Amrap || workout.type == .ForTime {
                     
-                    
-                    if let numberOfRounds = workout.numberOfRounds {
-                        let roundsText = numberOfRounds == 1 ? "Round" : "Rounds"
-                        let formattedTime = formatTimeToNumberOnly(seconds: numberOfRounds)
+                    VStack {
+                        Image("clock_icon")
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
                         
-                        Text("\(formattedTime)")
+                        Text(formatTimeWithDecimals(seconds: workout.initialCountdown ?? 0))
+                            .font(.body)
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 90)
+                    
+                    
+                    
+                    
+                    VStack {
+                        Text(String(workout.seriesPerformed ?? 0))
                             .font(.body)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                         
-                        Text("\(roundsText)")
+                        Text("Series")
                             .font(.body)
                             .foregroundColor(.white)
                     }
+                    .frame(width: 90)
+                    
+                    
+                    
+                } else if workout.type == .Emom || workout.type == .Tabata {
+                    
+                    VStack {
+                        
+                        
+                        if let numberOfRounds = workout.numberOfRounds {
+                            let roundsText = numberOfRounds == 1 ? "Round" : "Rounds"
+                            let formattedTime = formatTimeToNumberOnly(seconds: numberOfRounds)
+                            
+                            Text("\(formattedTime)")
+                                .font(.body)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            
+                            Text("\(roundsText)")
+                                .font(.body)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .frame(width: 90)
+                    
+                    
+                    
+                    
+                    
+                    
+                    VStack {
+                        
+                        if let seriesPerformed = workout.performedSets {
+                            let setText = seriesPerformed == 1 ? "Set" : "Sets"
+                            let numberOfPerformedSeries = formatTimeToNumberOnly(seconds:  workout.performedSets ?? 0)
+                            
+                            Text("\(numberOfPerformedSeries)")
+                                .font(.body)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            
+                            Text("\(setText)")
+                                .font(.body)
+                                .foregroundColor(.white)
+                            
+                        }
+                        
+                    }
+                    .frame(width: 90)
+                    
+                    
+                    
                 }
-                .padding()
-
+                
                 
                 Spacer()
                 
-                VStack {
-                    
-                    if let seriesPerformed = workout.performedSets {
-                        let setText = seriesPerformed == 1 ? "Set" : "Sets"
-                        let numberOfPerformedSeries = formatTimeToNumberOnly(seconds:  workout.performedSets ?? 0)
-                        
-                        Text("\(numberOfPerformedSeries)")
-                            .font(.body)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                        
-                        Text("\(setText)")
-                            .font(.body)
-                            .foregroundColor(.white)
-                        
-                    }
-                    
-                }.padding()
-                
-                
             }
-            
-            Spacer()
-            Spacer()
-            Spacer()
-            
+            .padding(.horizontal)
+                        
         }
+        .padding(.vertical, 10)
         .background(Color("cardBackgroundColor"))
-        .cornerRadius(15)
-        .padding(.horizontal)
+        .cornerRadius(12)
+        
     }
-    
     
 }
 
 #Preview {
     let dummyWorkout = Workout(
         type: .Tabata,
-        date: Date(), // Use the current date for the dummy workout
-        initialCountdown: 300, // 5 minutes countdown
-        seriesPerformed: 5,
-        seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
+        date: Date(),
+        performedSets: 2,
+        numberOfRounds: 2,
+        roundTimes: 10,
+        totalWorkoutTime: 40
     )
+    
+    let dummyWorkout2 = Workout(
+        type: .Amrap,
+        date: Date(),
+        initialCountdown: 300,
+        seriesPerformed: 5,
+        seriesTimes: [30, 40, 35, 45, 50]
+    )
+    
+    
     let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
     
     HistoryRow(viewModel: viewModel, workout: dummyWorkout)
+    HistoryRow(viewModel: viewModel, workout: dummyWorkout2)
 }

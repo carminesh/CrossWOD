@@ -21,13 +21,13 @@ struct Workout: Identifiable, Codable {
     let date: Date
     
 
-    // AMRAP-specific properties
+    // AMRAP and ForTime - specific properties
     var initialCountdown: Int?
     var seriesPerformed: Int?
     var seriesTimes: [Int]?
     
-    // EMOM-specific properties
-    var performedSets: Int?     
+    // EMOM and Tabata - specific properties
+    var performedSets: Int?
     var numberOfRounds: Int?
     var roundTimes: Int?
     var totalWorkoutTime: Int?

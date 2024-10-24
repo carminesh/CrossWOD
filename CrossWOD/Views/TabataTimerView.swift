@@ -304,7 +304,7 @@ struct TabataTimerView: View {
     
     private func saveWorkoutHistory() {
         let workout = Workout(
-            type: .Tabata,
+            type: .Tabata, 
             date: Date(),
             performedSets: setSeries,
             numberOfRounds: numberOfSeries,
