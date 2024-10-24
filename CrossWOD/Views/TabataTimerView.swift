@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabataTimerView: View {
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
-
+    
     let workTime: Int // Work time for each round
     let restTime: Int // Rest time between rounds
     let numberOfSeries: Int // Total series to be performed
@@ -25,12 +25,12 @@ struct TabataTimerView: View {
     @State private var isSetResting: Bool = false
     @State private var timer: Timer?
     @State private var delayCountdown: Int = 3
-
+    
     @State private var delay: Bool = true
     @State private var randomPhrase: String = ""
     @State private var timerHasFinished = false
     @State private var showAfterDelay: Bool = false
-
+    
     var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
     
     
@@ -43,59 +43,61 @@ struct TabataTimerView: View {
         
         return totalTimePerRound
     }
-
+    
     var body: some View {
         ZStack {
             Color("backgroundColor")
                 .edgesIgnoringSafeArea(.all)
-
+            
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
-
+            
             VStack {
                 Text("TABATA")
                     .font(.largeTitle)
                     .foregroundColor(.white)
                     .fontWeight(.bold)
                     .padding()
-
+                
                 HStack(spacing: 20) {
-                   
+                    
                     if setSeries > 1 {
                         InfoIndicator(text: "Set: \(currentSet)/\(setSeries)", accentColor: Color("tabataAccentColor"), number: currentSet, outOF: setSeries, timerHasFinished: timerHasFinished)
                     }
-                   
                     
                     if numberOfSeries > 1 {
-                        InfoIndicator(text: "Round: \(currentSeries)/\(numberOfSeries)", accentColor: Color("tabataAccentColor"), number: currentSeries, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
+                        
+                        InfoIndicator(text: "Round: \(currentRound)/\(numberOfSeries)", accentColor: Color("tabataAccentColor"), number: currentRound, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
                     }
-                  
                     
                     
                     
                 }.padding(.horizontal, 10)
-
-                if isResting {
-                    Text("Rest Time")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .opacity(timerHasFinished ? 0 : 1)
-                        .padding()
-                }
-               
-
+                
+                Spacer()
+                    .frame(height: 70)
+                
                 VStack {
-                    Text("Starts in:")
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding()
-                        .opacity(delay ? 1 : 0)
-
+                    
+                    if !isResting {
+                        Text("STARTS IN:")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                            .padding()
+                            .opacity(delay ? 1 : 0)
+                    } else if isResting && !timerHasFinished {
+                        Text("REST")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("tabataAccentColor"))
+                            .padding()
+                            .animation(.easeInOut, value: isResting)
+                    }
+                    
                     if delay {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
@@ -110,7 +112,7 @@ struct TabataTimerView: View {
                             .padding()
                     }
                 }.padding()
-
+                
                 if timerHasFinished && showAfterDelay {
                     Spacer()
                     Text(randomPhrase)
@@ -139,9 +141,9 @@ struct TabataTimerView: View {
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(12)
                 }
-
+                
                 Spacer()
-
+                
                 HStack {
                     Button(action: {
                         isPaused.toggle()
@@ -158,7 +160,7 @@ struct TabataTimerView: View {
                                 .scaledToFit()
                                 .frame(width: 14, height: 14)
                                 .padding(.leading, 50)
-
+                            
                             Text(isPaused ? "PAUSE" : "START")
                                 .font(.body)
                                 .fontWeight(.bold)
@@ -200,11 +202,11 @@ struct TabataTimerView: View {
     }
     
     
-
+    
     private func startDelay() {
         delayCountdown = 3 // Reset delay countdown
         delay = true // Show the delay countdown
-
+        
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if delayCountdown > 0 {
                 delayCountdown -= 1
@@ -215,13 +217,13 @@ struct TabataTimerView: View {
             }
         }
     }
-
+    
     func startTimer() {
         riveAnimation.pauseRiveAnimation()
         stopTimer()
-
+        
         riveAnimation.startRiveAnimation()
-
+        
         // Set the initial timeRemaining only if the timer hasn't started (i.e., timeRemaining is zero)
         if timeRemaining == 0 {
             // Determine the timer for work/rest/set rest based on the state
@@ -231,20 +233,20 @@ struct TabataTimerView: View {
                 timeRemaining = restTime
             } else if isSetResting {
                 timeRemaining = setRestTime
+                
             }
         }
-
+        
         // Schedule the timer
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             tick()
         }
     }
-
     func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-
+    
     func tick() {
         if timeRemaining > 0 {
             timeRemaining -= 1
@@ -252,51 +254,54 @@ struct TabataTimerView: View {
             handleNextRoundOrRest()
         }
     }
-
+    
     func handleNextRoundOrRest() {
         if isSetResting {
-            // Set rest completed, go to next set
-            currentSet += 1
-            if currentSet > setSeries {
+            // Set rest completed, prepare for the next set
+            if currentSet < setSeries {
+                currentSet += 1
+                currentRound = 1 // Reset rounds for the new set
+                isSetResting = false
+                isResting = false // Ensure work time starts for the new set
+                timeRemaining = workTime // Reset to work time
+                startTimer() // Start work time for the new set
+            } else {
+                // All sets finished
                 timerHasFinished = true
                 stopTimer()
                 riveAnimation.stopRiveAnimation()
-            } else {
-                currentSeries = 1
-                currentRound = 1
-                isSetResting = false
-                startTimer()
             }
         } else if isResting {
-            // Rest between rounds completed, start next round or series
-            currentSeries += 1
-            if currentSeries > numberOfSeries {
-                // All series done, move to set rest or end timer
+            // Rest between rounds completed
+            if currentRound < numberOfSeries {
+                // Start next round
+                currentRound += 1 // Increment currentRound
+                // Next round, start work time
+                isResting = false
+                timeRemaining = workTime // Reset to work time for the next round
+                startTimer() // Start work time for the next round
+            } else {
+                // All rounds in the current set are done
                 if currentSet < setSeries {
-                    isSetResting = true
-                    startTimer()
+                    // Move to next set rest
+                    isSetResting = true // Start set rest
+                    timeRemaining = setRestTime // Set time for the set rest
+                    startTimer() // Start set rest time
                 } else {
+                    // If it is the last set, finish the workout
                     timerHasFinished = true
                     stopTimer()
                     riveAnimation.stopRiveAnimation()
                 }
-            } else {
-                isResting = false
-                startTimer() // Start next work round
             }
         } else {
-            // Work round completed, start rest or next round
-            currentRound += 1
-            if currentRound > numberOfSeries {
-                isResting = true
-                startTimer()
-            } else {
-                isResting = true
-                startTimer() // Start rest time
-            }
+            // Work round completed, start rest time
+            isResting = true
+            timeRemaining = restTime // Set time for rest
+            startTimer() // Start rest time
         }
     }
-
+    
     private func saveWorkoutHistory() {
         let workout = Workout(
             type: .Tabata,

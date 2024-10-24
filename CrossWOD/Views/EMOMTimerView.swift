@@ -78,29 +78,30 @@ struct EMOMTimerView: View {
             
                 }.padding(.horizontal, 10)
                 
-                if isResting {
-                    Text("Rest Time")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .opacity(timerHasFinished ? 0 : 1)
-                        .padding()
-                }
+               
                 
-            
-    
-                
+                Spacer()
+                    .frame(height: 50)
+
                 VStack {
                 
+                    if !isResting {
+                        Text("STARTS IN:")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
+                            .padding()
+                            .opacity(delay ? 1 : 0)
+                    } else if isResting && !timerHasFinished {
+                        Text("REST")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("emomAccentColor"))
+                            .padding()
+                            .animation(.easeInOut, value: isResting)
+                    }
                     
-                    
-                    
-                    Text("Starts in:")
-                        .foregroundColor(.white)
-                        .fontWeight(.bold)
-                        .padding()
-                        .opacity(delay ? 1 : 0)
-                    
-                    
+                
                     
                     // Show the remaining time section
                     if delay {

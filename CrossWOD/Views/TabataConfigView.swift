@@ -10,8 +10,8 @@ import SwiftUI
 struct TabataConfigView: View {
     
     @State private var numberOfSeries: Int = 1
-    @State private var workTime: Int = 10
-    @State private var restTime: Int = 10
+    @State private var workTime: Int = 5
+    @State private var restTime: Int = 5
     @State private var showTimePicker = false
     
     @State private var workTimeBool = false

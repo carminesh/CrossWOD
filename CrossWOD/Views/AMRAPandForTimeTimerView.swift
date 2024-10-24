@@ -70,7 +70,8 @@ struct AMRAPandForTimeTimerView: View {
                             
                             VStack() {
                                 
-                                Text("Starts in:")
+                                Text("STARTS IN:")
+                                    .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .opacity(delay ? 1 : 0)
