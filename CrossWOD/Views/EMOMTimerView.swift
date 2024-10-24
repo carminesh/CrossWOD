@@ -65,18 +65,27 @@ struct EMOMTimerView: View {
                 Text("EMOM")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(.white)
                     .padding()
                 
+                HStack(spacing: 20) {
+                   
+                    if numberOfSeries > 1 {
+                        InfoIndicator(text: "Set: \(currentSeries)/\(numberOfSeries)", accentColor: Color("emomAccentColor"), number: currentSeries, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
+                    }
+                  
                 
-                Text("Set: \(currentSeries)/\(numberOfSeries)")
-                    .font(.title3)
-                    .opacity(timerHasFinished ? 0 : 1)
-                    .padding(.top, 4)
+            
+                }.padding(.horizontal, 10)
                 
-                Text(isResting ? "Rest Time" : "Round: \(currentRound)/\(formatTimeToNumberOnly(seconds: forTime))")
-                    .font(.title3)
-                    .opacity(timerHasFinished ? 0 : 1)
-                    .padding()
+                if isResting {
+                    Text("Rest Time")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .opacity(timerHasFinished ? 0 : 1)
+                        .padding()
+                }
+                
             
     
                 
@@ -86,6 +95,7 @@ struct EMOMTimerView: View {
                     
                     
                     Text("Starts in:")
+                        .foregroundColor(.white)
                         .fontWeight(.bold)
                         .padding()
                         .opacity(delay ? 1 : 0)
@@ -141,7 +151,7 @@ struct EMOMTimerView: View {
                             .padding(.trailing, 12)
                     }
                     .background(Color("cardBackgroundColor"))
-                    .cornerRadius(15)
+                    .cornerRadius(12)
                     
                 }
                 

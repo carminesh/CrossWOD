@@ -131,7 +131,7 @@ struct AMRAPandForTimeTimerView: View {
                                 
                         }
                         .background(Color("cardBackgroundColor"))
-                        .cornerRadius(10)
+                        .cornerRadius(12)
                         .transition(.opacity)
                         
                     }

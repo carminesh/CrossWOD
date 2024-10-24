@@ -62,22 +62,21 @@ struct TabataTimerView: View {
                     .fontWeight(.bold)
                     .padding()
 
-                VStack {
-                    
+                HStack(spacing: 20) {
+                   
                     if setSeries > 1 {
-                        Text("Set: \(currentSet)/\(setSeries)")
-                            .foregroundColor(.white)
-                            .font(.title3)
-                            .opacity(timerHasFinished ? 0 : 1)
+                        InfoIndicator(text: "Set: \(currentSet)/\(setSeries)", accentColor: Color("tabataAccentColor"), number: currentSet, outOF: setSeries, timerHasFinished: timerHasFinished)
                     }
                    
-
                     
-                    Text("Round: \(currentSeries)/\(numberOfSeries)")
-                        .foregroundColor(.white)
-                        .font(.title3)
-                        .opacity(timerHasFinished ? 0 : 1)
-                }
+                    if numberOfSeries > 1 {
+                        InfoIndicator(text: "Round: \(currentSeries)/\(numberOfSeries)", accentColor: Color("tabataAccentColor"), number: currentSeries, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
+                    }
+                  
+                    
+                    
+                    
+                }.padding(.horizontal, 10)
 
                 if isResting {
                     Text("Rest Time")
@@ -138,7 +137,7 @@ struct TabataTimerView: View {
                             .padding(.trailing, 12)
                     }
                     .background(Color("cardBackgroundColor"))
-                    .cornerRadius(15)
+                    .cornerRadius(12)
                 }
 
                 Spacer()
@@ -199,6 +198,8 @@ struct TabataTimerView: View {
             }
         }
     }
+    
+    
 
     private func startDelay() {
         delayCountdown = 3 // Reset delay countdown
