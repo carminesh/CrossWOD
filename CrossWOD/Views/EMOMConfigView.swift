@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EMOMConfigView: View {
     
-    @State private var everyTime: Int = 60 {
+    @State private var workTime: Int = 60 {
         didSet {
             updateForTime()
         }
@@ -17,7 +17,7 @@ struct EMOMConfigView: View {
     @State private var forTime: Int = 120
     @State private var showTimePicker = false
     
-    @State private var everyTimeBool = false
+    @State private var workTimeBool = false
     @State private var forTimeBool = false
     @State private var showAdditionalSettings = false
     @State private var emomAdditionalConfigDetent = PresentationDetent.medium
@@ -56,9 +56,9 @@ struct EMOMConfigView: View {
                         
                         Button(action: {
                             showTimePicker = true
-                            everyTimeBool = true // Show time picker
+                            workTimeBool = true // Show time picker
                         }) {
-                            Text(formatTimeWithDecimals(seconds: everyTime))
+                            Text(formatTimeWithDecimals(seconds: workTime))
                                 .font(.system(size: 46))
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -79,7 +79,7 @@ struct EMOMConfigView: View {
                             
                             // Decrease Series
                             Button(action: {
-                                forTime = max(forTime - everyTime, everyTime)
+                                forTime = max(forTime - workTime, workTime)
                             }) {
                                 ZStack {
                                     Circle()
@@ -107,7 +107,7 @@ struct EMOMConfigView: View {
                                
                             
                             Button(action: {
-                                forTime = min(forTime + everyTime, 10 * everyTime)
+                                forTime = min(forTime + workTime, 10 * workTime)
                             }) {
                                 ZStack {
                                     Circle()
@@ -152,10 +152,10 @@ struct EMOMConfigView: View {
                     Spacer()
                     
                     NavigationLink(destination: EMOMTimerView(
-                        everyTime: everyTime,
+                        workTime: workTime,
                         forTime: forTime,
-                        numberOfSeries: numberOfSeries,
-                        restTime: selectedRestTime
+                        setRestTime: selectedRestTime,
+                        setSeries: numberOfSeries
                     )) {
                         Text("START TIMER")
                             .font(.body)
@@ -188,16 +188,16 @@ struct EMOMConfigView: View {
                     Color.black.opacity(0.9)
                     
                     VStack {
-                        if everyTimeBool {
-                            CustomTimePicker(intervalType: "EMOM", selectedTime: $everyTime)
-                                .onChange(of: everyTime) {
+                        if workTimeBool {
+                            CustomTimePicker(intervalType: "EMOM", selectedTime: $workTime)
+                                .onChange(of: workTime) {
                                     updateForTime()
                                 }
                         }
                         
                         Button("Done") {
                             showTimePicker = false
-                            everyTimeBool = false
+                            workTimeBool = false
                             forTimeBool = false
                         }
                         .padding()
@@ -216,11 +216,11 @@ struct EMOMConfigView: View {
     }
     
     private func updateForTime() {
-        // Ensure forTime is always a multiple of everyTime
-        if forTime < everyTime {
-            forTime = everyTime
+        // Ensure forTime is always a multiple of workTime
+        if forTime < workTime {
+            forTime = workTime
         } else {
-            forTime = ((forTime + everyTime - 1) / everyTime) * everyTime
+            forTime = ((forTime + workTime - 1) / workTime) * workTime
         }
     }
 }

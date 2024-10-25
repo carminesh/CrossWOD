@@ -74,7 +74,7 @@ struct HistoryRow: View {
                         
                         if let numberOfRounds = workout.numberOfRounds {
                             let roundsText = numberOfRounds == 1 ? "Round" : "Rounds"
-                            let formattedTime = formatTimeToNumberOnly(seconds: numberOfRounds)
+                            let formattedTime = formatTimeToNumberOnly(seconds: numberOfRounds) ?? "0"
                             
                             Text("\(formattedTime)")
                                 .font(.body)
@@ -94,22 +94,19 @@ struct HistoryRow: View {
                     
                     
                     VStack {
-                        
                         if let seriesPerformed = workout.performedSets {
                             let setText = seriesPerformed == 1 ? "Set" : "Sets"
-                            let numberOfPerformedSeries = formatTimeToNumberOnly(seconds:  workout.performedSets ?? 0)
+                            let numberOfPerformedSeries = formatTimeToNumberOnly(seconds: seriesPerformed) ?? "0"
                             
-                            Text("\(numberOfPerformedSeries)")
+                            Text(numberOfPerformedSeries)
                                 .font(.body)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                             
-                            Text("\(setText)")
+                            Text(setText)
                                 .font(.body)
                                 .foregroundColor(.white)
-                            
                         }
-                        
                     }
                     .frame(width: 90)
                     

@@ -35,12 +35,12 @@ struct CustomTimePicker: View {
     var body: some View {
         VStack {
             // Display the currently selected time
-            Text("Selected Time: \(formatTime(seconds: selectedTime))")
+            Text("Selected time: \(formatTime(seconds: selectedTime))")
                 .font(.headline)
                 .padding()
 
             // Picker to select the time
-            Picker("Select Time", selection: $selectedTime) {
+            Picker("Select time", selection: $selectedTime) {
                 ForEach(timeIntervals, id: \.self) { time in
                     Text(formatTime(seconds: time)).tag(time)
                 }

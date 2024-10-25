@@ -10,81 +10,82 @@ import SwiftUI
 struct EMOMTimerView: View {
     @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     
-    
-    let everyTime: Int // Time interval (e.g. every minute)
-    let forTime: Int // Number of rounds before rest
-    let numberOfSeries: Int // Total sets to be performed
-    let restTime: Int // Rest time between series
+    let workTime: Int // Work time for each round
+    let forTime: Int // Total time per round
+    let restTime: Int = 0 // Rest time between rounds
+    let setRestTime: Int // Rest time between sets
+    let setSeries: Int // Number of sets
     
     @State private var isPaused: Bool = true
-    
     @State private var currentRound: Int = 1
     @State private var currentSeries: Int = 1
+    @State private var currentSet: Int = 1
     @State private var timeRemaining: Int = 0 // Countdown timer
     @State private var isResting: Bool = false
+    @State private var isSetResting: Bool = false
     @State private var timer: Timer?
-    @State private var delayCountdown : Int = 3
+    @State private var delayCountdown: Int = 3
     
     @State private var delay: Bool = true
     @State private var randomPhrase: String = ""
     @State private var timerHasFinished = false
-    
     @State private var showAfterDelay: Bool = false
     
+    var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
+    
+    
     var totalTime: Int {
-        let totalTimePerRound = forTime
+        let totalTimePerRound = (workTime + restTime) * numberOfSeries
         
-        if numberOfSeries > 1 {
-            return (totalTimePerRound * numberOfSeries) + (restTime * (numberOfSeries > 1 ? numberOfSeries - 1 : numberOfSeries ))
+        if setSeries > 1 {
+            return (totalTimePerRound * setSeries) + (setRestTime * (setRestTime > 1 ? setSeries - 1 : setSeries ))
         }
         
         return totalTimePerRound
     }
     
-    var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
+    var numberOfSeries: Int {
+        return forTime / workTime
+    }
     
     var body: some View {
-        
-        
         ZStack {
-            
             Color("backgroundColor")
                 .edgesIgnoringSafeArea(.all)
-
             
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
-
             
             VStack {
-                
-                
                 Text("EMOM")
                     .font(.largeTitle)
-                    .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .fontWeight(.bold)
                     .padding()
                 
                 HStack(spacing: 20) {
-                   
-                    if numberOfSeries > 1 {
-                        InfoIndicator(text: "Set: \(currentSeries)/\(numberOfSeries)", accentColor: Color("emomAccentColor"), number: currentSeries, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
+                    
+                    if setSeries > 1 {
+                        InfoIndicator(text: "Set: \(currentSet)/\(setSeries)", accentColor: Color("emomAccentColor"), number: currentSet, outOF: setSeries, timerHasFinished: timerHasFinished)
                     }
-                  
-                
-            
+                    
+                    
+                    if numberOfSeries > 1 {
+                        InfoIndicator(text: "Round: \(currentRound)/\(numberOfSeries)", accentColor: Color("emomAccentColor"), number: currentRound, outOF: numberOfSeries, timerHasFinished: timerHasFinished)
+                    }
+                    
+                    
+                    
                 }.padding(.horizontal, 10)
                 
-               
-                
                 Spacer()
-                    .frame(height: 50)
-
-                VStack {
+                    .frame(height: 70)
                 
+                VStack {
+                    
                     if !isResting {
                         Text("STARTS IN:")
                             .font(.title3)
@@ -92,7 +93,7 @@ struct EMOMTimerView: View {
                             .fontWeight(.bold)
                             .padding()
                             .opacity(delay ? 1 : 0)
-                    } else if isResting && !timerHasFinished {
+                    } else if isResting && !timerHasFinished && restTime > 0 {
                         Text("REST")
                             .font(.title3)
                             .fontWeight(.bold)
@@ -101,9 +102,6 @@ struct EMOMTimerView: View {
                             .animation(.easeInOut, value: isResting)
                     }
                     
-                
-                    
-                    // Show the remaining time section
                     if delay {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
@@ -117,17 +115,10 @@ struct EMOMTimerView: View {
                             .foregroundColor(.white)
                             .padding()
                     }
-                    
-                    
                 }.padding()
                 
-               
-                
-                
-                if currentSeries == 0 && currentRound == 0  && !isResting && showAfterDelay{
-                    
+                if timerHasFinished && showAfterDelay {
                     Spacer()
-
                     Text(randomPhrase)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -153,7 +144,6 @@ struct EMOMTimerView: View {
                     }
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(12)
-                    
                 }
                 
                 Spacer()
@@ -169,7 +159,7 @@ struct EMOMTimerView: View {
                         }
                     }) {
                         HStack(spacing: 10) {
-                            Image(isPaused ? "pause_icon" : "start_icon" )
+                            Image(isPaused ? "pause_icon" : "start_icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 14, height: 14)
@@ -186,20 +176,17 @@ struct EMOMTimerView: View {
                         .cornerRadius(10)
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
-                    
-                    
                 }
                 .disabled(timeRemaining == 0 || delay)
                 .opacity(timeRemaining == 0 || delay ? 0 : 1)
                 .padding(.bottom, 40)
-                
-                
-            }.onAppear {
+            }
+            .onAppear {
                 startDelay()
                 randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
             }
-            .onChange(of: currentSeries) {
-                if currentSeries == 0 && !isResting && currentRound == 0 {
+            .onChange(of: timerHasFinished) {
+                if timerHasFinished {
                     // Add a delay before showing the text
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         withAnimation {
@@ -218,6 +205,8 @@ struct EMOMTimerView: View {
         }
     }
     
+    
+    
     private func startDelay() {
         delayCountdown = 3 // Reset delay countdown
         delay = true // Show the delay countdown
@@ -235,76 +224,85 @@ struct EMOMTimerView: View {
     
     func startTimer() {
         riveAnimation.pauseRiveAnimation()
-        stopTimer() // Stop any existing timer
+        stopTimer()
         
         riveAnimation.startRiveAnimation()
-        // Set the initial timeRemaining based on the current state
-        if !isResting {
-            
-            
-            if timeRemaining == 0 {
-                // If timeRemaining is zero, start with everyTime
-                timeRemaining = everyTime // Start the timer for the exercise interval
-            }
-        } else {
-            if timeRemaining == 0 {
-                // If in resting state and timeRemaining is zero, start with restTime
-                timeRemaining = restTime // Start the timer for the rest period
+        
+        // Set the initial timeRemaining only if the timer hasn't started (i.e., timeRemaining is zero)
+        if timeRemaining == 0 {
+            // Determine the timer for work/rest/set rest based on the state
+            if !isResting && !isSetResting {
+                timeRemaining = workTime
+            } else if isResting && !isSetResting {
+                timeRemaining = restTime
+            } else if isSetResting {
+                timeRemaining = setRestTime
+                
             }
         }
         
+        // Schedule the timer
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.prepare() // Prepare the generator
-            generator.impactOccurred() // Trigger the feedback
             tick()
         }
     }
-    
-    // Stop the timer
     func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
     
-    // timeRemaining tick
     func tick() {
         if timeRemaining > 0 {
             timeRemaining -= 1
-            
         } else {
             handleNextRoundOrRest()
         }
     }
     
     func handleNextRoundOrRest() {
-        if isResting {
-            currentSeries += 1 // Go to the next series
-            isResting = false // Stop resting
-            
-            if currentSeries <= numberOfSeries {
-                startTimer() // Start the new series
+        if isSetResting {
+            // Set rest completed, prepare for the next set
+            if currentSet < setSeries {
+                currentSet += 1
+                currentRound = 1 // Reset rounds for the new set
+                isSetResting = false
+                isResting = false // Ensure work time starts for the new set
+                timeRemaining = workTime // Reset to work time
+                startTimer() // Start work time for the new set
             } else {
-                riveAnimation.stopRiveAnimation()
+                // All sets finished
+                timerHasFinished = true
                 stopTimer()
+                riveAnimation.stopRiveAnimation()
             }
-        } else {
-            currentRound += 1
-            if currentRound > Int(formatTimeToNumberOnly(seconds: forTime))! { // Completed all rounds in the current series
-                if currentSeries < numberOfSeries {
-                    isResting = true
-                    currentRound = 1
-                    startTimer()
+        } else if isResting {
+            // Rest between rounds completed
+            if currentRound < numberOfSeries {
+                // Start next round
+                currentRound += 1 // Increment currentRound
+                // Next round, start work time
+                isResting = false
+                timeRemaining = workTime // Reset to work time for the next round
+                startTimer() // Start work time for the next round
+            } else {
+                // All rounds in the current set are done
+                if currentSet < setSeries {
+                    // Move to next set rest
+                    isSetResting = true // Start set rest
+                    timeRemaining = setRestTime // Set time for the set rest
+                    startTimer() // Start set rest time
                 } else {
-                    currentSeries = 0
-                    currentRound = 0
+                    // If it is the last set, finish the workout
                     timerHasFinished = true
                     stopTimer()
                     riveAnimation.stopRiveAnimation()
                 }
-            } else {
-                startTimer() // Start the next round
             }
+        } else {
+            // Work round completed, start rest time
+            isResting = true
+            timeRemaining = restTime // Set time for rest
+            startTimer() // Start rest time
         }
     }
     
@@ -312,18 +310,17 @@ struct EMOMTimerView: View {
         let workout = Workout(
             type: .Emom,
             date: Date(),
-            performedSets: numberOfSeries,
-            numberOfRounds: forTime,
-            roundTimes: everyTime,
+            performedSets: setSeries,
+            numberOfRounds: numberOfSeries,
+            roundTimes: workTime,
             totalWorkoutTime: totalTime
         )
-        
         workoutHistoryManager.addWorkout(workout)
     }
-    
+
     
 }
 
 #Preview {
-    EMOMTimerView(everyTime: 60, forTime: 60, numberOfSeries: 1, restTime: 20)
+    EMOMTimerView(workTime: 60, forTime: 60, setRestTime: 10, setSeries: 1)
 }

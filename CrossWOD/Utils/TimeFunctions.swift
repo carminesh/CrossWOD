@@ -26,8 +26,10 @@ func formatTimeWithDecimals(seconds: Int) -> String {
 
 
 // -> 10 (SECONDS), 20 (SECONDS) and so on
-func formatTimeToNumberOnly(seconds: Int) -> String {
-    if seconds < 60 {
+func formatTimeToNumberOnly(seconds: Int) -> String? {
+    if seconds < 0 {
+        return nil
+    } else if seconds < 60 {
         return String(seconds)
     } else if seconds == 60 {
         return String(1)
