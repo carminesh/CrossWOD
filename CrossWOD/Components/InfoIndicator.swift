@@ -28,7 +28,7 @@ struct InfoIndicator: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(complete ? color.opacity(0.4) : Color("cardBackgroundColor"))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 14)
                         .stroke(color, lineWidth: 2)
                 )
                 .frame(width: 140, height: 50)

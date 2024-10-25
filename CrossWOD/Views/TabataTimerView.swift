@@ -52,7 +52,7 @@ struct TabataTimerView: View {
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(1), value: delayCountdown)
+                .animation(.easeInOut.delay(0.2), value: delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
@@ -75,7 +75,9 @@ struct TabataTimerView: View {
                     
                     
                     
-                }.padding(.horizontal, 10)
+                }
+                .opacity(delay ? 0 : 1)
+                .padding(.horizontal, 10)
                 
                 Spacer()
                     .frame(height: 70)
@@ -96,6 +98,18 @@ struct TabataTimerView: View {
                             .foregroundColor(Color("tabataAccentColor"))
                             .padding()
                             .animation(.easeInOut, value: isResting)
+                            .onAppear {
+                                riveAnimation.doRestRiveAnimation()
+                            }
+                            .onDisappear {
+                                
+                                if (!timerHasFinished) {
+                                    riveAnimation.undoRestRiveAnimation()
+                                } else {
+                                    riveAnimation.restToStopRiveAnimation()
+                                }
+                               
+                            }
                     }
                     
                     if delay {
@@ -169,7 +183,7 @@ struct TabataTimerView: View {
                         }
                         .padding(.vertical, 20)
                         .background(Color("cardBackgroundColor"))
-                        .cornerRadius(10)
+                        .cornerRadius(15)
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
                 }
@@ -242,6 +256,7 @@ struct TabataTimerView: View {
             tick()
         }
     }
+    
     func stopTimer() {
         timer?.invalidate()
         timer = nil
@@ -268,8 +283,12 @@ struct TabataTimerView: View {
             } else {
                 // All sets finished
                 timerHasFinished = true
-                stopTimer()
-                riveAnimation.stopRiveAnimation()
+                
+                if !isResting {
+                    stopTimer()
+                    riveAnimation.stopRiveAnimation()
+                }
+            
             }
         } else if isResting {
             // Rest between rounds completed

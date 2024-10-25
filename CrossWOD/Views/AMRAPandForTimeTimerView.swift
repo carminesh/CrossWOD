@@ -41,7 +41,7 @@ struct AMRAPandForTimeTimerView: View {
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(1), value: delayCountdown)
+                .animation(.easeInOut.delay(0.2), value: delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
@@ -180,7 +180,7 @@ struct AMRAPandForTimeTimerView: View {
                             Image("add_icon")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 19, height: 19)
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)

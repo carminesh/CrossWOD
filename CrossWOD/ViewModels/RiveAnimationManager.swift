@@ -19,8 +19,7 @@ struct RiveAnimationManager {
     
     public func startRiveAnimation() {
         riveViewModel.setInput("isStarted", value: true)
-        
-        
+         
     }
     
     public func pauseRiveAnimation() {
@@ -32,6 +31,20 @@ struct RiveAnimationManager {
         riveViewModel.setInput("endAnimation", value: true)
     }
 
-        
+    
+    public func doRestRiveAnimation() {
+        riveViewModel.setInput("isResting", value: true)
+    }
+    
+    public func undoRestRiveAnimation() {
+        riveViewModel.setInput("isResting", value: false)
+        riveViewModel.reset()
+        riveViewModel.setInput("isStarted", value: true)
+    }
+    
+    public func restToStopRiveAnimation() {
+        riveViewModel.setInput("isResting", value: false)
+        riveViewModel.setInput("endAnimation", value: true)
+    }
     
 }

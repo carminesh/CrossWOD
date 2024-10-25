@@ -63,7 +63,7 @@ struct AdditionalTimerConfigView: View {
                         
                         // Display Number of Series
                         Text(String(numberOfSeries))
-                            .foregroundColor(.white)
+                            .foregroundColor(numberOfSeries != 1 ? accentColor : .white)
                             .font(.title)
                             .fontWeight(.bold)
                             .frame(width: geometry.size.width * 0.3)
@@ -136,7 +136,7 @@ struct AdditionalTimerConfigView: View {
                         
                         // Display Rest Time
                         Text(formatTimeWithDecimals(seconds: selectedRestTime))
-                            .foregroundColor(.white)
+                            .foregroundColor(selectedRestTime != 10 ? accentColor : .white)
                             .font(.title)
                             .fontWeight(.bold)
                             .frame(width: geometry.size.width * 0.3)
@@ -193,7 +193,7 @@ struct AdditionalTimerConfigView: View {
                                 .padding()
                                 .background(accentColor)
                                 .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .cornerRadius(15)
                         }
                         
                         
@@ -208,7 +208,7 @@ struct AdditionalTimerConfigView: View {
                                     .foregroundColor(.white)
                                     .padding()
                             }
-                            .frame(width: geometry.size.width * 0.143, height: geometry.size.width * 0.143)
+                            .frame(width: geometry.size.width * 0.138, height: geometry.size.width * 0.138)
                             .background(Color("cardBackgroundColor"))
                             .cornerRadius(15)
                         }
