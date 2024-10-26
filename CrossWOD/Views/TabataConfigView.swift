@@ -43,7 +43,8 @@ struct TabataConfigView: View {
                 
                 Text("Intense work followed by rest")
                     .font(.subheadline)
-                    .foregroundColor(.white)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color("tabataAccentColor"))
             
                 // MARK: Time configuration boxes
                 VStack(spacing: 16) {

@@ -44,7 +44,7 @@ struct RiveAnimationManager {
     
     public func restToStopRiveAnimation() {
         riveViewModel.setInput("isResting", value: false)
-        riveViewModel.setInput("endAnimation", value: true)
+        riveViewModel.setInput("isStarted", value: false)
     }
     
 }

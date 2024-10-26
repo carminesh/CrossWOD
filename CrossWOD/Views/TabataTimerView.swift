@@ -52,7 +52,7 @@ struct TabataTimerView: View {
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(0.2), value: delayCountdown)
+                .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
@@ -111,7 +111,7 @@ struct TabataTimerView: View {
                                
                             }
                     }
-                    
+                     
                     if delay {
                         Text("\(delayCountdown)")
                             .font(.system(size: 60))
@@ -187,8 +187,8 @@ struct TabataTimerView: View {
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
                 }
-                .disabled(timeRemaining == 0 || delay)
-                .opacity(timeRemaining == 0 || delay ? 0 : 1)
+                .disabled(timeRemaining == 0 || delay || isResting || isSetResting)
+                .opacity(timeRemaining == 0 || delay || isResting || isSetResting ? 0 : 1)
                 .padding(.bottom, 40)
             }
             .onAppear {
@@ -252,7 +252,7 @@ struct TabataTimerView: View {
         }
         
         // Schedule the timer
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in            
             tick()
         }
     }

@@ -55,7 +55,7 @@ struct EMOMTimerView: View {
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(0.2), value: delayCountdown)
+                .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
@@ -190,8 +190,8 @@ struct EMOMTimerView: View {
                     }
                     .animation(.easeInOut(duration: 1), value: isPaused)
                 }
-                .disabled(timeRemaining == 0 || delay)
-                .opacity(timeRemaining == 0 || delay ? 0 : 1)
+                .disabled(timeRemaining == 0 || delay || isSetResting)
+                .opacity(timeRemaining == 0 || delay || isSetResting ? 0 : 1)
                 .padding(.bottom, 40)
             }
             .onAppear {
@@ -255,6 +255,7 @@ struct EMOMTimerView: View {
         
         // Schedule the timer
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            
             tick()
         }
     }

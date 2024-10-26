@@ -38,7 +38,8 @@ struct AMRAPandForTimeConfigView: View {
     
                 Text(modeDescription)
                     .font(.subheadline)
-                    .foregroundColor(.white)
+                    .fontWeight(.medium)
+                    .foregroundColor(accentColor)
 
                 
                 // Time Configuration Box

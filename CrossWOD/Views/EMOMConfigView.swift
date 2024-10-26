@@ -43,7 +43,8 @@ struct EMOMConfigView: View {
                 
                 Text("Every minute on the minute")
                     .font(.subheadline)
-                    .foregroundColor(.white)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color("emomAccentColor"))
                 
                 VStack(spacing: 16) {
                     // Time Configuration Box

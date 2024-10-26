@@ -41,7 +41,7 @@ struct AMRAPandForTimeTimerView: View {
             riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
                 .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(0.2), value: delayCountdown)
+                .animation(.easeInOut.delay(1), value: delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
@@ -242,10 +242,8 @@ struct AMRAPandForTimeTimerView: View {
         
         
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.prepare() // Prepare the generator
-            generator.impactOccurred() // Trigger the feedback
-            
+ 
+    
             if isPaused && countdown > 0 {
                 countdown -= 1
             }
