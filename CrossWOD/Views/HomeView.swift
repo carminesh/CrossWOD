@@ -11,9 +11,9 @@ struct HomeView: View {
     var props: Properties
     @State private var selectedMode: String = ""
     @State private var showTimer = false
+    
 
     let workoutList = Constants.workouts
-    
     
     
     

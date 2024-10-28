@@ -38,17 +38,26 @@ struct CardView: View {
             
         }
         .frame(height: 100)
-        .padding(.horizontal, 20) 
+        .padding(.horizontal, 20)
     }
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(
-            imageName: "amrap_card",
-            title: "Amrap",
-            modeDescription: "Intense work followed by rest"
-        )
-        .previewLayout(.sizeThatFits)
+        VStack {
+            CardView(
+                imageName: "amrap_card",
+                title: "Amrap",
+                modeDescription: "Intense work followed by rest"
+            ).previewLayout(.sizeThatFits)
+            
+            CardView(
+                imageName: "amrap_card",
+                title: "Amrap",
+                modeDescription: "Intense work followed by rest"
+            )
+            .previewLayout(.sizeThatFits)
+        }
+        
     }
 }

@@ -91,7 +91,7 @@ struct AdditionalTimerConfigView: View {
                         .padding(.leading, geometry.size.width * 0.02)
                     }
                     .padding()
-                    .background(Color("backgroundColor"))
+                    .background(Color("cardBackgroundColor"))
                     .cornerRadius(20)
                     
                     
@@ -177,7 +177,7 @@ struct AdditionalTimerConfigView: View {
                         
                     }
                     .padding()
-                    .background(Color("backgroundColor"))
+                    .background(Color("cardBackgroundColor"))
                     .cornerRadius(20)
                     
         
