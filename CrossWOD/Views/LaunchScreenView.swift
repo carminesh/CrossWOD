@@ -23,7 +23,7 @@ struct LaunchScreenView: View {
             
             if showText {
                 Text("CrossWOD")
-                    .font(.title)
+                    .font(Font.custom("ethnocentric", size: 22))
                     .foregroundColor(.white)
                     .fontWeight(.bold)
                     .padding(.top, 220)
@@ -43,13 +43,7 @@ struct LaunchScreenView: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(.easeOut(duration: 0.5)) {
-                    viewOpacity = 0 // Fade out the entire view
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isPresented.toggle()
-                }
+                isPresented.toggle()
             }
         }
     }

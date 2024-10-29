@@ -23,12 +23,15 @@ struct HomeView: View {
                 ZStack {
                     Color("backgroundColor").edgesIgnoringSafeArea(.all)
                     
+                    
+                    
                     VStack {
                         HStack {
-                            Text("welcome.")
+                            Text("CrossWOD")
+                                .font(Font.custom("ethnocentric", size: 28))
                                 .foregroundColor(.white)
-                                .font(.largeTitle)
-                                .padding()
+                                
+                            
                             Spacer()
                             
                             NavigationLink(destination: SettingsView()) {
@@ -39,7 +42,7 @@ struct HomeView: View {
                             }
                         }
                         .padding()
-                        
+                        .padding(.horizontal)
                         
                         LazyVStack(spacing: 0) {
                             ForEach(workoutList, id: \.title) { workout in
@@ -47,11 +50,11 @@ struct HomeView: View {
                                     CardView(
                                         imageName: workout.icon, title: workout.title, modeDescription: workout.modeDescription
                                     )
-                                    .frame(height: geometry.size.width / 3.45)
+                                    .padding(6 )
                                     
                                 }
                             }
-                        }
+                        }.padding(.top, 10)
                         
                         Spacer()
                     }
