@@ -12,6 +12,7 @@ struct AMRAPandForTimeConfigView: View {
     @State private var showTimePicker = false
     
     
+    
     var modeTitle: String
     var modeDescription: String
     var timePickerDescription: String
@@ -71,7 +72,7 @@ struct AMRAPandForTimeConfigView: View {
                 Spacer()
                 
                 // NavigationLink for starting the timer
-                NavigationLink(destination: AMRAPandForTimeTimerView(countdown: selectedTime, modeTitle: modeTitle,  accentColor: accentColor)){
+                NavigationLink(destination: AMRAPandForTimeTimerView(modeTitle: modeTitle,  accentColor: accentColor, countdown: selectedTime)){
                     Text("START TIMER")
                         .font(.body)
                         .fontWeight(.bold)

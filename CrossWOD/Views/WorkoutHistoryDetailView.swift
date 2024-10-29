@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct WorkoutHistoryDetailView: View {
-    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
-    @ObservedObject var viewModel: HistoryRowViewModel
     
+    var viewModel = ViewModel()
     var workout: Workout
    
     
@@ -33,7 +32,7 @@ struct WorkoutHistoryDetailView: View {
                                 
                             
                             HStack {
-                                viewModel.shape()
+                                workoutShape(for: workout.type.rawValue)
                                 
                                 Text(workout.type.rawValue)
                                     .font(.headline)
@@ -144,9 +143,9 @@ struct WorkoutHistoryDetailView: View {
                                             
                                             Spacer()
                                             
-                                            Text(workoutHistoryManager.timeDifferenceText(workout: workout, for: index))
+                                            Text(viewModel.timeDifferenceText(workout: workout, for: index))
                                                 .font(.body)
-                                                .foregroundColor(workoutHistoryManager.timeDifferenceColor(workout: workout, for: index))
+                                                .foregroundColor(viewModel.timeDifferenceColor(workout: workout, for: index))
                                                 .frame(width: 70)
                                         }
                                         .padding()
@@ -231,18 +230,18 @@ struct WorkoutHistoryDetail_Previews: PreviewProvider {
             seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
         )
         
-        let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
+        
         
         Group {
-            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+            WorkoutHistoryDetailView(workout: dummyWorkout)
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
-            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+            WorkoutHistoryDetailView(workout: dummyWorkout)
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
-            WorkoutHistoryDetailView(viewModel: viewModel, workout: dummyWorkout)
+            WorkoutHistoryDetailView(workout: dummyWorkout)
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }

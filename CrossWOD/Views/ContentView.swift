@@ -14,13 +14,11 @@ struct ContentView: View {
         
     var body: some View {
         ResponsiveView { props in
-            
             if !isLaunchScreenPresented {
                 HomeView(props: props)
             } else {
                 LaunchScreenView(isPresented: $isLaunchScreenPresented)
             }
-            
         }
     }
 }

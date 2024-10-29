@@ -8,27 +8,17 @@
 import SwiftUI
 
 struct AMRAPandForTimeTimerView: View {
-   
-    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
     
-    @State private var randomPhrase: String = ""
-    @State private var isPaused: Bool = true
-    var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
+    var viewModel: ViewModel
     
-    @State var countdown: Int
-    @State private var timer: Timer? = nil
-    @State private var delay: Bool = true
     
-    @State private var startingTime : Int = 0
-    @State private var delayCountdown : Int = 3
-    @State private var initialCountdown : Int = 0
-    @State private var seriesTimes: [Int] = []
-    @State private var showAfterDelay: Bool = false
+    init(modeTitle: String, accentColor: Color, countdown: Int) {
+        // Load existing workouts if any
+        let existingWorkouts = WorkoutHistoryView.ViewModel().getWorkouts()
+        self.viewModel = ViewModel(modeTitle: modeTitle, accentColor: accentColor, countdown: countdown, existingWorkouts: existingWorkouts)
+    }
     
-    var modeTitle: String
-    var accentColor: Color
     
-  
     
     var body: some View {
         
@@ -38,35 +28,35 @@ struct AMRAPandForTimeTimerView: View {
             Color("backgroundColor")
                 .ignoresSafeArea()
             
-            riveAnimation.riveViewModel.view()
+            viewModel.riveAnimation.riveViewModel.view()
                 .frame(maxWidth: .infinity)
-                .opacity(delayCountdown == 0 ? 1 : 0)
-                .animation(.easeInOut.delay(1), value: delayCountdown)
+                .opacity(viewModel.delayCountdown == 0 ? 1 : 0)
+                .animation(.easeInOut.delay(1), value: viewModel.delayCountdown)
                 .ignoresSafeArea()
             
             VStack {
                 
-                Text(modeTitle)
+                Text(viewModel.modeTitle)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .padding()
-            
+                
                 
                 
                 // MARK: COUNTDOWN section
                 VStack(alignment: .center) {
                     
                     
-                    Text("Last series in: \(formatTimeWithDecimals(seconds: seriesTimes.last ?? 0))")
+                    Text("Last series in: \(formatTimeWithDecimals(seconds: viewModel.seriesTimes.last ?? 0))")
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .opacity(!seriesTimes.isEmpty ? 1 : 0)
+                        .opacity(!viewModel.seriesTimes.isEmpty ? 1 : 0)
                     
                     
                     
                     GeometryReader { geometry in
-                        if delay {
+                        if viewModel.delay {
                             
                             VStack() {
                                 
@@ -74,29 +64,29 @@ struct AMRAPandForTimeTimerView: View {
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
-                                    .opacity(delay ? 1 : 0)
+                                    .opacity(viewModel.delay ? 1 : 0)
                                     .padding(.bottom, 20)
                                 
-                                Text("\(delayCountdown)")
+                                Text("\(viewModel.delayCountdown)")
                                     .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.2))
                                     .fontWeight(.bold)
-                                    .foregroundColor(accentColor)
+                                    .foregroundColor(viewModel.accentColor)
                                 
                             }
                             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                             
-                        
+                            
                             
                         } else {
                             
-                            Text(formatTimeWithDecimals(seconds: countdown))
+                            Text(formatTimeWithDecimals(seconds: viewModel.countdown))
                                 .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.18))
                                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                                 .fontWeight(.bold)
-                                .opacity(countdown == 0 ? 0 : 1)
+                                .opacity(viewModel.countdown == 0 ? 0 : 1)
                                 .foregroundColor(.white)
-                              
-            
+                            
+                            
                         }
                         
                     }
@@ -107,9 +97,9 @@ struct AMRAPandForTimeTimerView: View {
                 
                 
                 // Delay showing this part after countdown == 0
-                if countdown == 0 && showAfterDelay {
+                if viewModel.countdown == 0 && viewModel.showAfterDelay {
                     VStack {
-                        Text(randomPhrase)
+                        Text(viewModel.randomPhrase)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
@@ -122,14 +112,14 @@ struct AMRAPandForTimeTimerView: View {
                                 .scaledToFit()
                                 .frame(width: 16, height: 16)
                                 .padding(10)
-
                             
-                            Text(formatTimeWithDecimals(seconds: startingTime))
+                            
+                            Text(formatTimeWithDecimals(seconds: viewModel.startingTime))
                                 .font(.body)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                                 .padding(10)
-                                
+                            
                         }
                         .background(Color("cardBackgroundColor"))
                         .cornerRadius(12)
@@ -139,29 +129,29 @@ struct AMRAPandForTimeTimerView: View {
                     .padding()
                     
                 }
-            
-                Spacer()
-            
                 
-            
+                Spacer()
+                
+                
+                
                 // MARK: BUTTON section
                 HStack {
                     Button(action: {
-                        isPaused.toggle()
-                        if isPaused {
-                            startTimer()
+                        viewModel.isPaused.toggle()
+                        if viewModel.isPaused {
+                            viewModel.startTimer()
                         } else {
-                            stopTimer()
+                            viewModel.stopTimer()
                         }
                     }) {
                         HStack(spacing: 10) {
-                            Image(isPaused ? "pause_icon" : "start_icon")
+                            Image(viewModel.isPaused ? "pause_icon" : "start_icon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 14, height: 14)
                                 .padding(.leading, 50)
                             
-                            Text(isPaused ? "PAUSE" : "START")
+                            Text(viewModel.isPaused ? "PAUSE" : "START")
                                 .font(.body)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -171,10 +161,10 @@ struct AMRAPandForTimeTimerView: View {
                         .background(Color("cardBackgroundColor"))
                         .cornerRadius(15)
                     }
-                    .animation(.easeInOut(duration: 1), value: isPaused)
+                    .animation(.easeInOut(duration: 1), value: viewModel.isPaused)
                     
                     Button(action: {
-                        lastSeriesTime()
+                        viewModel.recordLastSeriesTime()
                     }) {
                         HStack(spacing: 10) {
                             Image("add_icon")
@@ -184,123 +174,50 @@ struct AMRAPandForTimeTimerView: View {
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)
-                        .background(Color(accentColor))
+                        .background(viewModel.accentColor)
                         .cornerRadius(15)
                     }
                     
                 }
                 .padding()
-                .disabled(countdown == 0 || delay)
-                .opacity(countdown == 0 || delay ? 0 : 1)
+                .disabled(viewModel.countdown == 0 || viewModel.delay)
+                .opacity(viewModel.countdown == 0 || viewModel.delay ? 0 : 1)
                 
             }
             .onAppear {
-                randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
-                startingTime = countdown
-                initialCountdown = countdown
-                startDelay()
+                viewModel.startDelay()
             }
-            .onChange(of: countdown) {
-                if countdown == 0 {
+            .onChange(of: viewModel.countdown) {
+                if viewModel.countdown == 0 {
                     // Add a delay before showing the text
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         withAnimation {
-                            showAfterDelay = true
+                            viewModel.showAfterDelay = true
                         }
                     }
                 }
             }
             .onDisappear {
-                riveAnimation.riveViewModel.reset()
-                stopTimer()
-                if(countdown == 0) {
-                    saveWorkoutHistory()
-                }
-            }
-        }
-        
-        
-    }
-    
-    private func startDelay() {
-        delayCountdown = 3 // Reset delay countdown
-        delay = true // Show the delay countdown
-        
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if delayCountdown > 0 {
-                delayCountdown -= 1
-            } else {
-                delay = false
-                timer.invalidate() // Stop the delay timer
-                startTimer() // Start the main countdown timer
+                viewModel.saveWorkoutHistory()
+                viewModel.resetCountdown()
             }
         }
     }
-    
-    private func startTimer() {
-        riveAnimation.startRiveAnimation()
-        
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
- 
-    
-            if isPaused && countdown > 0 {
-                countdown -= 1
-            }
-            
-            if countdown == 0 {
-                timer?.invalidate()
-                timer = nil
-                riveAnimation.stopRiveAnimation()
-            }
-        }
-    }
-    
-    private func stopTimer() {
-        riveAnimation.pauseRiveAnimation()
-        timer?.invalidate()
-        timer = nil
-    }
-    
-    private func lastSeriesTime() {
-        let seriesTime = initialCountdown - countdown
-        seriesTimes.append(seriesTime)
-        initialCountdown -= seriesTime
-    }
-    
-    
-    
-    private func saveWorkoutHistory() {
-
-        
-        let workout = Workout(
-            type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
-            date: Date(),
-            initialCountdown: startingTime,
-            seriesPerformed: seriesTimes.count,
-            seriesTimes: seriesTimes
-        )
-        
-        workoutHistoryManager.addWorkout(workout)
-    }
-    
-    
 }
 
-    
 
 struct AMRAPandForTimeTimerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
-            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
-            AMRAPandForTimeTimerView(countdown: 10, modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"))
+            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }

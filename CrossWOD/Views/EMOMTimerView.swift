@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EMOMTimerView: View {
-    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
+    //var workoutHistoryManager = WorkoutHistoryManager()
     
     let workTime: Int // Work time for each round
     let forTime: Int // Total time per round
@@ -334,7 +334,7 @@ struct EMOMTimerView: View {
             roundTimes: workTime,
             totalWorkoutTime: totalTime
         )
-        workoutHistoryManager.addWorkout(workout)
+        //workoutHistoryManager.addWorkout(workout)
     }
 
     

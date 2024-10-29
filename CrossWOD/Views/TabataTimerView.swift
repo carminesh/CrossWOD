@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TabataTimerView: View {
-    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
+    //var workoutHistoryManager = [WorkoutHistoryManager()]
     
     let workTime: Int // Work time for each round
     let restTime: Int // Rest time between rounds
@@ -330,7 +330,7 @@ struct TabataTimerView: View {
             roundTimes: workTime,
             totalWorkoutTime: totalTime
         )
-        workoutHistoryManager.addWorkout(workout)
+        //workoutHistoryManager.addWorkout(workout)
     }
 }
 

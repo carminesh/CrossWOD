@@ -8,38 +8,32 @@
 import SwiftUI
 
 struct WorkoutHistoryView: View {
-    @ObservedObject var workoutHistoryManager = WorkoutHistoryManager()
+    var viewModel = ViewModel()
     
     var body: some View {
         
-    
+        
         ZStack {
             Color("backgroundColor").edgesIgnoringSafeArea(.all)
             
             List {
-                ForEach(workoutHistoryManager.groupedWorkouts) { group in
+                ForEach(viewModel.groupedWorkouts) { group in
                     Section(header: Text(dateFormatter.string(from: group.date))) {
                         ForEach(group.workouts) { workout in
-                            HistoryRow(
-                                viewModel: HistoryRowViewModel(workoutType: workout.type.rawValue),
-                                workout: workout
-                            )
+                            HistoryRow(workout: workout)
                             .background(Color("cardBackgroundColor"))
                             .listRowInsets(EdgeInsets())
                         }
                         .onDelete { indexSet in
                             if let index = indexSet.first {
                                 let workoutToDelete = group.workouts[index]
-                                workoutHistoryManager.removeWorkout(workoutToDelete)
+                                viewModel.removeWorkout(workoutToDelete)
                             }
                         }
                     }
                 }
             }
             .navigationTitle("Workout History")
-            .onAppear {
-                workoutHistoryManager.loadWorkouts()
-            }
             .listStyle(.insetGrouped)
             .background(Color.clear)
             .scrollContentBackground(.hidden)

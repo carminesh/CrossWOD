@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HistoryRow: View {
-    @ObservedObject var viewModel: HistoryRowViewModel
+
     let workout: Workout
     
     
@@ -19,11 +19,11 @@ struct HistoryRow: View {
         
         HStack(spacing: 12) {
             
-            NavigationLink(destination: WorkoutHistoryDetailView(viewModel: viewModel, workout: workout)) {
+            NavigationLink(destination: WorkoutHistoryDetailView(workout: workout)) {
                 
                 VStack {
                     
-                    viewModel.shape()
+                    workoutShape(for: workout.type.rawValue)
                     
                     
                     Text(workout.type.rawValue)
@@ -148,8 +148,7 @@ struct HistoryRow: View {
     )
     
     
-    let viewModel = HistoryRowViewModel(workoutType: dummyWorkout.type.rawValue)
-    
-    HistoryRow(viewModel: viewModel, workout: dummyWorkout)
-    HistoryRow(viewModel: viewModel, workout: dummyWorkout2)
+
+    HistoryRow(workout: dummyWorkout)
+    HistoryRow(workout: dummyWorkout2)
 }
