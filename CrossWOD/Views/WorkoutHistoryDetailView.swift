@@ -165,7 +165,7 @@ struct WorkoutHistoryDetailView: View {
                                 }.padding()
                             }
                             // MARK: EMOM section
-                        } else if workout.type == .Emom  {
+                        } else if workout.type == .Emom || workout.type == .Tabata  {
                             
                             HStack {
                                 VStack(alignment: .leading) {
@@ -195,7 +195,7 @@ struct WorkoutHistoryDetailView: View {
                                         .foregroundColor(.white)
                                     
                                     
-                                    Text("\(formatTimeWithDecimals(seconds: workout.numberOfRounds ?? 0)) \(formatTimeToOnlyText(seconds: workout.numberOfRounds ?? 0))")
+                                    Text("\(formatTimeWithDecimals(seconds: workout.totalWorkoutTime ?? 0)) \(formatTimeToOnlyText(seconds: workout.totalWorkoutTime ?? 0))")
                                         .frame(width: geometry.size.width / 3)
                                         .padding()
                                         .font(.headline)

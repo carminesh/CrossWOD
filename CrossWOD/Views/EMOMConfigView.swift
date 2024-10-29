@@ -96,8 +96,8 @@ struct EMOMConfigView: View {
                             }
                             .frame(width: 50, height: 50)
                             
-            
-                                
+                            
+                            
                             
                             // Display Number of Series
                             Text(formatTimeWithDecimals(seconds: forTime))
@@ -105,7 +105,7 @@ struct EMOMConfigView: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 46))
                                 .fontWeight(.bold)
-                               
+                            
                             
                             Button(action: {
                                 forTime = min(forTime + workTime, 10 * workTime)
@@ -128,7 +128,7 @@ struct EMOMConfigView: View {
                         }
                         .padding(.horizontal)
                         .cornerRadius(20)
-
+                        
                     }
                     .frame(minWidth: UIScreen.main.bounds.width * 0.8)
                     .padding()
@@ -152,12 +152,7 @@ struct EMOMConfigView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: EMOMTimerView(
-                        workTime: workTime,
-                        forTime: forTime,
-                        setRestTime: selectedRestTime,
-                        setSeries: numberOfSeries
-                    )) {
+                    NavigationLink(destination: EMOMTimerView(viewModel: EMOMTimerView.ViewModel( workTime: workTime, forTime: forTime, setRestTime: selectedRestTime, setSeries: numberOfSeries))) {
                         Text("START TIMER")
                             .font(.body)
                             .fontWeight(.bold)
@@ -166,7 +161,7 @@ struct EMOMConfigView: View {
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }
-                    .padding(.bottom, 40)
+                                                             .padding(.bottom, 40)
                 }
             }
             .accentColor(.white)
