@@ -165,7 +165,7 @@ struct WorkoutHistoryDetailView: View {
                                 }.padding()
                             }
                             // MARK: EMOM section
-                        } else if workout.type == .Emom {
+                        } else if workout.type == .Emom  {
                             
                             HStack {
                                 VStack(alignment: .leading) {

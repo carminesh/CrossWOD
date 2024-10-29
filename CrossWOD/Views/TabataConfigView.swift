@@ -195,8 +195,8 @@ struct TabataConfigView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: TabataTimerView(workTime: workTime, restTime: restTime, numberOfSeries: numberOfSeries, setRestTime: selectedRestTimeForSet, setSeries: numberOfSets
-                    )) {
+                    NavigationLink(destination: TabataTimerView(viewModel: TabataTimerView.ViewModel(workTime: workTime, restTime: restTime, numberOfSeries: numberOfSeries, setRestTime: selectedRestTimeForSet, setSeries: numberOfSets)))
+                    {
                         Text("START TIMER")
                             .font(.body)
                             .fontWeight(.bold)

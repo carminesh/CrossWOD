@@ -12,9 +12,7 @@ import SwiftUICore
 extension AMRAPandForTimeTimerView {
     
     @Observable
-    class ViewModel {
-        var workouts: [Workout] = []
-        
+    class ViewModel {        
         var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
         
         var countdown: Int
@@ -38,8 +36,7 @@ extension AMRAPandForTimeTimerView {
         
         
         // MARK: Init function
-        init(modeTitle: String, accentColor: Color, countdown: Int, existingWorkouts: [Workout]) {
-            self.workouts = existingWorkouts
+        init(modeTitle: String, accentColor: Color, countdown: Int) {
             self.modeTitle = modeTitle
             self.accentColor = accentColor
             self.countdown = countdown
@@ -64,16 +61,6 @@ extension AMRAPandForTimeTimerView {
         
         
         // MARK: Function related to the workout model
-        func addWorkout(_ workout: Workout) {
-            workouts.append(workout)
-            saveWorkouts()
-        }
-        
-        func saveWorkouts() {
-            if let encoded = try? JSONEncoder().encode(workouts) {
-                UserDefaults.standard.set(encoded, forKey: "workoutHistory")
-            }
-        }
         
         func saveWorkoutHistory() {
             if countdown == 0 {
@@ -85,7 +72,7 @@ extension AMRAPandForTimeTimerView {
                     seriesTimes: seriesTimes
                 )
                 
-                addWorkout(workout)
+                WorkoutHistoryView.ViewModel().addWorkout(workout)
             }
             
         }

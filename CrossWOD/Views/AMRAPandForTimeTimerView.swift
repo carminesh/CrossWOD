@@ -12,14 +12,6 @@ struct AMRAPandForTimeTimerView: View {
     var viewModel: ViewModel
     
     
-    init(modeTitle: String, accentColor: Color, countdown: Int) {
-        // Load existing workouts if any
-        let existingWorkouts = WorkoutHistoryView.ViewModel().getWorkouts()
-        self.viewModel = ViewModel(modeTitle: modeTitle, accentColor: accentColor, countdown: countdown, existingWorkouts: existingWorkouts)
-    }
-    
-    
-    
     var body: some View {
         
         ZStack {
@@ -209,15 +201,18 @@ struct AMRAPandForTimeTimerView: View {
 struct AMRAPandForTimeTimerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
+            // Using ViewModel for iPhone 16 Pro preview
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
-            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
+            // Using ViewModel for iPhone SE (3rd generation) preview
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
-            AMRAPandForTimeTimerView(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10)
+            // Using ViewModel for iPad (11-inch) preview
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }
