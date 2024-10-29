@@ -55,7 +55,7 @@ struct HomeView: View {
                         
                         Spacer()
                     }
-                }
+                }.navigationBarHidden(true)
             }
             .accentColor(.white)
         }

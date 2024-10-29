@@ -160,6 +160,7 @@ struct EMOMTimerView: View {
             }
             .onAppear {
                 viewModel.startDelay()
+                UIApplication.shared.isIdleTimerDisabled = true
             }
             .onChange(of: viewModel.timerHasFinished) {
                 if viewModel.timerHasFinished {
@@ -174,6 +175,7 @@ struct EMOMTimerView: View {
             .onDisappear {
                 viewModel.saveWorkoutHistory()
                 viewModel.reset()
+                UIApplication.shared.isIdleTimerDisabled = false
             }
         }
     }

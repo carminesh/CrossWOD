@@ -15,7 +15,6 @@ var dateFormatter: DateFormatter {
 }
 
 
-
 // -> 00:10, 1:30
 func formatTimeWithDecimals(seconds: Int) -> String {
     let minutes = seconds / 60
@@ -149,4 +148,14 @@ func generateTimeIntervalsForTabata() -> [Int] {
 
 
     return intervals
+}
+
+
+func updateForTime(forTime: inout Int, workTime: Int) {
+    // Ensure forTime is always a multiple of workTime
+    if forTime < workTime {
+        forTime = workTime
+    } else {
+        forTime = ((forTime + workTime - 1) / workTime) * workTime
+    }
 }

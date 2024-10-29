@@ -160,6 +160,7 @@ struct TabataTimerView: View {
             }
             .onAppear {
                 viewModel.startDelay()
+                UIApplication.shared.isIdleTimerDisabled = true
             }
             .onChange(of: viewModel.timerHasFinished) {
                 if viewModel.timerHasFinished {
@@ -174,6 +175,7 @@ struct TabataTimerView: View {
             .onDisappear {
                 viewModel.saveWorkoutHistory()
                 viewModel.resetTimer()
+                UIApplication.shared.isIdleTimerDisabled = false
             }
         }
     }

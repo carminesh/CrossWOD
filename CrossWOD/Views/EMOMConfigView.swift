@@ -11,7 +11,7 @@ struct EMOMConfigView: View {
     
     @State private var workTime: Int = 60 {
         didSet {
-            updateForTime()
+            updateForTime(forTime: &forTime, workTime: workTime)
         }
     }
     @State private var forTime: Int = 120
@@ -187,7 +187,7 @@ struct EMOMConfigView: View {
                         if workTimeBool {
                             CustomTimePicker(intervalType: "EMOM", selectedTime: $workTime)
                                 .onChange(of: workTime) {
-                                    updateForTime()
+                                    updateForTime(forTime: &forTime, workTime: workTime)
                                 }
                         }
                         
@@ -211,15 +211,10 @@ struct EMOMConfigView: View {
         .animation(.easeInOut, value: showTimePicker)
     }
     
-    private func updateForTime() {
-        // Ensure forTime is always a multiple of workTime
-        if forTime < workTime {
-            forTime = workTime
-        } else {
-            forTime = ((forTime + workTime - 1) / workTime) * workTime
-        }
-    }
+    
 }
+
+
 struct EMOMConfigView_Previews: PreviewProvider {
     static var previews: some View {
         EMOMConfigView()

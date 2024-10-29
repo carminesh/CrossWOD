@@ -178,6 +178,7 @@ struct AMRAPandForTimeTimerView: View {
             }
             .onAppear {
                 viewModel.startDelay()
+                UIApplication.shared.isIdleTimerDisabled = true
             }
             .onChange(of: viewModel.countdown) {
                 if viewModel.countdown == 0 {
@@ -192,6 +193,7 @@ struct AMRAPandForTimeTimerView: View {
             .onDisappear {
                 viewModel.saveWorkoutHistory()
                 viewModel.resetCountdown()
+                UIApplication.shared.isIdleTimerDisabled = false
             }
         }
     }

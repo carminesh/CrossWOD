@@ -260,15 +260,6 @@ struct TabataConfigView: View {
         .animation(.easeInOut, value: showTimePicker)
     }
     
-    private func updaterestTime() {
-        
-        if restTime < 2 * workTime {
-            restTime = 2 * workTime
-        } else {
-            restTime = ((restTime + workTime - 1) / workTime) * workTime;
-        }
-        
-    }
 
 }
 
