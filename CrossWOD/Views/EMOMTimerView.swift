@@ -17,7 +17,8 @@ struct EMOMTimerView: View {
                 .edgesIgnoringSafeArea(.all)
             
             viewModel.riveAnimation.riveViewModel.view()
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scaleEffect(UIScreen.main.bounds.width < 376 ? 1.15 : 1.0)
                 .opacity(viewModel.delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: viewModel.delayCountdown)
                 .ignoresSafeArea()

@@ -21,7 +21,8 @@ struct AMRAPandForTimeTimerView: View {
                 .ignoresSafeArea()
             
             viewModel.riveAnimation.riveViewModel.view()
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scaleEffect(UIScreen.main.bounds.width < 376 ? 1.15 : 1.0)
                 .opacity(viewModel.delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: viewModel.delayCountdown)
                 .ignoresSafeArea()
@@ -35,96 +36,103 @@ struct AMRAPandForTimeTimerView: View {
                     .padding()
                 
                 
-                
-                // MARK: COUNTDOWN section
-                VStack(alignment: .center) {
-                    
+                HStack(spacing: 20) {
                     
                     Text("Last series in: \(formatTimeWithDecimals(seconds: viewModel.seriesTimes.last ?? 0))")
                         .fontWeight(.bold)
                         .foregroundColor(.white)
-                        .opacity(!viewModel.seriesTimes.isEmpty ? 1 : 0)
+                        .opacity(!viewModel.seriesTimes.isEmpty && viewModel.countdown > 0 ? 1 : 0)
+                        
                     
                     
                     
-                    GeometryReader { geometry in
-                        if viewModel.delay {
-                            
-                            VStack() {
+                }
+                .opacity(viewModel.delay ? 0 : 1)
+                .padding(.horizontal, 10)
+                
+                
+                Spacer()
+                    .frame(height: 70)
+                   
+                
+                // MARK: COUNTDOWN section
+                VStack(alignment: .center) {
+                    
                                 
-                                Text("STARTS IN:")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .opacity(viewModel.delay ? 1 : 0)
-                                    .padding(.bottom, 20)
-                                
-                                Text("\(viewModel.delayCountdown)")
-                                    .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.2))
-                                    .fontWeight(.bold)
-                                    .foregroundColor(viewModel.accentColor)
-                                
-                            }
-                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                    if viewModel.delay {
+                        
+                        VStack() {
                             
-                            
-                            
-                        } else {
-                            
-                            Text(formatTimeWithDecimals(seconds: viewModel.countdown))
-                                .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.18))
-                                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                            Text("STARTS IN:")
+                                .font(.title3)
                                 .fontWeight(.bold)
-                                .opacity(viewModel.countdown == 0 ? 0 : 1)
                                 .foregroundColor(.white)
+                                .opacity(viewModel.delay ? 1 : 0)
+                                .padding(.bottom, 20)
                             
+                            Text("\(viewModel.delayCountdown)")
+                                .font(.system(size: 60))
+                                .fontWeight(.bold)
+                                .foregroundColor(viewModel.accentColor)
                             
                         }
                         
+                        
+                        
+                        
+                    } else {
+                        
+                        Text(formatTimeWithDecimals(seconds: viewModel.countdown))
+                            .font(.system(size: 56))
+                            .fontWeight(.bold)
+                            .opacity(viewModel.countdown == 0 ? 0 : 1)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                        
+                        
                     }
                     
-                }
-                .padding()
-                .padding(.bottom, 80)
+                }.padding()
                 
                 
                 // Delay showing this part after countdown == 0
                 if viewModel.countdown == 0 && viewModel.showAfterDelay {
-                    VStack {
-                        Text(viewModel.randomPhrase)
+                    Spacer()
+                    Text(viewModel.randomPhrase)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
+                        .padding()
+                    
+                    HStack {
+                        Image("clock_icon")
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+                            .padding(.all, 8)
+                            .padding(.leading, 12)
+                        
+                        Text(formatTimeWithDecimals(seconds: viewModel.startingTime))
+                            .font(.body)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding()
-                        
-                        HStack {
-                            Image("clock_icon")
-                                .scaledToFit()
-                                .frame(width: 16, height: 16)
-                                .padding(10)
-                            
-                            
-                            Text(formatTimeWithDecimals(seconds: viewModel.startingTime))
-                                .font(.body)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(10)
-                            
-                        }
-                        .background(Color("cardBackgroundColor"))
-                        .cornerRadius(12)
-                        .transition(.opacity)
-                        
+                            .padding(.all, 8)
+                            .padding(.trailing, 12)
                     }
-                    .padding()
-                    
+                    .background(Color("cardBackgroundColor"))
+                    .cornerRadius(12)
                 }
+                    
                 
+                    
+                
+                
+               
                 Spacer()
-                
-                
+               
+                    
                 
                 // MARK: BUTTON section
                 HStack {
@@ -204,17 +212,17 @@ struct AMRAPandForTimeTimerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             // Using ViewModel for iPhone 16 Pro preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
             // Using ViewModel for iPhone SE (3rd generation) preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
             // Using ViewModel for iPad (11-inch) preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 10))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }

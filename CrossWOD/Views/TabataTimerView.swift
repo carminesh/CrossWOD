@@ -14,10 +14,11 @@ struct TabataTimerView: View {
     var body: some View {
         ZStack {
             Color("backgroundColor")
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
             
             viewModel.riveAnimation.riveViewModel.view()
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scaleEffect(UIScreen.main.bounds.width < 376 ? 1.15 : 1.0)
                 .opacity(viewModel.delayCountdown == 0 ? 1 : 0)
                 .animation(.easeInOut.delay(1), value: viewModel.delayCountdown)
                 .ignoresSafeArea()
@@ -86,7 +87,7 @@ struct TabataTimerView: View {
                             .foregroundColor(Color("tabataAccentColor"))
                     } else {
                         Text(formatTimeWithDecimals(seconds: viewModel.timeRemaining))
-                            .font(.system(size: 60))
+                            .font(.system(size: 56))
                             .fontWeight(.bold)
                             .opacity(viewModel.timeRemaining == 0 ? 0 : 1)
                             .foregroundColor(.white)
@@ -125,6 +126,7 @@ struct TabataTimerView: View {
                 
                 Spacer()
                 
+                // MARK: BUTTON section
                 HStack {
                     Button(action: {
                         viewModel.isPaused.toggle()
