@@ -9,14 +9,18 @@ import SwiftUI
 
 struct WorkoutHistoryDetailView: View {
     
-    var viewModel = ViewModel()
+    var viewModel: ViewModel
     var workout: Workout
-   
+    
+    // State variables for alert
+    @State private var showRepeatAlert = false
+    @State private var navigateToWorkout = false
+    
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-              
+                
                 Color("backgroundColor")
                     .edgesIgnoringSafeArea(.all)
                 
@@ -29,7 +33,7 @@ struct WorkoutHistoryDetailView: View {
                             Text("Workout type:")
                                 .font(.body)
                                 .foregroundColor(.white)
-                                
+                            
                             
                             HStack {
                                 workoutShape(for: workout.type.rawValue)
@@ -49,13 +53,13 @@ struct WorkoutHistoryDetailView: View {
                         
                         // MARK: Workout date and duration
                         HStack() {
-                           
+                            
                             
                             VStack(alignment: .leading) {
                                 Text("Workout date:")
                                     .font(.body)
                                     .foregroundColor(.white)
-                                    
+                                
                                 
                                 
                                 VStack {
@@ -75,14 +79,14 @@ struct WorkoutHistoryDetailView: View {
                             }
                             
                             Spacer()
-                        
+                            
                             VStack(alignment: .leading) {
                                 
                                 
                                 Text("Workout duration:")
                                     .font(.body)
                                     .foregroundColor(.white)
-                                   
+                                
                                 
                                 
                                 
@@ -106,15 +110,15 @@ struct WorkoutHistoryDetailView: View {
                                         .foregroundColor(.white)
                                         .padding(4)
                                     }
-                                   
+                                    
                                     
                                 }
                                 .frame(width: geometry.size.width / 2.35, height: geometry.size.width / 2.5)
                                 .background(Color("cardBackgroundColor"))
                                 .cornerRadius(15)
-                              
+                                
                             }
-                           
+                            
                         }.padding()
                         
                         // MARK: AMRAP and FORTIME list section
@@ -126,7 +130,7 @@ struct WorkoutHistoryDetailView: View {
                                     Text("Round timing:")
                                         .font(.body)
                                         .foregroundColor(.white)
-                                     
+                                    
                                     
                                     ForEach(Array(seriesTimes.enumerated()), id: \.offset) { index, time in
                                         HStack {
@@ -161,11 +165,11 @@ struct WorkoutHistoryDetailView: View {
                                     Text("For this workout, series were not performed.")
                                         .font(.body)
                                         .foregroundColor(.gray)
-                                        
+                                    
                                 }.padding()
                             }
                             // MARK: EMOM section
-                        } else if workout.type == .Emom || workout.type == .Tabata  {
+                        } else if workout.type == .Emom  {
                             
                             HStack {
                                 VStack(alignment: .leading) {
@@ -173,8 +177,8 @@ struct WorkoutHistoryDetailView: View {
                                     Text("Every:")
                                         .font(.body)
                                         .foregroundColor(.white)
-
-                                       
+                                    
+                                    
                                     
                                     Text("\(formatTimeWithDecimals(seconds: workout.roundTimes ?? 0)) \(formatTimeToOnlyText(seconds: workout.roundTimes ?? 0))")
                                         .frame(width: geometry.size.width / 3)
@@ -183,7 +187,7 @@ struct WorkoutHistoryDetailView: View {
                                         .foregroundColor(.white)
                                         .background(Color("cardBackgroundColor"))
                                         .cornerRadius(15)
-                                     
+                                    
                                 }
                                 
                                 Spacer()
@@ -202,30 +206,133 @@ struct WorkoutHistoryDetailView: View {
                                         .foregroundColor(.white)
                                         .background(Color("cardBackgroundColor"))
                                         .cornerRadius(15)
-
+                                    
                                 }
                                 
-                               
+                                
                             }
                             .padding()
+                        } else if workout.type == .Tabata {
+                            
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    
+                                    Text("Work time:")
+                                        .font(.body)
+                                        .foregroundColor(.white)
+                                    
+                                    
+                                    Text("\(formatTimeWithDecimals(seconds: workout.workTime ?? 0)) \(formatTimeToOnlyText(seconds: workout.workTime ?? 0))")
+                                        .frame(width: geometry.size.width / 3)
+                                        .padding()
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .background(Color("cardBackgroundColor"))
+                                        .cornerRadius(15)
+                                    
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .leading) {
+                                    
+                                    Text("Performed rounds:")
+                                        .font(.body)
+                                        .foregroundColor(.white)
+                                    
+                                    
+                                    if let rounds = workout.numberOfRounds {
+                                        Text("\(rounds) round\(rounds == 1 ? "" : "s")")
+                                            .frame(width: geometry.size.width / 3)
+                                            .padding()
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .background(Color("cardBackgroundColor"))
+                                            .cornerRadius(15)
+                                    }
+                                    
+                                }
+                                
+                                
+                            }
+                            .padding()
+                            
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    
+                                    Text("Performed sets:")
+                                        .font(.body)
+                                        .foregroundColor(.white)
+                                    
+                                    
+                                    if let series = workout.setSeries {
+                                        Text("\(series) set\(series == 1 ? "" : "s")")
+                                            .frame(width: geometry.size.width / 3)
+                                            .padding()
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .background(Color("cardBackgroundColor"))
+                                            .cornerRadius(15)
+                                    }
+                                }
+                                
+                                Spacer()
+                                
+                                
+                                
+                                
+                            }
+                            .padding(.horizontal)
+                                
+                                
+                            
                         }
                     }
                 }.padding(.top, 30)
+                
+                
+                // NavigationLink to handle the navigation
+                NavigationLink(destination: viewModel.redirectToProperWorkoutView(to: workout), isActive: $navigateToWorkout) {
+                    EmptyView() // Invisible link that activates when navigateToWorkout is true
+                }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    showRepeatAlert.toggle()
+                }) {
+                    Image(systemName: "repeat")
+                        .font(.system(size: 16))
+                        .foregroundColor(.white)
+                        .padding(.top, 2)
+                }
+            }
+        }
+        .alert(isPresented: $showRepeatAlert) {
+            Alert(
+                title: Text("Repeat Workout"),
+                message: Text("Do you want to repeat this workout?"),
+                primaryButton: .default(Text("Yes")) {
+                    navigateToWorkout = true
+                },
+                secondaryButton: .cancel()
+            )
+        }
+    
         
     }
 }
 
 struct WorkoutHistoryDetail_Previews: PreviewProvider {
-
+    
     
     static var previews: some View {
         
         let dummyWorkout = Workout(
             type: .Amrap,
             date: Date(), // Use the current date for the dummy workout
-            initialCountdown: 300, // 5 minutes countdown
+            initialCountdown: 300,
             seriesPerformed: 5,
             seriesTimes: [30, 40, 35, 45, 50] // Example series times in seconds
         )
@@ -233,15 +340,15 @@ struct WorkoutHistoryDetail_Previews: PreviewProvider {
         
         
         Group {
-            WorkoutHistoryDetailView(workout: dummyWorkout)
+            WorkoutHistoryDetailView(viewModel: WorkoutHistoryDetailView.ViewModel(), workout: dummyWorkout)
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
-            WorkoutHistoryDetailView(workout: dummyWorkout)
+            WorkoutHistoryDetailView(viewModel: WorkoutHistoryDetailView.ViewModel(), workout: dummyWorkout)
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
-            WorkoutHistoryDetailView(workout: dummyWorkout)
+            WorkoutHistoryDetailView(viewModel: WorkoutHistoryDetailView.ViewModel(), workout: dummyWorkout)
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }

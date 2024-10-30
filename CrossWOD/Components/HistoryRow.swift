@@ -19,7 +19,7 @@ struct HistoryRow: View {
         
         HStack(spacing: 12) {
             
-            NavigationLink(destination: WorkoutHistoryDetailView(workout: workout)) {
+            NavigationLink(destination: WorkoutHistoryDetailView(viewModel: WorkoutHistoryDetailView.ViewModel(), workout: workout)) {
                 
                 VStack {
                     

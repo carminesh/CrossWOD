@@ -169,6 +169,11 @@ extension TabataTimerView {
                 let workout = Workout(
                     type: .Tabata,
                     date: Date(),
+                    restTime: restTime,
+                    numberOfSeries: numberOfSeries,
+                    workTime: workTime,
+                    setRestTime: setRestTime,
+                    setSeries: setSeries,
                     performedSets: setSeries,
                     numberOfRounds: numberOfSeries,
                     roundTimes: workTime,

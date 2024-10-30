@@ -73,7 +73,7 @@ struct AMRAPandForTimeTimerView: View {
                             Text("\(viewModel.delayCountdown)")
                                 .font(.system(size: 60))
                                 .fontWeight(.bold)
-                                .foregroundColor(viewModel.accentColor)
+                                .foregroundColor(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
                             
                         }
                         
@@ -174,7 +174,7 @@ struct AMRAPandForTimeTimerView: View {
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)
-                        .background(viewModel.accentColor)
+                        .background(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
                         .cornerRadius(15)
                     }
                     
@@ -212,17 +212,17 @@ struct AMRAPandForTimeTimerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             // Using ViewModel for iPhone 16 Pro preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", countdown: 2))
                 .previewDevice("iPhone 16 Pro")
                 .previewDisplayName("iPhone 16 Pro")
             
             // Using ViewModel for iPhone SE (3rd generation) preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", countdown: 2))
                 .previewDevice("iPhone SE (3rd generation)")
                 .previewDisplayName("iPhone SE 3rd Gen")
             
             // Using ViewModel for iPad (11-inch) preview
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", accentColor: Color("amrapAccentColor"), countdown: 2))
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: "AMRAP", countdown: 2))
                 .previewDevice("iPad (11-inch)")
                 .previewDisplayName("iPad 11-inch")
         }

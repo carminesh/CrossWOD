@@ -22,8 +22,9 @@ struct SettingsView: View {
                 }
                 
                 Section(header: Text("Others").font(.headline)) {
-                    SettingsRow(icon: "person.fill", title: "Suggest new features", destination: Text("Sign In"))
-                    SettingsRow(icon: "info.circle", title: "About", destination: Text("About"))
+                    SettingsRow(icon: "star.fill", title: "Rate the app", destination: Text("Rate app"))
+                    SettingsRow(icon: "plus.rectangle.fill.on.rectangle.fill", title: "Suggest new features", destination: Text("Sign In"))
+                    SettingsRow(icon: "info.circle.fill", title: "About", destination: Text("About"))
                 }
                 
             }

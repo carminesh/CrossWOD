@@ -7,6 +7,7 @@
 
 
 import Foundation
+import SwiftUICore
 
 enum WorkoutType: String, Codable {
     case Amrap
@@ -20,13 +21,28 @@ struct Workout: Identifiable, Codable {
     let type: WorkoutType
     let date: Date
     
+    
 
     // AMRAP and ForTime - specific properties
+    var accentColor: String?
     var initialCountdown: Int?
     var seriesPerformed: Int?
     var seriesTimes: [Int]?
     
     // EMOM and Tabata - specific properties
+    
+    // EMOM
+    var forTime: Int?
+
+    
+    // TABATA
+    var restTime: Int?
+    var numberOfSeries: Int?
+    
+    // TABATA and EMOM
+    var workTime: Int?
+    var setRestTime: Int?
+    var setSeries: Int?
     var performedSets: Int?
     var numberOfRounds: Int?
     var roundTimes: Int?

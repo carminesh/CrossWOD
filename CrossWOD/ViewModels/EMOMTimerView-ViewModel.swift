@@ -172,6 +172,11 @@ extension EMOMTimerView {
                 let workout = Workout(
                     type: .Emom,
                     date: Date(),
+                    forTime: forTime,
+                    numberOfSeries: forTime,//because it will be divided later on
+                    workTime: workTime,
+                    setRestTime: setRestTime,
+                    setSeries: setSeries,
                     performedSets: setSeries,
                     numberOfRounds: numberOfSeries,
                     roundTimes: workTime,

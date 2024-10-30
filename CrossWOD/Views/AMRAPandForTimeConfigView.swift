@@ -72,7 +72,7 @@ struct AMRAPandForTimeConfigView: View {
                 Spacer()
                 
                 // NavigationLink for starting the timer
-                NavigationLink(destination: AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, accentColor: accentColor, countdown: selectedTime))){
+                NavigationLink(destination: AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime))){
                     Text("START TIMER")
                         .font(.body)
                         .fontWeight(.bold)

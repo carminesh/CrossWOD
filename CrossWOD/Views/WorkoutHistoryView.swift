@@ -101,6 +101,9 @@ struct WorkoutHistoryView: View {
                     }
                 )
             }
+            .onAppear {
+                viewModel.loadWorkouts()
+            }
         }
     }
     

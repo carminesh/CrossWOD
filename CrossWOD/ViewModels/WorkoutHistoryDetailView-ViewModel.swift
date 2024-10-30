@@ -49,6 +49,35 @@ extension WorkoutHistoryDetailView {
             }
         }
         
+        func redirectToProperWorkoutView(to workout: Workout) -> AnyView {
+                switch workout.type {
+                case .Amrap:
+                    return AnyView(AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(
+                        modeTitle: "AMRAP",
+                        countdown: workout.initialCountdown!
+                    )))
+                case .ForTime:
+                    return AnyView(AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(
+                        modeTitle: "FOR TIME",
+                        countdown: workout.initialCountdown!
+                    )))
+                case .Emom:
+                    return AnyView(EMOMTimerView(viewModel: EMOMTimerView.ViewModel(
+                        workTime: workout.workTime!,
+                        forTime: workout.forTime!,
+                        setRestTime: workout.setRestTime!,
+                        setSeries: workout.setSeries!
+                    )))
+                case .Tabata:
+                    return AnyView(TabataTimerView(viewModel: TabataTimerView.ViewModel(
+                        workTime: workout.workTime!,
+                        restTime: workout.restTime!,
+                        numberOfSeries: workout.numberOfSeries!,
+                        setRestTime: workout.setRestTime!,
+                        setSeries: workout.setSeries!
+                    )))
+                }
+            }
         
         
     }

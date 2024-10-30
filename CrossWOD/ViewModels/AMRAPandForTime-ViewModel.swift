@@ -27,7 +27,7 @@ extension AMRAPandForTimeTimerView {
         var initialCountdown: Int // this one is used for recording the last series time
         var startingTime: Int
         var modeTitle: String
-        var accentColor: Color
+
         
         var delay: Bool = true
         
@@ -36,9 +36,8 @@ extension AMRAPandForTimeTimerView {
         
         
         // MARK: Init function
-        init(modeTitle: String, accentColor: Color, countdown: Int) {
+        init(modeTitle: String, countdown: Int) {
             self.modeTitle = modeTitle
-            self.accentColor = accentColor
             self.countdown = countdown
             self.originalCountdown = countdown
             self.startingTime = countdown
