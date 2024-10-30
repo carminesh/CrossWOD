@@ -19,23 +19,23 @@ struct AdditionalTimerConfigView: View {
         
         
         ZStack {
-        
+            
             Color("extraBackgroundColor")
                 .edgesIgnoringSafeArea(.all)
             
             
             GeometryReader { geometry in
                 
-    
+                
                 
                 VStack(spacing: 10){
-        
+                    
                     // Sets Section
                     Text("Sets")
                         .foregroundColor(.white)
                         .font(.headline) // Dynamic font size
                         .fontWeight(.bold)
-                        
+                    
                     
                     HStack {
                         // Decrease Series
@@ -48,7 +48,7 @@ struct AdditionalTimerConfigView: View {
                                 Circle()
                                     .fill(Color.clear)
                                     .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-
+                                
                                 Image(systemName: "minus")
                                     .font(.title2) // Dynamic size
                                     .foregroundColor(.white)
@@ -76,7 +76,7 @@ struct AdditionalTimerConfigView: View {
                                 Circle()
                                     .fill(Color.clear)
                                     .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-
+                                
                                 Image(systemName: "plus")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
@@ -100,7 +100,7 @@ struct AdditionalTimerConfigView: View {
                         .foregroundColor(.white)
                         .font(.headline)
                         .fontWeight(.bold)
-                        
+                    
                     
                     HStack {
                         // Decrease Rest Time
@@ -121,7 +121,7 @@ struct AdditionalTimerConfigView: View {
                                 Circle()
                                     .fill(Color.clear)
                                     .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-
+                                
                                 Image(systemName: "minus")
                                     .foregroundColor(.white)
                                     .font(.headline)
@@ -143,10 +143,8 @@ struct AdditionalTimerConfigView: View {
                         
                         // Increase Rest Time
                         Button(action: {
-                            if selectedRestTime < 10 * 60 {
-                                if selectedRestTime >= 5 * 60 {
-                                    selectedRestTime += 60 // Add 1 minute
-                                } else if selectedRestTime >= 3 * 60 {
+                            if selectedRestTime < 5 * 60 {  // Set max rest time to 5 minutes (300 seconds)
+                                if selectedRestTime >= 3 * 60 {
                                     selectedRestTime += 30 // Add 30 seconds
                                 } else if selectedRestTime >= 1 * 60 {
                                     selectedRestTime += 15 // Add 15 seconds
@@ -159,7 +157,7 @@ struct AdditionalTimerConfigView: View {
                                 Circle()
                                     .fill(Color.clear)
                                     .frame(width: geometry.size.width * 0.12, height: geometry.size.width * 0.12)
-
+                                
                                 Image(systemName: "plus")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
@@ -180,7 +178,7 @@ struct AdditionalTimerConfigView: View {
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(20)
                     
-        
+                    
                     Spacer()
                     
                     HStack {

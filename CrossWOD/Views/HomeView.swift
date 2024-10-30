@@ -11,9 +11,12 @@ struct HomeView: View {
     var props: Properties
     @State private var selectedMode: String = ""
     @State private var showTimer = false
+    @State private var userIsPro: Bool = false
     
-
-    let workoutList = Constants.workouts
+    // Computed property to get the workout list based on userIsPro status
+    private var workoutList: [(title: String, icon: String, modeDescription: String, destination: AnyView)] {
+        Constants.getWorkouts(userIsPro: userIsPro)
+    }
     
     
     
@@ -30,7 +33,7 @@ struct HomeView: View {
                             Text("CrossWOD")
                                 .font(Font.custom("ethnocentric", size: 28))
                                 .foregroundColor(.white)
-                                
+                            
                             
                             Spacer()
                             
@@ -54,7 +57,7 @@ struct HomeView: View {
                                     
                                 }
                             }
-                        }.padding(.top, 30)
+                        }.padding(.top, UIScreen.main.bounds.width < 376 ? 0 : 30)
                         
                         Spacer()
                     }

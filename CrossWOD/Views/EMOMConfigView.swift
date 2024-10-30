@@ -161,7 +161,7 @@ struct EMOMConfigView: View {
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }
-                                                             .padding(.bottom, 40)
+                     .padding(.bottom, 40)
                 }
             }
             .accentColor(.white)
