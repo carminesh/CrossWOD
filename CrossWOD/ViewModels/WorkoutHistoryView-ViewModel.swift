@@ -14,7 +14,7 @@ extension WorkoutHistoryView {
     @Observable
     class ViewModel {
         var workouts: [Workout] = []
-        
+                
         var groupedWorkouts: [WorkoutGroup] {
             let calendar = Calendar.current
             let grouped = Dictionary(grouping: workouts) { workout in
@@ -28,12 +28,23 @@ extension WorkoutHistoryView {
             .sorted(by: { $0.date > $1.date }) // Sort groups by date (most recent first)
         }
         
-       
+        // Computed property for recent workout IDs
+        var recentWorkoutIDs: Set<Workout.ID> {
+            let allWorkouts = groupedWorkouts.flatMap { $0.workouts }
+            let recentWorkouts = allWorkouts.sorted(by: { $0.date > $1.date }).prefix(5)
+            return Set(recentWorkouts.map { $0.id })
+        }
+
+        func canDeleteWorkout(_ workout: Workout, userIsPro: Bool) -> Bool {
+            return userIsPro || recentWorkoutIDs.contains(workout.id)
+        }
+
+        
         init() {
             loadWorkouts()
         }
         
-       
+        
         
         func addWorkout(_ workout: Workout) {
             workouts.append(workout)
@@ -67,10 +78,10 @@ extension WorkoutHistoryView {
             
             return workouts
         }
-
+        
         
         
     }
-
+    
 }
 

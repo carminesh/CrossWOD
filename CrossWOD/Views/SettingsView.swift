@@ -18,7 +18,7 @@ struct SettingsView: View {
             
             List {
                 Section(header: Text("Your progress").font(.headline)) {
-                    SettingsRow(icon: "figure.run", title: "Workout history", destination: WorkoutHistoryView())
+                    SettingsRow(icon: "figure.run", title: "Workout history", destination: WorkoutHistoryView(viewModel: WorkoutHistoryView.ViewModel()))
                 }
                 
                 Section(header: Text("Others").font(.headline)) {
