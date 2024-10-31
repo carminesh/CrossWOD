@@ -33,8 +33,14 @@ final class WatchConnector: NSObject, ObservableObject {
     }
     
     
-    public func send(workout: Workout) {
+    public func send(theFollowing workout: Workout) {
         guard WCSession.default.activationState == .activated else {
+            print("WCSession is not activated.")
+            return
+        }
+        
+        guard WCSession.default.isReachable else {
+            print("WCSession is not reachable.")
             return
         }
         
@@ -55,31 +61,19 @@ final class WatchConnector: NSObject, ObservableObject {
         
         
         
-        let workoutData: [String: Any] = [
-            "id": workout.id.uuidString,
-            "type": workout.type.rawValue,
-            "date": workout.date.timeIntervalSince1970,
-            "accentColor": workout.accentColor ?? "",
-            "initialCountdown": workout.initialCountdown ?? 0,
-            "seriesPerformed": workout.seriesPerformed ?? 0,
-            "seriesTimes": workout.seriesTimes ?? [],
-            "forTime": workout.forTime ?? 0,
-            "restTime": workout.restTime ?? 0,
-            "numberOfSeries": workout.numberOfSeries ?? 0,
-            "workTime": workout.workTime ?? 0,
-            "setRestTime": workout.setRestTime ?? 0,
-            "setSeries": workout.setSeries ?? 0,
-            "performedSets": workout.performedSets ?? 0,
-            "numberOfRounds": workout.numberOfRounds ?? 0,
-            "roundTimes": workout.roundTimes ?? 0,
-            "totalWorkoutTime": workout.totalWorkoutTime ?? 0
-        ]
-
-        if !workoutData.isEmpty {
-            WCSession.default.transferUserInfo(workoutData)
-        } else {
-            print("Failed to convert Workout to dictionary for transfer.")
-        }
+        let workoutDictionary = workoutToDictionary(workout: workout)
+        
+        
+        
+        WCSession.default.sendMessage(workoutDictionary as [String : Any], replyHandler: { response in
+            if let status = response["status"] as? String {
+                print("Response from Watch: \(status)")
+            } else {
+                print("Unexpected response from Watch.")
+            }
+        }, errorHandler: { error in
+            print("Error sending message: \(error.localizedDescription)")
+        })
         
     }
     
@@ -88,6 +82,7 @@ final class WatchConnector: NSObject, ObservableObject {
 
 
 // MARK: - WCSessionDelegate
+// here we manage the received messages
 extension WatchConnector: WCSessionDelegate {
     
     func session(
@@ -95,6 +90,16 @@ extension WatchConnector: WCSessionDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
     ) {
+        if let error = error {
+            print("Activation error: \(error.localizedDescription)")
+        } else {
+            print("WCSession activated with state: \(activationState.rawValue)")
+        }
+        
+        if activationState == .activated {
+            print("WCSession activated.")
+            
+        }
     }
     
 #if os(iOS)
@@ -110,34 +115,30 @@ extension WatchConnector: WCSessionDelegate {
     
     func session(
         _ session: WCSession,
-        didReceiveUserInfo userInfo: [String: Any] = [:]
+        didReceiveMessage message: [String: Any],
+        replyHandler: @escaping ([String: Any]) -> Void
     ) {
-        // Convert the dictionary to JSON data
+        // Print received message for debugging
+        print("Received message: \(message)")
+        
         do {
-            // Convert compatible values to types expected in `Workout`
-            var userInfoWithCompatibleTypes = userInfo
+    
+            // Decode the message directly to a Workout object
+            let workout = try dictionaryToWorkout(dictionary: message)
             
-            if let dateTimestamp = userInfo["date"] as? TimeInterval {
-                userInfoWithCompatibleTypes["date"] = Date(timeIntervalSince1970: dateTimestamp)
-            }
-            
-            if let uuidString = userInfo["id"] as? String {
-                userInfoWithCompatibleTypes["id"] = UUID(uuidString: uuidString)
-            }
-            
-            // Encode the adjusted dictionary back to JSON
-            let data = try JSONSerialization.data(withJSONObject: userInfoWithCompatibleTypes, options: .fragmentsAllowed)
-            
-            // Decode the JSON data to a Workout object
-            let workout = try JSONDecoder().decode(Workout.self, from: data)
+            print("workout: \(workout)")
             
             // Assign the decoded Workout to self.workout
             DispatchQueue.main.async {
-                self.workout = workout
+                self.workout = workout 
             }
             
+            // Send acknowledgment to sender
+            replyHandler(["status": "Workout received successfully"])
+            
         } catch {
-            print("Error decoding Workout from userInfo: \(error)")
+            print("Error decoding Workout from message: \(error)")
+            replyHandler(["status": "Error decoding Workout: \(error.localizedDescription)"])
         }
     }
     

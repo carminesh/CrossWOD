@@ -10,6 +10,7 @@ import SwiftUI
 struct AMRAPandForTimeConfigView: View {
     @State private var selectedTime: Int = 10
     @State private var showTimePicker = false
+    @State private var workout: Workout?
     
     
     
@@ -36,12 +37,12 @@ struct AMRAPandForTimeConfigView: View {
                     .padding(.top, 50)
                     .foregroundColor(.white)
                 
-    
+                
                 Text(modeDescription)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(accentColor)
-
+                
                 
                 // Time Configuration Box
                 VStack {
@@ -50,7 +51,7 @@ struct AMRAPandForTimeConfigView: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .padding(6)
-                        
+                    
                     Button(action: {
                         showTimePicker = true // Show time picker
                     }) {
@@ -104,12 +105,31 @@ struct AMRAPandForTimeConfigView: View {
                     .cornerRadius(20)
                     .shadow(radius: 10)
                     .transition(.scale)
-
+                    
                 }
                 .edgesIgnoringSafeArea(.all) // Cover the entire screen
             }
         }
         .animation(.easeInOut, value: showTimePicker)
+        .onChange(of: selectedTime) {
+            
+            // Update the workout instance each time selectedTime changes
+            workout = Workout(
+                type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
+                date: Date(),
+                initialCountdown: selectedTime,
+                seriesPerformed: 0,  // Example: set initial performed series
+                seriesTimes: []      // Example: set initial series times as empty
+            )
+            
+            
+            if let workout = workout {
+                sendWorkoutInfo(workout: workout)
+            }
+            
+            
+            
+        }
     }
 }
 

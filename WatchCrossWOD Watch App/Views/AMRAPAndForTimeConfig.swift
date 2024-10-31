@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct AMRAPAndForTimeTimer: View {
+struct AMRAPAndForTimeConfig: View {
     
-    
+    var selectedWorkout: Workout
     
     var body: some View {
         
-        Text("AMRAP")
+        Text(selectedWorkout.type == .Amrap ? "AMRAP" : "FOR TIME")
             .font(.title2)
             .foregroundColor(.white)
             .fontWeight(.medium)
@@ -24,45 +24,44 @@ struct AMRAPAndForTimeTimer: View {
         VStack {
         
             HStack(alignment: .top) {
-        
-                
                 Text("Duration: ")
                     .font(.body)
                     .foregroundColor(.white)
                     .padding(.leading, 14)
-                    
                 
-                Text("00:20")
+                Text(formatTimeWithDecimals(seconds: selectedWorkout.initialCountdown ?? 0))
                     .font(.body)
                     .foregroundColor(Color("amrapAccentColor"))
-                    
-            
-            
-                    
             }
             .frame(width: 175, height: 50, alignment: .leading)
             .background(Color("cardBackgroundColor"))
             .cornerRadius(13)
-
-        
             
-            NavigationLink(destination: WatchTimerView()){
+            NavigationLink(destination: AMRAPAndForTimeTimer(viewModel: AMRAPAndForTimeTimer.ViewModel())) {
                 Text("START TIMER")
                     .font(.body)
                     .fontWeight(.medium)
-                    .padding()
+                    .frame(maxWidth: .infinity, minHeight: 44) // Ensures a minimum tappable size
                     .foregroundColor(.white)
-                    .cornerRadius(15)
+                    .padding()
             }
             .background(Color("amrapAccentColor"))
-            .frame(width: 175, height: 50)
             .cornerRadius(13)
-            
-            
+            .contentShape(Rectangle()) // Expands tappable area
         }
     }
 }
-
 #Preview {
-    AMRAPAndForTimeTimer()
+    
+    let workout = Workout(
+            type: .Amrap,
+            date: Date(),
+            accentColor: "amrapAccentColor",
+            initialCountdown: 1200,
+            seriesPerformed: 5,
+            seriesTimes: [200, 400, 600]
+        )
+    
+    
+    AMRAPAndForTimeConfig(selectedWorkout: workout)
 }

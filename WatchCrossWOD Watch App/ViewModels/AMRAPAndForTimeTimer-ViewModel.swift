@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+extension AMRAPAndForTimeTimer {
+    
+    @Observable
+    class ViewModel {
+        
+        
+        
+        
+    }
+    
+}

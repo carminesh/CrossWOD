@@ -8,12 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var watchConnector = WatchConnector.shared
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            
+            if let workout = watchConnector.workout {
+                
+                switch workout.type {
+                case .Amrap, .ForTime:
+                    AMRAPAndForTimeConfig(selectedWorkout: workout)
+                case .Emom:
+                    Text("EMOM")
+                case .Tabata:
+                    Text("TABATA")
+                }
+                
+                
+            } else {
+                
+                Text("Open the CrossWOD application on your iPhone and select the workout")
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            
+            
         }
         .padding()
     }

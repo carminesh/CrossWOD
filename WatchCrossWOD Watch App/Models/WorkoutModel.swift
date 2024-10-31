@@ -55,3 +55,4 @@ struct WorkoutGroup: Identifiable {
     let date: Date
     let workouts: [Workout]
 }
+

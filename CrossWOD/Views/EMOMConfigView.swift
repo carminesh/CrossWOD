@@ -209,6 +209,7 @@ struct EMOMConfigView: View {
             }
         }
         .animation(.easeInOut, value: showTimePicker)
+        
     }
     
     

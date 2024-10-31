@@ -7,7 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F3565A312CD377F900269057 /* WatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A302CD377F900269057 /* WatchConnector.swift */; };
+		F3565A322CD377F900269057 /* WatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A302CD377F900269057 /* WatchConnector.swift */; };
+		F3565A342CD380F700269057 /* SharedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A332CD380F700269057 /* SharedFunctions.swift */; };
+		F3565A352CD380F700269057 /* SharedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A332CD380F700269057 /* SharedFunctions.swift */; };
+		F3565A3B2CD39E2200269057 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A3A2CD39E2200269057 /* Test.swift */; };
+		F3565A3C2CD39E2200269057 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A3A2CD39E2200269057 /* Test.swift */; };
+		F3565A3E2CD3A56900269057 /* UtilsSharedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A3D2CD3A56900269057 /* UtilsSharedFunctions.swift */; };
+		F3565A3F2CD3A56900269057 /* UtilsSharedFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3565A3D2CD3A56900269057 /* UtilsSharedFunctions.swift */; };
 		F3BDA2082CBDAE620001872D /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F3BDA2072CBDAE620001872D /* RiveRuntime */; };
+		F3DF7C182CD291FB0000231C /* WatchCrossWOD Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F3DF7BF52CD291F90000231C /* WatchCrossWOD Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F3DF7C2D2CD2974F0000231C /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3DF7C2C2CD2974F0000231C /* WatchConnectivity.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,15 +35,68 @@
 			remoteGlobalIDString = F37B1FD02CBA6EC000941C87;
 			remoteInfo = CrossWOD;
 		};
+		F3DF7C052CD291FB0000231C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F37B1FC92CBA6EC000941C87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3DF7BF42CD291F90000231C;
+			remoteInfo = "WatchCrossWOD Watch App";
+		};
+		F3DF7C0F2CD291FB0000231C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F37B1FC92CBA6EC000941C87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3DF7BF42CD291F90000231C;
+			remoteInfo = "WatchCrossWOD Watch App";
+		};
+		F3DF7C162CD291FB0000231C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F37B1FC92CBA6EC000941C87 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3DF7BF42CD291F90000231C;
+			remoteInfo = "WatchCrossWOD Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F3DF7C1C2CD291FB0000231C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				F3DF7C182CD291FB0000231C /* WatchCrossWOD Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		F3565A302CD377F900269057 /* WatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnector.swift; sourceTree = "<group>"; };
+		F3565A332CD380F700269057 /* SharedFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedFunctions.swift; sourceTree = "<group>"; };
+		F3565A3A2CD39E2200269057 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		F3565A3D2CD3A56900269057 /* UtilsSharedFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsSharedFunctions.swift; sourceTree = "<group>"; };
 		F37B1FD12CBA6EC000941C87 /* CrossWOD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrossWOD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F37B1FE12CBA6EC200941C87 /* CrossWODTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrossWODTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F37B1FEB2CBA6EC200941C87 /* CrossWODUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrossWODUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DF7BF52CD291F90000231C /* WatchCrossWOD Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchCrossWOD Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DF7C042CD291FB0000231C /* WatchCrossWOD Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WatchCrossWOD Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DF7C0E2CD291FB0000231C /* WatchCrossWOD Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WatchCrossWOD Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DF7C2A2CD297250000231C /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.0.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
+		F3DF7C2C2CD2974F0000231C /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F3565A452CD3BB2600269057 /* Exceptions for "WatchCrossWOD Watch App" folder in "CrossWOD" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"ViewModels/AMRAPAndForTimeTimer-ViewModel.swift",
+				Views/AMRAPAndForTimeConfig.swift,
+				Views/AMRAPAndForTimeTimer.swift,
+			);
+			target = F37B1FD02CBA6EC000941C87 /* CrossWOD */;
+		};
 		F3F9A4B12CD17F3700413F8A /* Exceptions for "CrossWOD" folder in "CrossWOD" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -62,6 +125,24 @@
 			path = CrossWODUITests;
 			sourceTree = "<group>";
 		};
+		F3DF7BF62CD291F90000231C /* WatchCrossWOD Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F3565A452CD3BB2600269057 /* Exceptions for "WatchCrossWOD Watch App" folder in "CrossWOD" target */,
+			);
+			path = "WatchCrossWOD Watch App";
+			sourceTree = "<group>";
+		};
+		F3DF7C072CD291FB0000231C /* WatchCrossWOD Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "WatchCrossWOD Watch AppTests";
+			sourceTree = "<group>";
+		};
+		F3DF7C112CD291FB0000231C /* WatchCrossWOD Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "WatchCrossWOD Watch AppUITests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3BDA2082CBDAE620001872D /* RiveRuntime in Frameworks */,
+				F3DF7C2D2CD2974F0000231C /* WatchConnectivity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,15 +169,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3DF7BF22CD291F90000231C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C012CD291FB0000231C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C0B2CD291FB0000231C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F3565A2F2CD377BA00269057 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F3565A302CD377F900269057 /* WatchConnector.swift */,
+				F3565A332CD380F700269057 /* SharedFunctions.swift */,
+				F3565A3A2CD39E2200269057 /* Test.swift */,
+				F3565A3D2CD3A56900269057 /* UtilsSharedFunctions.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		F37B1FC82CBA6EC000941C87 = {
 			isa = PBXGroup;
 			children = (
+				F3565A2F2CD377BA00269057 /* Shared */,
 				F37B1FD32CBA6EC000941C87 /* CrossWOD */,
 				F37B1FE42CBA6EC200941C87 /* CrossWODTests */,
 				F37B1FEE2CBA6EC200941C87 /* CrossWODUITests */,
+				F3DF7BF62CD291F90000231C /* WatchCrossWOD Watch App */,
+				F3DF7C072CD291FB0000231C /* WatchCrossWOD Watch AppTests */,
+				F3DF7C112CD291FB0000231C /* WatchCrossWOD Watch AppUITests */,
+				F3DF7C292CD297250000231C /* Frameworks */,
 				F37B1FD22CBA6EC000941C87 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,8 +225,20 @@
 				F37B1FD12CBA6EC000941C87 /* CrossWOD.app */,
 				F37B1FE12CBA6EC200941C87 /* CrossWODTests.xctest */,
 				F37B1FEB2CBA6EC200941C87 /* CrossWODUITests.xctest */,
+				F3DF7BF52CD291F90000231C /* WatchCrossWOD Watch App.app */,
+				F3DF7C042CD291FB0000231C /* WatchCrossWOD Watch AppTests.xctest */,
+				F3DF7C0E2CD291FB0000231C /* WatchCrossWOD Watch AppUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F3DF7C292CD297250000231C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F3DF7C2C2CD2974F0000231C /* WatchConnectivity.framework */,
+				F3DF7C2A2CD297250000231C /* WatchConnectivity.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,10 +251,12 @@
 				F37B1FCD2CBA6EC000941C87 /* Sources */,
 				F37B1FCE2CBA6EC000941C87 /* Frameworks */,
 				F37B1FCF2CBA6EC000941C87 /* Resources */,
+				F3DF7C1C2CD291FB0000231C /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F3DF7C172CD291FB0000231C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F37B1FD32CBA6EC000941C87 /* CrossWOD */,
@@ -182,6 +315,74 @@
 			productReference = F37B1FEB2CBA6EC200941C87 /* CrossWODUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		F3DF7BF42CD291F90000231C /* WatchCrossWOD Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3DF7C192CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch App" */;
+			buildPhases = (
+				F3DF7BF12CD291F90000231C /* Sources */,
+				F3DF7BF22CD291F90000231C /* Frameworks */,
+				F3DF7BF32CD291F90000231C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F3DF7BF62CD291F90000231C /* WatchCrossWOD Watch App */,
+			);
+			name = "WatchCrossWOD Watch App";
+			packageProductDependencies = (
+			);
+			productName = "WatchCrossWOD Watch App";
+			productReference = F3DF7BF52CD291F90000231C /* WatchCrossWOD Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F3DF7C032CD291FB0000231C /* WatchCrossWOD Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3DF7C1D2CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch AppTests" */;
+			buildPhases = (
+				F3DF7C002CD291FB0000231C /* Sources */,
+				F3DF7C012CD291FB0000231C /* Frameworks */,
+				F3DF7C022CD291FB0000231C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3DF7C062CD291FB0000231C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F3DF7C072CD291FB0000231C /* WatchCrossWOD Watch AppTests */,
+			);
+			name = "WatchCrossWOD Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "WatchCrossWOD Watch AppTests";
+			productReference = F3DF7C042CD291FB0000231C /* WatchCrossWOD Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F3DF7C0D2CD291FB0000231C /* WatchCrossWOD Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3DF7C202CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch AppUITests" */;
+			buildPhases = (
+				F3DF7C0A2CD291FB0000231C /* Sources */,
+				F3DF7C0B2CD291FB0000231C /* Frameworks */,
+				F3DF7C0C2CD291FB0000231C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3DF7C102CD291FB0000231C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F3DF7C112CD291FB0000231C /* WatchCrossWOD Watch AppUITests */,
+			);
+			name = "WatchCrossWOD Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "WatchCrossWOD Watch AppUITests";
+			productReference = F3DF7C0E2CD291FB0000231C /* WatchCrossWOD Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -202,6 +403,17 @@
 					F37B1FEA2CBA6EC200941C87 = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = F37B1FD02CBA6EC000941C87;
+					};
+					F3DF7BF42CD291F90000231C = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					F3DF7C032CD291FB0000231C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = F3DF7BF42CD291F90000231C;
+					};
+					F3DF7C0D2CD291FB0000231C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = F3DF7BF42CD291F90000231C;
 					};
 				};
 			};
@@ -225,6 +437,9 @@
 				F37B1FD02CBA6EC000941C87 /* CrossWOD */,
 				F37B1FE02CBA6EC200941C87 /* CrossWODTests */,
 				F37B1FEA2CBA6EC200941C87 /* CrossWODUITests */,
+				F3DF7BF42CD291F90000231C /* WatchCrossWOD Watch App */,
+				F3DF7C032CD291FB0000231C /* WatchCrossWOD Watch AppTests */,
+				F3DF7C0D2CD291FB0000231C /* WatchCrossWOD Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -251,6 +466,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3DF7BF32CD291F90000231C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C022CD291FB0000231C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C0C2CD291FB0000231C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -258,6 +494,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3565A3E2CD3A56900269057 /* UtilsSharedFunctions.swift in Sources */,
+				F3565A342CD380F700269057 /* SharedFunctions.swift in Sources */,
+				F3565A312CD377F900269057 /* WatchConnector.swift in Sources */,
+				F3565A3C2CD39E2200269057 /* Test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +509,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F37B1FE72CBA6EC200941C87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7BF12CD291F90000231C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3565A3F2CD3A56900269057 /* UtilsSharedFunctions.swift in Sources */,
+				F3565A322CD377F900269057 /* WatchConnector.swift in Sources */,
+				F3565A352CD380F700269057 /* SharedFunctions.swift in Sources */,
+				F3565A3B2CD39E2200269057 /* Test.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C002CD291FB0000231C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3DF7C0A2CD291FB0000231C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -287,6 +552,21 @@
 			isa = PBXTargetDependency;
 			target = F37B1FD02CBA6EC000941C87 /* CrossWOD */;
 			targetProxy = F37B1FEC2CBA6EC200941C87 /* PBXContainerItemProxy */;
+		};
+		F3DF7C062CD291FB0000231C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3DF7BF42CD291F90000231C /* WatchCrossWOD Watch App */;
+			targetProxy = F3DF7C052CD291FB0000231C /* PBXContainerItemProxy */;
+		};
+		F3DF7C102CD291FB0000231C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3DF7BF42CD291F90000231C /* WatchCrossWOD Watch App */;
+			targetProxy = F3DF7C0F2CD291FB0000231C /* PBXContainerItemProxy */;
+		};
+		F3DF7C172CD291FB0000231C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3DF7BF42CD291F90000231C /* WatchCrossWOD Watch App */;
+			targetProxy = F3DF7C162CD291FB0000231C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -542,6 +822,146 @@
 			};
 			name = Release;
 		};
+		F3DF7C1A2CD291FB0000231C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchCrossWOD Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchCrossWOD;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.carmineFabbri.CrossWOD;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.carmineFabbri.CrossWOD.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		F3DF7C1B2CD291FB0000231C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchCrossWOD Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchCrossWOD;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.carmineFabbri.CrossWOD;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.carmineFabbri.CrossWOD.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		F3DF7C1E2CD291FB0000231C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.carmineFabbri.WatchCrossWOD-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WatchCrossWOD Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WatchCrossWOD Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		F3DF7C1F2CD291FB0000231C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.carmineFabbri.WatchCrossWOD-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WatchCrossWOD Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WatchCrossWOD Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		F3DF7C212CD291FB0000231C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.carmineFabbri.WatchCrossWOD-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "WatchCrossWOD Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		F3DF7C222CD291FB0000231C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CZ3J4XPNP8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.carmineFabbri.WatchCrossWOD-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "WatchCrossWOD Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -577,6 +997,33 @@
 			buildConfigurations = (
 				F37B1FFC2CBA6EC200941C87 /* Debug */,
 				F37B1FFD2CBA6EC200941C87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3DF7C192CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3DF7C1A2CD291FB0000231C /* Debug */,
+				F3DF7C1B2CD291FB0000231C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3DF7C1D2CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3DF7C1E2CD291FB0000231C /* Debug */,
+				F3DF7C1F2CD291FB0000231C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3DF7C202CD291FB0000231C /* Build configuration list for PBXNativeTarget "WatchCrossWOD Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3DF7C212CD291FB0000231C /* Debug */,
+				F3DF7C222CD291FB0000231C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

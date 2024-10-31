@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct CrossWODApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

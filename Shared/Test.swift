@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+
+struct Test: Identifiable, Codable {
+    var id = UUID()
+    let countdown: Int
+}

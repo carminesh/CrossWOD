@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+
+
+func sendWorkoutInfo(workout: Workout) {
+    WatchConnector.shared.send(theFollowing: workout)
+}
