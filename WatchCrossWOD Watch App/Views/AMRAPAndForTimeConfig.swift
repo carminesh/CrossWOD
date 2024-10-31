@@ -24,33 +24,47 @@ struct AMRAPAndForTimeConfig: View {
         VStack {
         
             HStack(alignment: .top) {
+        
+                
                 Text("Duration: ")
                     .font(.body)
                     .foregroundColor(.white)
                     .padding(.leading, 14)
+                    
                 
                 Text(formatTimeWithDecimals(seconds: selectedWorkout.initialCountdown ?? 0))
                     .font(.body)
                     .foregroundColor(Color("amrapAccentColor"))
+                    
+            
+            
+                    
             }
             .frame(width: 175, height: 50, alignment: .leading)
             .background(Color("cardBackgroundColor"))
             .cornerRadius(13)
             
-            NavigationLink(destination: AMRAPAndForTimeTimer(viewModel: AMRAPAndForTimeTimer.ViewModel())) {
-                Text("START TIMER")
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity, minHeight: 44) // Ensures a minimum tappable size
-                    .foregroundColor(.white)
-                    .padding()
+            if let initialCountdown = selectedWorkout.initialCountdown {
+                NavigationLink(destination: AMRAPAndForTimeTimer(viewModel: AMRAPAndForTimeTimer.ViewModel(modeTitle: selectedWorkout.type.rawValue, countdown: initialCountdown ))) {
+                    Text("START TIMER")
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .frame(width: 175, height: 50)
+                        .foregroundColor(.white)
+                        .background(Color("amrapAccentColor"))
+                        .cornerRadius(13)
+                }
+            
             }
-            .background(Color("amrapAccentColor"))
-            .cornerRadius(13)
-            .contentShape(Rectangle()) // Expands tappable area
+        
+            
+            
+            
+            
         }
     }
 }
+
 #Preview {
     
     let workout = Workout(
