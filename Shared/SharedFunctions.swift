@@ -10,5 +10,13 @@ import Foundation
 
 
 func sendWorkoutInfo(workout: Workout) {
-    WatchConnector.shared.send(theFollowing: workout)
+    WatchConnector.shared.sendWorkoutInfo(ofTheFollowing: workout)
 }
+
+
+
+func startWorkoutOnOtherDevice() {
+    WatchConnector.shared.startWorkoutOnOtherDevice()
+}
+
+

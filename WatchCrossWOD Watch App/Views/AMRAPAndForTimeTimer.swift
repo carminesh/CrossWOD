@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AMRAPAndForTimeTimer: View {
     
+    @ObservedObject var watchConnector = WatchConnector.shared
+    
     var viewModel: ViewModel
     
     
@@ -19,7 +21,7 @@ struct AMRAPAndForTimeTimer: View {
             
             Color("backgroundColor")
                 .ignoresSafeArea()
-        
+            
             
             VStack {
                 
@@ -27,7 +29,10 @@ struct AMRAPAndForTimeTimer: View {
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .opacity(viewModel.countdown == 0 ? 0 : 1)
                     .padding()
+                
+                
                 
                 Text("STARTS IN:")
                     .font(.caption)
@@ -37,8 +42,6 @@ struct AMRAPAndForTimeTimer: View {
                 
                 
                 
-
-                   
                 
                 // MARK: COUNTDOWN section
                 VStack(alignment: .center) {
@@ -48,9 +51,10 @@ struct AMRAPAndForTimeTimer: View {
                         Text("\(viewModel.delayCountdown)")
                             .font(.system(size: 40))
                             .fontWeight(.bold)
-                            .foregroundColor(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
-        
-                    } else {
+                            .foregroundColor(viewModel.modeTitle == "Amrap" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
+                        
+                        
+                    } else if viewModel.countdown > 0 {
                         
                         Text(formatTimeWithDecimals(seconds: viewModel.countdown))
                             .font(.system(size: 40))
@@ -58,67 +62,74 @@ struct AMRAPAndForTimeTimer: View {
                             .opacity(viewModel.countdown == 0 ? 0 : 1)
                             .foregroundColor(.white)
                         
+                        
+                    } else {
+                        
+                        VStack {
+                            Image("done_icon")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                              
+                            Text("Nice done")
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .opacity(viewModel.countdown == 0 ? 1 : 0)
+                                .foregroundColor(.white)
+                                .padding()
+                        }
+
+                        
+                    
+                            
+                        
                     }
                     
-                }.padding()
-                
-                                
-            
-                
                     
+                    
+                }.padding(.bottom, 26)
+                
+                
+                
+                
                 
                 // MARK: BUTTON section
-                    Button(action: {
-                        viewModel.isPaused.toggle()
-                        if viewModel.isPaused {
-                            viewModel.startTimer()
-                        } else {
-                            viewModel.stopTimer()
-                        }
-                    }) {
-                        HStack(spacing: 8) {
-                            
-                            Image(viewModel.isPaused ? "pause_icon" : "start_icon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 12, height: 12)
-                                
-                            
-                            Text(viewModel.isPaused ? "PAUSE" : "START")
-                                .font(.body)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                
-                        }
+                Button(action: {
+                    viewModel.isPaused.toggle()
+                    if viewModel.isPaused {
+                        viewModel.startTimer()
+                    } else {
+                        viewModel.stopTimer()
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .frame(width: 175, height: 50)
-                    .background(Color("cardBackgroundColor"))
-                    .cornerRadius(13)
-                    .disabled(viewModel.countdown == 0 || viewModel.delay)
-                    .opacity(viewModel.countdown == 0 || viewModel.delay ? 0 : 1)
-                    .animation(.easeInOut(duration: 1), value: viewModel.isPaused)
-//                    Button(action: {
-//                        viewModel.recordLastSeriesTime()
-//                    }) {
-//                        HStack(spacing: 10) {
-//                            Image("add_icon")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 19, height: 19)
-//                                .padding(.horizontal, 20)
-//                        }
-//                        .padding(.vertical, 20)
-//                        .background(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
-//                        .cornerRadius(15)
-//                    }
-                    
-
+                }) {
+                    HStack(spacing: 8) {
+                        
+                        Image(viewModel.isPaused ? "pause_icon" : "start_icon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 12, height: 12)
+                        
+                        
+                        Text(viewModel.isPaused ? "PAUSE" : "START")
+                            .font(.body)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+                .frame(width: 175, height: 50)
+                .background(Color("cardBackgroundColor"))
+                .cornerRadius(13)
+                .disabled(viewModel.countdown == 0 || viewModel.delay)
+                .opacity(viewModel.countdown == 0 || viewModel.delay ? 0 : 1)
+                .animation(.easeInOut(duration: 1), value: viewModel.isPaused)
+                .padding(.bottom, 24)
+            
                 
             }
             .onAppear {
                 viewModel.startDelay()
-                
+                startWorkoutOnOtherDevice()
             }
             .onChange(of: viewModel.countdown) {
                 if viewModel.countdown == 0 {
@@ -133,6 +144,9 @@ struct AMRAPAndForTimeTimer: View {
             .onDisappear {
                 viewModel.saveWorkoutHistory()
                 viewModel.resetCountdown()
+            }
+            .onTapGesture(count: 2) {
+                viewModel.recordLastSeriesTime()
             }
         }
     }

@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct AMRAPandForTimeConfigView: View {
+    
+    // --MARK: watchOs variables
+    @ObservedObject var watchConnector = WatchConnector.shared
+    @State private var readyToNavigate = false
+    
     @State private var selectedTime: Int = 10
     @State private var showTimePicker = false
     @State private var workout: Workout?
@@ -17,6 +22,7 @@ struct AMRAPandForTimeConfigView: View {
     var modeTitle: String
     var modeDescription: String
     var timePickerDescription: String
+    
     
     
     private var accentColor: Color {
@@ -72,17 +78,21 @@ struct AMRAPandForTimeConfigView: View {
                 
                 Spacer()
                 
-                // NavigationLink for starting the timer
-                NavigationLink(destination: AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime))){
+                Button {
+                    readyToNavigate.toggle()
+                } label: {
                     Text("START TIMER")
-                        .font(.body)
-                        .fontWeight(.bold)
-                        .padding()
-                        .background(accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
                 }
+                .font(.body)
+                .fontWeight(.bold)
+                .padding()
+                .background(accentColor)
+                .foregroundColor(.white)
+                .cornerRadius(15)
                 .padding(.bottom, 40)
+                
+                
+                
             }
             
             // Custom time picker overlay
@@ -111,6 +121,20 @@ struct AMRAPandForTimeConfigView: View {
             }
         }
         .animation(.easeInOut, value: showTimePicker)
+        .onAppear {
+            workout = Workout(
+                type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
+                date: Date(),
+                initialCountdown: selectedTime,
+                seriesPerformed: 0,
+                seriesTimes: []    
+            )
+            
+            
+            if let workout = workout {
+                sendWorkoutInfo(workout: workout)
+            }
+        }
         .onChange(of: selectedTime) {
             
             // Update the workout instance each time selectedTime changes
@@ -118,18 +142,20 @@ struct AMRAPandForTimeConfigView: View {
                 type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
                 date: Date(),
                 initialCountdown: selectedTime,
-                seriesPerformed: 0,  // Example: set initial performed series
-                seriesTimes: []      // Example: set initial series times as empty
+                seriesPerformed: 0,  
+                seriesTimes: []
             )
             
             
             if let workout = workout {
                 sendWorkoutInfo(workout: workout)
             }
-            
-            
-            
         }
+        .navigationDestination(isPresented: $readyToNavigate) {
+            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime))
+        }
+        .onChange(of: watchConnector.startWorkout) { readyToNavigate = true }
+        
     }
 }
 

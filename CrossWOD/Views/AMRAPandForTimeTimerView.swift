@@ -185,6 +185,7 @@ struct AMRAPandForTimeTimerView: View {
                 
             }
             .onAppear {
+                startWorkoutOnOtherDevice()
                 viewModel.startDelay()
                 UIApplication.shared.isIdleTimerDisabled = true
             }

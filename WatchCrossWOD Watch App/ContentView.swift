@@ -12,7 +12,7 @@ struct ContentView: View {
     @ObservedObject var watchConnector = WatchConnector.shared
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             
             VStack {
                 

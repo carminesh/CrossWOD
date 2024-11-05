@@ -84,6 +84,7 @@ extension AMRAPAndForTimeTimer {
                 guard let self = self else { return }
                 
                 if self.delayCountdown > 0 {
+                    print("Delay countdown on watch")
                     self.delayCountdown -= 1
                 } else {
                     self.delay = false
