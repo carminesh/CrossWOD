@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  CrossWOD
-//
-//  Created by Carmine Fabbri on 31/10/24.
-//
-
 import Foundation
 import WatchConnectivity
 
@@ -15,12 +8,14 @@ final class WatchConnector: NSObject, ObservableObject {
     
     @Published var workout: Workout? = nil
     @Published var startWorkout: Bool = false
+    @Published var isWorkoutPaused: Bool = true
+    @Published var countdownToAdjust: Int = 0
+
     
-    
-    
+
+
     
     override private init() {
-        
         super.init()
         
 #if !os(watchOS)
@@ -31,11 +26,21 @@ final class WatchConnector: NSObject, ObservableObject {
         
         WCSession.default.delegate = self
         
-        // start the WCSession
+        // Start the WCSession
         WCSession.default.activate()
     }
     
-    // --MARK: Function to send workout info over the other device
+    // MARK: - Helper Function to Identify Source Device
+    private func getDeviceType() -> String {
+#if os(watchOS)
+        return "Watch"
+#else
+        return "iPhone"
+#endif
+    }
+    
+    // MARK: - Sender functions section
+    
     public func sendWorkoutInfo(ofTheFollowing workout: Workout) {
         guard WCSession.default.activationState == .activated else {
             print("WCSession is not activated.")
@@ -47,40 +52,34 @@ final class WatchConnector: NSObject, ObservableObject {
             return
         }
         
-        
 #if os(watchOS)
-        
         guard WCSession.default.isCompanionAppInstalled else {
             return
         }
 #else
-        
-        // here i check if the app is installed on the watch
         guard WCSession.default.isWatchAppInstalled else {
             return
         }
 #endif
         
-        
-        
-        
         let workoutDictionary = workoutToDictionary(workout: workout)
-        let message = workoutDictionary.merging(["messageType": "sendWorkoutInfo"]) { (_, new) in new }
-        
+        let message = workoutDictionary.merging([
+            "messageType": "sendWorkoutInfo",
+            "sourceDevice": getDeviceType()  // Add source device identifier
+        ]) { (_, new) in new }
         
         WCSession.default.sendMessage(message as [String : Any], replyHandler: { response in
             if let status = response["status"] as? String {
-                print("Response from Watch: \(status)")
+                print("Response from \(response["sourceDevice"] ?? "Unknown") in sendWorkoutInfo: \(status)")
             } else {
-                print("Unexpected response from Watch.")
+                print("Unexpected response in sendWorkoutInfo.")
             }
         }, errorHandler: { error in
             print("Error sending message: \(error.localizedDescription)")
         })
-        
     }
     
-    public func sendPauseInfo(pause: Bool) {
+    public func sendPauseInfo(toPaused paused: Bool, countdownToAdjust: Int) {
         guard WCSession.default.activationState == .activated else {
             print("WCSession is not activated.")
             return
@@ -91,33 +90,35 @@ final class WatchConnector: NSObject, ObservableObject {
             return
         }
         
-        
-#if os(watchOS)
-        
+    #if os(watchOS)
         guard WCSession.default.isCompanionAppInstalled else {
             return
         }
-#else
-        
-        // here i check if the app is installed on the watch
+    #else
         guard WCSession.default.isWatchAppInstalled else {
             return
         }
-#endif
+    #endif
+
+        // Log device information and current pause state
+        print("[\(getDeviceType())] Sending pause info. Paused: \(paused)")
         
-        let setPause = ["pause": pause, "messageType": "sendPauseInfo"] as [String : Any]
+        let message = [
+            "messageType": "sendPauseInfo",
+            "sourceDevice": getDeviceType(),
+            "isPaused": paused,
+            "countdownToAdjust": countdownToAdjust
+        ] as [String : Any]
         
-        
-        WCSession.default.sendMessage(setPause as [String : Any], replyHandler: { response in
+        WCSession.default.sendMessage(message, replyHandler: { response in
             if let status = response["status"] as? String {
-                print("Response from Watch: \(status)")
+                print("[\(self.getDeviceType())] Response from \(response["sourceDevice"] ?? "Unknown") in sendPauseInfo: \(status)")
             } else {
-                print("Unexpected response from Watch.")
+                print("[\(self.getDeviceType())] Unexpected response in sendPauseInfo.")
             }
         }, errorHandler: { error in
-            print("Error sending message: \(error.localizedDescription)")
+            print("[\(self.getDeviceType())] Error sending message: \(error.localizedDescription)")
         })
-        
     }
     
     // MARK: - Function to start workout on other device
@@ -138,34 +139,28 @@ final class WatchConnector: NSObject, ObservableObject {
         guard WCSession.default.isWatchAppInstalled else { return }
 #endif
         
-        let message = ["messageType": "startWorkoutOnOtherDevice"]
+        let message = [
+            "messageType": "startWorkoutOnOtherDevice",
+            "sourceDevice": getDeviceType()  // Add source device identifier
+        ]
         
         WCSession.default.sendMessage(message, replyHandler: { response in
-            if let status = response["status"] as? String, status == "Workout started" {
-                DispatchQueue.main.async {
-                    self.startWorkout = true
-                }
-                print("Response from Watch: \(status)")
-            } else {
-                print("Unexpected response from Watch.")
-            }
+            print("Response from \(response["sourceDevice"] ?? "Unknown") in startWorkout: \(response)")
         }, errorHandler: { error in
             print("Error sending message: \(error.localizedDescription)")
         })
     }
     
-    
-    func handleWorkoutResponse(_ message: [String: Any]) {
+    // MARK: Receiver function section
+    func handleWorkoutInfoResponse(_ message: [String: Any]) {
         do {
-            
             // Decode the message directly to a Workout object
             let workout = try dictionaryToWorkout(dictionary: message)
-                        
+            
             // Assign the decoded Workout to self.workout
             DispatchQueue.main.async {
                 self.workout = workout
             }
-            
             
         } catch {
             print("Error decoding Workout from message: \(error.localizedDescription)")
@@ -173,8 +168,13 @@ final class WatchConnector: NSObject, ObservableObject {
     }
     
     func handlePauseResponse(_ response: [String: Any]) {
-        if let status = response["status"] as? String {
-            print("Pause Response: \(status)")
+        if let isPaused = response["isPaused"] as? Bool,
+           let countdownToAdjust = response["countdownToAdjust"] as? Int {
+            DispatchQueue.main.async {
+                print("[\(self.getDeviceType())] setting isWorkoutPaused to: \(isPaused) and countdownToAdjust to: \(countdownToAdjust)")
+                self.isWorkoutPaused = isPaused
+                self.countdownToAdjust = countdownToAdjust
+            }
         }
     }
     
@@ -187,11 +187,7 @@ final class WatchConnector: NSObject, ObservableObject {
     func handleError(_ error: Error) {
         print("Error sending message: \(error.localizedDescription)")
     }
-    
-    
-    
 }
-
 
 // MARK: - WCSessionDelegate here we manage the received messages
 extension WatchConnector: WCSessionDelegate {
@@ -206,16 +202,10 @@ extension WatchConnector: WCSessionDelegate {
         } else {
             print("WCSession activated with state: \(activationState.rawValue)")
         }
-        
-        if activationState == .activated {
-            print("WCSession activated.")
-            
-        }
     }
     
 #if os(iOS)
-    func sessionDidBecomeInactive(_ session: WCSession) {
-    }
+    func sessionDidBecomeInactive(_ session: WCSession) {}
     
     func sessionDidDeactivate(_ session: WCSession) {
         // If the person has more than one watch, and they switch,
@@ -229,27 +219,40 @@ extension WatchConnector: WCSessionDelegate {
         didReceiveMessage message: [String: Any],
         replyHandler: @escaping ([String: Any]) -> Void
     ) {
-        
         guard let messageType = message["messageType"] as? String else {
-            replyHandler(["status": "Unknown message type"])
+            replyHandler(["status": "Unknown message type", "sourceDevice": getDeviceType()])
             return
         }
         
+        // Get the source of the message
+        let sourceDevice = message["sourceDevice"] as? String ?? "Unknown"
+        
+        // Ignore messages from the same device to avoid looping
+        if sourceDevice == getDeviceType() {
+            print("Ignoring message \(messageType) from same device (\(sourceDevice))")
+            replyHandler(["status": "Ignored message from same device", "sourceDevice": getDeviceType()])
+            return
+        }
+        
+        print("Received MessageType: \(messageType) from \(sourceDevice)")
+        
+        // Send a custom acknowledgment
+        if messageType == "startWorkoutOnOtherDevice" {
+            replyHandler(["status": "Workout started", "sourceDevice": getDeviceType()])
+        } else {
+            replyHandler(["status": "received", "sourceDevice": getDeviceType()])
+        }
+        
+        // Here we manage the response on the receiving device
         switch messageType {
         case "sendWorkoutInfo":
-            handleWorkoutResponse(message)
+            handleWorkoutInfoResponse(message)
         case "sendPauseInfo":
             handlePauseResponse(message)
         case "startWorkoutOnOtherDevice":
             handleStartWorkoutResponse(message)
         default:
-            replyHandler(["status": "Unhandled message type"])
+            print("Unhandled message type: \(messageType)")
         }
-        
-        
     }
-    
-    
-    
-    
 }

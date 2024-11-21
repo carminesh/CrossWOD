@@ -19,4 +19,7 @@ func startWorkoutOnOtherDevice() {
     WatchConnector.shared.startWorkoutOnOtherDevice()
 }
 
+func sendPauseInfo(toPaused paused: Bool, countdownToAdjust: Int) {
+    WatchConnector.shared.sendPauseInfo(toPaused: paused, countdownToAdjust: countdownToAdjust)
+}
 

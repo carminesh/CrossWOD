@@ -12,7 +12,7 @@ import SwiftUICore
 extension AMRAPandForTimeTimerView {
     
     @Observable
-    class ViewModel {        
+    class ViewModel {
         var riveAnimation = RiveAnimationManager(fileName: "countdown_animation", stateMachineName: "AnimatedCountdown")
         
         var countdown: Int
@@ -27,9 +27,9 @@ extension AMRAPandForTimeTimerView {
         var initialCountdown: Int // this one is used for recording the last series time
         var startingTime: Int
         var modeTitle: String
-
         
-        var delay: Bool = true
+        
+        private(set) var delay: Bool
         
         // Store the original countdown value
         private var originalCountdown: Int
@@ -43,7 +43,10 @@ extension AMRAPandForTimeTimerView {
             self.startingTime = countdown
             self.initialCountdown = countdown
             self.randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
+            self.delay = false
         }
+        
+        
         
         // MARK: Reset countdown and related properties
         func resetCountdown() {
@@ -81,6 +84,7 @@ extension AMRAPandForTimeTimerView {
         
         // MARK: Section related to the timer and animation management
         func startDelay() {
+            guard !delay else { return }
             delayCountdown = 3 // Reset delay countdown
             delay = true
             
@@ -94,6 +98,7 @@ extension AMRAPandForTimeTimerView {
                     self.delay = false
                     timer.invalidate()
                     self.timer = nil
+                    showAfterDelay = true
                     self.startTimer()
                 }
             }

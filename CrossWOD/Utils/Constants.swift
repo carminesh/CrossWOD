@@ -15,9 +15,9 @@ struct Constants {
     
     static func getWorkouts(userIsPro: Bool) -> [(title: String, icon: String, modeDescription: String, destination: AnyView)] {
         return [
-            (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "AMRAP", modeDescription: "As many rounds as possible", timePickerDescription: "Complete as many rounds as possible in:"))),
+            (title: "AMRAP", icon: "amrap_card", modeDescription: "As many rounds as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "AMRAP", modeDescription: "As many rounds as possible", timePickerDescription: "Complete as many rounds as possible in:", selectedTime: 10))),
             (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
-            (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "FOR TIME", modeDescription: "Workout as fast as possible", timePickerDescription: "Finish the workout as fast as possible in:"))),
+            (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "FOR TIME", modeDescription: "Workout as fast as possible", timePickerDescription: "Finish the workout as fast as possible in:", selectedTime: 10))),
             (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(TabataConfigView())),
             (title: "BENCHMARK", icon: userIsPro ? "benchmark_card" : "benchmark_premium_card", modeDescription: "CrossFit Benchmark WODs", destination: AnyView(BenchmarkConfigView()))
         ]

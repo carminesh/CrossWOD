@@ -10,6 +10,7 @@ import SwiftUI
 struct AMRAPandForTimeTimerView: View {
     
     var viewModel: ViewModel
+    @ObservedObject var watchConnector = WatchConnector.shared
     
     
     var body: some View {
@@ -42,7 +43,7 @@ struct AMRAPandForTimeTimerView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .opacity(!viewModel.seriesTimes.isEmpty && viewModel.countdown > 0 ? 1 : 0)
-                        
+                    
                     
                     
                     
@@ -53,12 +54,12 @@ struct AMRAPandForTimeTimerView: View {
                 
                 Spacer()
                     .frame(height: 70)
-                   
+                
                 
                 // MARK: COUNTDOWN section
                 VStack(alignment: .center) {
                     
-                                
+                    
                     if viewModel.delay {
                         
                         VStack() {
@@ -124,20 +125,20 @@ struct AMRAPandForTimeTimerView: View {
                     .background(Color("cardBackgroundColor"))
                     .cornerRadius(12)
                 }
-                    
-                
-                    
                 
                 
-               
+
                 Spacer()
-               
-                    
+                
+                
                 
                 // MARK: BUTTON section
                 HStack {
                     Button(action: {
                         viewModel.isPaused.toggle()
+                        
+                        sendPauseInfo(toPaused: viewModel.isPaused, countdownToAdjust: viewModel.countdown)
+                        
                         if viewModel.isPaused {
                             viewModel.startTimer()
                         } else {
@@ -185,19 +186,29 @@ struct AMRAPandForTimeTimerView: View {
                 
             }
             .onAppear {
-                startWorkoutOnOtherDevice()
+                
                 viewModel.startDelay()
-                UIApplication.shared.isIdleTimerDisabled = true
-            }
-            .onChange(of: viewModel.countdown) {
-                if viewModel.countdown == 0 {
-                    // Add a delay before showing the text
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation {
-                            viewModel.showAfterDelay = true
-                        }
-                    }
+                
+                if (!watchConnector.startWorkout) {
+                    startWorkoutOnOtherDevice()
                 }
+                
+            }
+            //MARK: onChange related to the pause message sent from watchOS
+            .onChange(of: watchConnector.isWorkoutPaused) {
+                print("ON CHANGE IPHONE")
+                viewModel.isPaused = watchConnector.isWorkoutPaused
+                
+                if viewModel.isPaused {
+                    viewModel.startTimer()
+                } else {
+                    viewModel.stopTimer()
+                }
+
+               
+            }
+            .onChange(of: watchConnector.countdownToAdjust) {
+                viewModel.countdown = watchConnector.countdownToAdjust
             }
             .onDisappear {
                 viewModel.saveWorkoutHistory()

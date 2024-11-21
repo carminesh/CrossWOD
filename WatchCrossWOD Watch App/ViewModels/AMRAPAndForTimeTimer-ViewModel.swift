@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension AMRAPAndForTimeTimer {
+extension AMRAPAndForTimeTimerView {
     
     @Observable
     class ViewModel {
@@ -25,10 +25,11 @@ extension AMRAPAndForTimeTimer {
         var modeTitle: String
 
         
-        var delay: Bool = true
+        private(set) var delay: Bool
         
         // Store the original countdown value
         private var originalCountdown: Int
+        
         
         
         // MARK: Init function
@@ -38,7 +39,7 @@ extension AMRAPAndForTimeTimer {
             self.originalCountdown = countdown
             self.startingTime = countdown
             self.initialCountdown = countdown
-
+            self.delay = false
         }
         
         // MARK: Reset countdown and related properties
@@ -72,10 +73,9 @@ extension AMRAPAndForTimeTimer {
         }
         
         
-        
-        
         // MARK: Section related to the timer and animation management
         func startDelay() {
+            guard !delay else { return }
             delayCountdown = 3 // Reset delay countdown
             delay = true
             
@@ -84,12 +84,12 @@ extension AMRAPAndForTimeTimer {
                 guard let self = self else { return }
                 
                 if self.delayCountdown > 0 {
-                    print("Delay countdown on watch")
                     self.delayCountdown -= 1
                 } else {
                     self.delay = false
                     timer.invalidate()
                     self.timer = nil
+                    showAfterDelay = true
                     self.startTimer()
                 }
             }
@@ -97,6 +97,7 @@ extension AMRAPAndForTimeTimer {
         
         
         func startTimer() {
+
             
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
                 guard let self = self else { return }
@@ -109,6 +110,7 @@ extension AMRAPAndForTimeTimer {
                 if self.countdown == 0 {
                     timer.invalidate() // Stop the delay timer
                     self.timer = nil
+                    
                 }
             }
             
@@ -117,6 +119,7 @@ extension AMRAPAndForTimeTimer {
         
         
         func stopTimer() {
+
             timer?.invalidate()
             timer = nil
         }

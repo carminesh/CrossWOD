@@ -12,6 +12,20 @@ struct AMRAPAndForTimeConfig: View {
     @ObservedObject var watchConnector = WatchConnector.shared
     @State private var readyToNavigate = false
     
+    // Create the @State viewModel
+    @State private var viewModel: AMRAPAndForTimeTimerView.ViewModel
+    
+    // Initialize the viewModel with selectedWorkout data
+    init(selectedWorkout: Workout) {
+        self.selectedWorkout = selectedWorkout
+        
+        // Initialize viewModel based on selectedWorkout
+        _viewModel = State(initialValue: AMRAPAndForTimeTimerView.ViewModel(
+            modeTitle: selectedWorkout.type.rawValue,
+            countdown: selectedWorkout.initialCountdown ?? 10 // Default to 10 if initialCountdown is nil
+        ))
+    }
+    
     var body: some View {
         Text(selectedWorkout.type == .Amrap ? "AMRAP" : "FOR TIME")
             .font(.title2)
@@ -50,11 +64,19 @@ struct AMRAPAndForTimeConfig: View {
             
         }
         .navigationDestination(isPresented: $readyToNavigate) {
-            if let initialCountdown = selectedWorkout.initialCountdown {
-                AMRAPAndForTimeTimer(viewModel: AMRAPAndForTimeTimer.ViewModel(modeTitle: selectedWorkout.type.rawValue, countdown: initialCountdown))
-            }
+            AMRAPAndForTimeTimerView(viewModel: viewModel)
+        }
+        //MARK: Update the time of the viewModel
+        .onChange(of: selectedWorkout.initialCountdown) {
+            viewModel = AMRAPAndForTimeTimerView.ViewModel(
+                modeTitle: selectedWorkout.type.rawValue,
+                countdown: selectedWorkout.initialCountdown ?? 10
+            )
         }
         .onChange(of: watchConnector.startWorkout) { readyToNavigate = true }
+        .onDisappear() {
+            watchConnector.startWorkout = false
+        }
     }
 }
 

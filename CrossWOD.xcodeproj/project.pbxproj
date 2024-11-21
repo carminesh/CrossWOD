@@ -93,7 +93,7 @@
 			membershipExceptions = (
 				"ViewModels/AMRAPAndForTimeTimer-ViewModel.swift",
 				Views/AMRAPAndForTimeConfig.swift,
-				Views/AMRAPAndForTimeTimer.swift,
+				Views/AMRAPAndForTimeTimerView.swift,
 			);
 			target = F37B1FD02CBA6EC000941C87 /* CrossWOD */;
 		};

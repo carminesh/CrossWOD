@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct AMRAPAndForTimeTimer: View {
-    
-    @ObservedObject var watchConnector = WatchConnector.shared
+struct AMRAPAndForTimeTimerView: View {
     
     var viewModel: ViewModel
+    @ObservedObject var watchConnector = WatchConnector.shared
     
     
     var body: some View {
@@ -77,24 +76,19 @@ struct AMRAPAndForTimeTimer: View {
                                 .foregroundColor(.white)
                                 .padding()
                         }
-
-                        
-                    
-                            
                         
                     }
-                    
-                    
                     
                 }.padding(.bottom, 26)
                 
                 
                 
-                
-                
+            
                 // MARK: BUTTON section
                 Button(action: {
                     viewModel.isPaused.toggle()
+                    
+                    sendPauseInfo(toPaused: viewModel.isPaused, countdownToAdjust: viewModel.countdown)
                     if viewModel.isPaused {
                         viewModel.startTimer()
                     } else {
@@ -129,7 +123,30 @@ struct AMRAPAndForTimeTimer: View {
             }
             .onAppear {
                 viewModel.startDelay()
-                startWorkoutOnOtherDevice()
+                
+                /* Here we prevent cycle in watchConnector */
+                if (!watchConnector.startWorkout) {
+                    startWorkoutOnOtherDevice()
+                }
+
+                
+            }
+            //MARK: onChange related to the pause message sent from watchOS
+            .onChange(of: watchConnector.isWorkoutPaused) {
+                print("ON CHANGE WATCH")
+                
+                viewModel.isPaused = watchConnector.isWorkoutPaused
+                
+                if viewModel.isPaused {
+                    viewModel.startTimer()
+                } else {
+                    viewModel.stopTimer()
+                }
+
+               
+            }
+            .onChange(of: watchConnector.countdownToAdjust) {
+                viewModel.countdown = watchConnector.countdownToAdjust
             }
             .onChange(of: viewModel.countdown) {
                 if viewModel.countdown == 0 {
@@ -154,5 +171,5 @@ struct AMRAPAndForTimeTimer: View {
 }
 
 #Preview {
-    AMRAPAndForTimeTimer(viewModel: AMRAPAndForTimeTimer.ViewModel(modeTitle: "AMRAP", countdown: 2))
+    AMRAPAndForTimeTimerView(viewModel: AMRAPAndForTimeTimerView.ViewModel(modeTitle: "AMRAP", countdown: 2))
 }

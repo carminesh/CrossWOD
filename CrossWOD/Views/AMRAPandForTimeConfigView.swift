@@ -30,6 +30,20 @@ struct AMRAPandForTimeConfigView: View {
     }
     
     
+    // Initialize the view model with selectedTime
+    @State private var viewModel: AMRAPandForTimeTimerView.ViewModel
+    
+    init(modeTitle: String, modeDescription: String, timePickerDescription: String, selectedTime: Int) {
+        self.modeTitle = modeTitle
+        self.modeDescription = modeDescription
+        self.timePickerDescription = timePickerDescription
+
+        
+        // Initialize the ViewModel with selectedTime
+        _viewModel = State(wrappedValue: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime))
+    }
+    
+    
     var body: some View {
         ZStack {
             Color("backgroundColor")
@@ -127,7 +141,7 @@ struct AMRAPandForTimeConfigView: View {
                 date: Date(),
                 initialCountdown: selectedTime,
                 seriesPerformed: 0,
-                seriesTimes: []    
+                seriesTimes: []
             )
             
             
@@ -142,9 +156,12 @@ struct AMRAPandForTimeConfigView: View {
                 type: modeTitle == "AMRAP" ? .Amrap : .ForTime,
                 date: Date(),
                 initialCountdown: selectedTime,
-                seriesPerformed: 0,  
+                seriesPerformed: 0,
                 seriesTimes: []
             )
+            
+            //Update the time of the viewModel
+            viewModel = AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime)
             
             
             if let workout = workout {
@@ -152,17 +169,17 @@ struct AMRAPandForTimeConfigView: View {
             }
         }
         .navigationDestination(isPresented: $readyToNavigate) {
-            AMRAPandForTimeTimerView(viewModel: AMRAPandForTimeTimerView.ViewModel(modeTitle: modeTitle, countdown: selectedTime))
+            AMRAPandForTimeTimerView(viewModel: viewModel)
         }
         .onChange(of: watchConnector.startWorkout) { readyToNavigate = true }
         
     }
 }
 
-#Preview {
-    AMRAPandForTimeConfigView(
-        modeTitle: "AMRAP",
-        modeDescription: "Maximum number of possible series in:",
-        timePickerDescription: "Complete as many rounds as possible in:"
-    )
-}
+//#Preview {
+//    AMRAPandForTimeConfigView(
+//        modeTitle: "AMRAP",
+//        modeDescription: "Maximum number of possible series in:",
+//        timePickerDescription: "Complete as many rounds as possible in:"
+//    )
+//}
