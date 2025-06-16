@@ -7,11 +7,15 @@
 
 import SwiftUI
 
+
 struct AMRAPAndForTimeTimerView: View {
     
     var viewModel: ViewModel
     @ObservedObject var watchConnector = WatchConnector.shared
     
+    // Access the presentation mode to allow navigation control
+    @Environment(\.presentationMode) var presentationMode
+        
     
     var body: some View {
         
@@ -38,8 +42,6 @@ struct AMRAPAndForTimeTimerView: View {
                     .foregroundColor(.white)
                     .opacity(viewModel.delay ? 1 : 0)
                     .padding(.bottom, 20)
-                
-                
                 
                 
                 // MARK: COUNTDOWN section
@@ -126,9 +128,9 @@ struct AMRAPAndForTimeTimerView: View {
                 
                 /* Here we prevent cycle in watchConnector */
                 if (!watchConnector.startWorkout) {
-                    startWorkoutOnOtherDevice()
+                    startWorkoutOnOtherDevice(setStart: true)
                 }
-
+                
                 
             }
             //MARK: onChange related to the pause message sent from watchOS
@@ -158,9 +160,17 @@ struct AMRAPAndForTimeTimerView: View {
                     }
                 }
             }
+            .onChange(of: watchConnector.resetView) {
+                if watchConnector.resetView {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
             .onDisappear {
+                resetView()
                 viewModel.saveWorkoutHistory()
                 viewModel.resetCountdown()
+                startWorkoutOnOtherDevice(setStart: false)
+            
             }
             .onTapGesture(count: 2) {
                 viewModel.recordLastSeriesTime()

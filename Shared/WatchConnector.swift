@@ -10,7 +10,7 @@ final class WatchConnector: NSObject, ObservableObject {
     @Published var startWorkout: Bool = false
     @Published var isWorkoutPaused: Bool = true
     @Published var countdownToAdjust: Int = 0
-
+    @Published var resetView: Bool = false
     
 
 
@@ -121,8 +121,43 @@ final class WatchConnector: NSObject, ObservableObject {
         })
     }
     
+    public func sendResetView() {
+        guard WCSession.default.activationState == .activated else {
+            print("WCSession is not activated.")
+            return
+        }
+        
+        guard WCSession.default.isReachable else {
+            print("WCSession is not reachable.")
+            return
+        }
+        
+    #if os(watchOS)
+        guard WCSession.default.isCompanionAppInstalled else {
+            return
+        }
+    #else
+        guard WCSession.default.isWatchAppInstalled else {
+            return
+        }
+    #endif
+
+   
+        
+        let message = [
+            "messageType": "resetView",
+            "sourceDevice": getDeviceType(),
+        ] as [String : Any]
+        
+        WCSession.default.sendMessage(message, replyHandler: { response in
+        }, errorHandler: { error in
+            print("[\(self.getDeviceType())] Error sending message: \(error.localizedDescription)")
+        })
+    }
+    
+    
     // MARK: - Function to start workout on other device
-    public func startWorkoutOnOtherDevice() {
+    public func startWorkoutOnOtherDevice(start: Bool) {
         guard WCSession.default.activationState == .activated else {
             print("WCSession is not activated.")
             return
@@ -141,8 +176,9 @@ final class WatchConnector: NSObject, ObservableObject {
         
         let message = [
             "messageType": "startWorkoutOnOtherDevice",
+            "start": start,
             "sourceDevice": getDeviceType()  // Add source device identifier
-        ]
+        ] as [String : Any]
         
         WCSession.default.sendMessage(message, replyHandler: { response in
             print("Response from \(response["sourceDevice"] ?? "Unknown") in startWorkout: \(response)")
@@ -167,9 +203,9 @@ final class WatchConnector: NSObject, ObservableObject {
         }
     }
     
-    func handlePauseResponse(_ response: [String: Any]) {
-        if let isPaused = response["isPaused"] as? Bool,
-           let countdownToAdjust = response["countdownToAdjust"] as? Int {
+    func handlePauseResponse(_ message: [String: Any]) {
+        if let isPaused = message["isPaused"] as? Bool,
+           let countdownToAdjust = message["countdownToAdjust"] as? Int {
             DispatchQueue.main.async {
                 print("[\(self.getDeviceType())] setting isWorkoutPaused to: \(isPaused) and countdownToAdjust to: \(countdownToAdjust)")
                 self.isWorkoutPaused = isPaused
@@ -178,15 +214,29 @@ final class WatchConnector: NSObject, ObservableObject {
         }
     }
     
-    func handleStartWorkoutResponse(_ response: [String: Any]) {
+    func handleStartWorkoutResponse(_ message: [String: Any]) {
+        
+        if let start = message["start"] as? Bool {
+            DispatchQueue.main.async {
+                self.startWorkout = start
+            }
+        }
+    }
+    
+  
+    func handleResetViewReponse(_ message: [String: Any]) {
         DispatchQueue.main.async {
-            self.startWorkout = true
+            print("before toggle: \(self.resetView)")
+            self.resetView.toggle()
+            print("after toggle: \(self.resetView)")
         }
     }
     
     func handleError(_ error: Error) {
         print("Error sending message: \(error.localizedDescription)")
     }
+    
+    
 }
 
 // MARK: - WCSessionDelegate here we manage the received messages
@@ -251,6 +301,8 @@ extension WatchConnector: WCSessionDelegate {
             handlePauseResponse(message)
         case "startWorkoutOnOtherDevice":
             handleStartWorkoutResponse(message)
+        case "resetView":
+            handleResetViewReponse(message)
         default:
             print("Unhandled message type: \(messageType)")
         }

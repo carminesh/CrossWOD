@@ -15,11 +15,14 @@ func sendWorkoutInfo(workout: Workout) {
 
 
 
-func startWorkoutOnOtherDevice() {
-    WatchConnector.shared.startWorkoutOnOtherDevice()
+func startWorkoutOnOtherDevice(setStart: Bool) {
+    WatchConnector.shared.startWorkoutOnOtherDevice(start: setStart)
 }
 
 func sendPauseInfo(toPaused paused: Bool, countdownToAdjust: Int) {
     WatchConnector.shared.sendPauseInfo(toPaused: paused, countdownToAdjust: countdownToAdjust)
 }
 
+func resetView() {
+    WatchConnector.shared.sendResetView()
+}

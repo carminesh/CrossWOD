@@ -12,6 +12,9 @@ struct AMRAPandForTimeTimerView: View {
     var viewModel: ViewModel
     @ObservedObject var watchConnector = WatchConnector.shared
     
+    // Access the presentation mode to allow navigation control
+    @Environment(\.presentationMode) var presentationMode
+    
     
     var body: some View {
         
@@ -190,7 +193,7 @@ struct AMRAPandForTimeTimerView: View {
                 viewModel.startDelay()
                 
                 if (!watchConnector.startWorkout) {
-                    startWorkoutOnOtherDevice()
+                    startWorkoutOnOtherDevice(setStart: true)
                 }
                 
             }
@@ -204,13 +207,18 @@ struct AMRAPandForTimeTimerView: View {
                 } else {
                     viewModel.stopTimer()
                 }
-
-               
             }
             .onChange(of: watchConnector.countdownToAdjust) {
                 viewModel.countdown = watchConnector.countdownToAdjust
             }
+            .onChange(of: watchConnector.resetView) {
+                if watchConnector.resetView {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
             .onDisappear {
+                startWorkoutOnOtherDevice(setStart: false)
+                resetView()
                 viewModel.saveWorkoutHistory()
                 viewModel.resetCountdown()
                 UIApplication.shared.isIdleTimerDisabled = false
