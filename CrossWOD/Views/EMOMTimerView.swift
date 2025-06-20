@@ -10,6 +10,8 @@ import SwiftUI
 struct EMOMTimerView: View {
     
     var viewModel: ViewModel
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @State private var isListening = false
     
     var body: some View {
         ZStack {
@@ -24,11 +26,37 @@ struct EMOMTimerView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text("EMOM")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-                    .fontWeight(.bold)
-                    .padding()
+                ZStack {
+                    // Titolo centrato
+                    Text("EMOM")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                        .padding()
+
+                    // Bottone microfono allineato a destra
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            isListening.toggle()
+                            if isListening {
+                                speechRecognizer.startListening()
+                            } else {
+                                speechRecognizer.stopListening()
+                            }
+                        }) {
+                            Image(systemName: isListening ? "mic.fill" : "mic.slash.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: 22))
+                                .padding(12)
+                                .background(isListening ? Color("emomAccentColor") : Color("cardBackgroundColor"))
+                                .clipShape(Circle())
+                        }
+                        .padding(.trailing, 20)
+                    }
+                
+
+            }
                 
                 HStack(spacing: 20) {
                     
@@ -161,6 +189,39 @@ struct EMOMTimerView: View {
             }
             .onAppear {
                 viewModel.startDelay()
+                
+                speechRecognizer.onCommandRecognized = { command in
+                    if isListening {
+                        switch command {
+                            
+                           
+                            
+                        case "continua", "riprendi":
+                            viewModel.isPaused.toggle()
+                            print("▶️ VOCE: \(command) - Avvio/Riprendo timer")
+                            if viewModel.isPaused {
+                                viewModel.startTimer()
+                            }
+
+                        case "pausa", "stop":
+                            viewModel.isPaused.toggle()
+                            print("⏸️ VOCE: \(command) - Pausa/Stop timer")
+                            if !viewModel.isPaused {
+                                viewModel.riveAnimation.pauseRiveAnimation()
+                                viewModel.stopTimer()
+
+                            }
+                            
+                      
+                        default:
+                            print("❓ Comando vocale non riconosciuto: \(command)")
+                            break
+                        }
+                    }
+                    
+                    speechRecognizer.startListening()
+                }
+                
                 UIApplication.shared.isIdleTimerDisabled = true
             }
             .onChange(of: viewModel.timerHasFinished) {

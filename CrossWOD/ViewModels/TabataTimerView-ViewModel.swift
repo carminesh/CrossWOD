@@ -12,6 +12,7 @@ extension TabataTimerView {
     
     @Observable
     class ViewModel {
+        
         var isPaused: Bool = true
         var currentRound: Int = 1
         var currentSeries: Int = 1

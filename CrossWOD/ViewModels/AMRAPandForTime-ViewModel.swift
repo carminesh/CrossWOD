@@ -28,6 +28,8 @@ extension AMRAPandForTimeTimerView {
         var startingTime: Int
         var modeTitle: String
         
+        var speechRecognizer = SpeechRecognizer()
+        
         
         private(set) var delay: Bool
         
@@ -44,6 +46,7 @@ extension AMRAPandForTimeTimerView {
             self.initialCountdown = countdown
             self.randomPhrase = Constants.motivationalPhrases.randomElement() ?? "Great job!"
             self.delay = false
+            
         }
         
         
@@ -139,6 +142,7 @@ extension AMRAPandForTimeTimerView {
             seriesTimes.append(seriesTime)
             initialCountdown -= seriesTime
         }
+       
         
         
         

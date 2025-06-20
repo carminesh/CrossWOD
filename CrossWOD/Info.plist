@@ -6,5 +6,11 @@
 	<array>
 		<string>ethnocentric.rg-regular.otf</string>
 	</array>
+    
+    <key>NSMicrophoneUsageDescription</key>
+    <string>L'app ha bisogno del microfono per ricevere comandi vocali.</string>
+
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Usiamo il riconoscimento vocale per controllare il timer (es: start, pausa, riprendi).</string>
 </dict>
 </plist>

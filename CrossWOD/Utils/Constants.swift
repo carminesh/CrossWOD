@@ -19,7 +19,7 @@ struct Constants {
             (title: "EMOM", icon: "emom_card", modeDescription: "Every minute on the minute", destination: AnyView(EMOMConfigView())),
             (title: "FOR TIME", icon: "for_time_card", modeDescription: "Workout as fast as possible", destination: AnyView(AMRAPandForTimeConfigView(modeTitle: "FOR TIME", modeDescription: "Workout as fast as possible", timePickerDescription: "Finish the workout as fast as possible in:", selectedTime: 10))),
             (title: "TABATA", icon: "tabata_card", modeDescription: "Intense work followed by rest", destination: AnyView(TabataConfigView())),
-            (title: "BENCHMARK", icon: userIsPro ? "benchmark_card" : "benchmark_premium_card", modeDescription: "CrossFit Benchmark WODs", destination: AnyView(BenchmarkConfigView()))
+            //(title: "BENCHMARK", icon: userIsPro ? "benchmark_card" : "benchmark_premium_card", modeDescription: "CrossFit Benchmark WODs", destination: AnyView(BenchmarkConfigView()))
         ]
     }
     
@@ -34,5 +34,5 @@ struct Constants {
         //"You did it! If you’re not wobbling, did you even AMRAP?",
         "Finished! And now for the recovery... a week-long Netflix marathon?",
         "Done! Feel that? That’s your body filing a formal complaint."
-    ]
+    ]		
 }

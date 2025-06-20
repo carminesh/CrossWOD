@@ -10,7 +10,10 @@ import SwiftUI
 struct AMRAPandForTimeTimerView: View {
     
     var viewModel: ViewModel
+
     @ObservedObject var watchConnector = WatchConnector.shared
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @State private var isListening = false
     
     // Access the presentation mode to allow navigation control
     @Environment(\.presentationMode) var presentationMode
@@ -33,11 +36,44 @@ struct AMRAPandForTimeTimerView: View {
             
             VStack {
                 
-                Text(viewModel.modeTitle)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding()
+                HStack {
+                    ZStack {
+                        Text(viewModel.modeTitle)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding()
+
+                        HStack {
+                            Spacer()
+
+                            Button(action: {
+                                isListening.toggle()
+                                if isListening {
+                                    speechRecognizer.startListening()
+                                } else {
+                                    speechRecognizer.stopListening()
+                                }
+                            }) {
+                                Image(systemName: isListening ? "mic.fill" : "mic.slash.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 22))
+                                    .padding(12)
+                                    .background(
+                                                isListening
+                                                    ? (viewModel.modeTitle == "AMRAP"
+                                                        ? Color("amrapAccentColor")
+                                                        : Color("forTimeAccentColor"))
+                                                    : Color("cardBackgroundColor")
+                                            )
+                                    .clipShape(Circle())
+                            }
+                            .padding(.trailing, 20)
+                        }
+                    }
+                }
+                
+              
                 
                 
                 HStack(spacing: 20) {
@@ -47,8 +83,7 @@ struct AMRAPandForTimeTimerView: View {
                         .foregroundColor(.white)
                         .opacity(!viewModel.seriesTimes.isEmpty && viewModel.countdown > 0 ? 1 : 0)
                     
-                    
-                    
+    
                     
                 }
                 .opacity(viewModel.delay ? 0 : 1)
@@ -178,7 +213,7 @@ struct AMRAPandForTimeTimerView: View {
                                 .padding(.horizontal, 20)
                         }
                         .padding(.vertical, 20)
-                        .background(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color("forTimeAccentColor"))
+                        .background(viewModel.modeTitle == "AMRAP" ? Color("amrapAccentColor") : Color	("forTimeAccentColor"))
                         .cornerRadius(15)
                     }
                     
@@ -191,6 +226,38 @@ struct AMRAPandForTimeTimerView: View {
             .onAppear {
                 
                 viewModel.startDelay()
+                	
+                speechRecognizer.onCommandRecognized = { command in
+                    if isListening {
+                        switch command {
+                            
+                        case "continua", "riprendi":
+                            viewModel.isPaused.toggle()
+                            print("▶️ VOCE: \(command) - Avvio/Riprendo timer")
+                            if viewModel.isPaused {
+                                viewModel.startTimer()
+                            }
+                            sendPauseInfo(toPaused: viewModel.isPaused, countdownToAdjust: viewModel.countdown)
+
+                        case "pausa", "stop":
+                            viewModel.isPaused.toggle()
+                            print("⏸️ VOCE: \(command) - Pausa/Stop timer")
+                            if !viewModel.isPaused {
+                                viewModel.riveAnimation.pauseRiveAnimation()
+                                viewModel.stopTimer()
+
+                            }
+                            sendPauseInfo(toPaused: viewModel.isPaused, countdownToAdjust: viewModel.countdown)
+                        
+                        default:
+                            
+                            print("❓ Comando vocale non riconosciuto: \(command)")
+                            break
+                        }
+                    }
+                    
+                    speechRecognizer.startListening()
+                }
                 
                 if (!watchConnector.startWorkout) {
                     startWorkoutOnOtherDevice(setStart: true)
@@ -214,6 +281,17 @@ struct AMRAPandForTimeTimerView: View {
             .onChange(of: watchConnector.resetView) {
                 if watchConnector.resetView {
                     presentationMode.wrappedValue.dismiss()
+                }
+            }
+            .onChange(of: viewModel.countdown) { newValue in
+                if newValue == 0 {
+                    // Ritarda di 1 secondo la visualizzazione
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        viewModel.showAfterDelay = true
+                    }
+                } else {
+                    // Reset nel caso di restart del timer
+                    viewModel.showAfterDelay = false
                 }
             }
             .onDisappear {
